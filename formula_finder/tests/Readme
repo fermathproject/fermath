@@ -1,0 +1,8 @@
+Los archivos test tienen el siguiente formato:
+<id de la magnitud buscada>
+<vector de la id de los datos>
+<numero de formulas>
+<formulas>
+
+los vectores acaban en 0
+debajo de asteriscos están los resultados objetivo (esto no afecta a la ejecución del programa)
