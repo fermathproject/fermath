@@ -12,14 +12,15 @@ Version:0.1
 #include <cstring>
 using namespace std;
 #include "math_functions.h"
-#include "conversion.h"
+#include "operations.h"
 #include "unit.h"
 #include "magnitude.h"
+#include "variable.h"
 
-float version=0.1;
+float version=0.2;
 main() {
     int id=0;
-    conversion conv;
+    operations conv;
     unit kg(string("kilogramos"),string("g"),id++,conv);
     conv.add_operation(4,1000);
     unit g(string("gramos"),string("g"),id++,conv);

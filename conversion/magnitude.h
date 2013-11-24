@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Magnitude Class
-Version:0.1
+Version:0.2
 */
 class magnitude {
 private:
@@ -35,9 +35,26 @@ public:
         punit=punit2;
     }
     //add a new unit to the magnitude
-    void add_unit(unit &unidad) {
+    void add_unit(unit unidad) {
         unidad.set_mag_id(id);
         units.push_back(unidad);
+    }
+    void set_all_magnitude_id() {
+        punit.set_mag_id(id);
+        for(int i=0; i<units.size(); i++) units[i].set_mag_id(id);
+    }
+    string get_name(int i=-1) {
+        if(i<0) return name;
+        else return names.at(i);
+    }
+    string get_symbol() {
+        return symbol;
+    }
+    bool is_unit(unit &unidad) {
+        int id2=unidad.get_id();
+        bool is=(id2==punit.get_id());
+        for(int i=0; i<units.size() && is==0; i++) is=(id2==units[i].get_id());
+        return is;
     }
 
 };

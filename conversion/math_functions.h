@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Math Functions
-Version:0.1
+Version:0.2
 
 This provides the needed methods to make the conversions between units (needed by the conversion class)
 */
@@ -82,18 +82,18 @@ double calc(int cal,double n1,double n2) {
     case 6:
         r=pow(n1,1/n2);
         break;
-    case 7:
-        r=log(n1)/log(n2);
-        break;
-    case 8:
-        r=fmod(n1,n2);
-        break;
-    case 9:
-        r=mcm(n1,n2);
-        break;
-    case 10:
-        r=mcd(n1,n2);
-        break;
+        /* case 7:
+             r=log(n1)/log(n2);
+             break;
+         case 8:
+             r=fmod(n1,n2);
+             break;
+         case 9:
+             r=mcm(n1,n2);
+             break;
+         case 10:
+             r=mcd(n1,n2);
+             break;*/
     }
     return r;
 }

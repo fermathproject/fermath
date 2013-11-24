@@ -1,0 +1,5 @@
+Fermath Conversions V0.2
+*changed conversion.h and class conversion into operations.h and class operations
+*added new set/get methods for unit and magnitude
+*added new class variable in variable.h
+
