@@ -1,5 +1,13 @@
-Fermath Conversions V0.2
-*changed conversion.h and class conversion into operations.h and class operations
-*added new set/get methods for unit and magnitude
-*added new class variable in variable.h
+Fermath Conversions V0.3
+*added remove_operation and operator<< to class operations in operations .h
+    *new operations_test.cpp to test only the class operations
+        *small changes in math_functions.h
+        *added convert_from to class unit in unit.h
+            *new unit_test.cpp to test class unit
+                *added operator + to class variable in varaible.h(not tested)
+
+                    Fermath Conversions V0.2
+                    *changed conversion.h and class conversion into operations.h and class operations
+                                *added new set/get methods for unit and magnitude
+                            *added new class variable in variable.h
 

@@ -4,9 +4,9 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Math Functions
-Version:0.2
+Version:0.3
 
-This provides the needed methods to make the conversions between units (needed by the conversion class)
+This provides the needed methods to operate with the class operations
 */
 
 const double pi=3.14159265358979323846; //number pi
@@ -74,12 +74,14 @@ double calc(int cal,double n1,double n2) {
         r=n1*n2;
         break;
     case 4:
+        if(n2==0) cout<<"error en division(arreglar esto)";
         r=n1/n2;
         break;
     case 5:
         r=pow(n1,n2);
         break;
     case 6:
+        if(n2==0) cout<<"error en raiz(arreglar esto)";
         r=pow(n1,1/n2);
         break;
         /* case 7:
@@ -103,6 +105,7 @@ double calc(int cal, double n) {
     double r=0;
     switch(cal) {
     case 1:
+        if(n<0) cout<<"error en raiz cuadrada(arreglar esto)";
         r=sqrt(n);
         break;
     case 2:

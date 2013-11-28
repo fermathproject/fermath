@@ -4,10 +4,10 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Conversion Class
-Version:0.2
+Version:0.3
 */
 
-//Para realizar operaciones
+//Class to store and do simple operations with doubles
 class operations {
 private:
     vector<int> op;
@@ -35,6 +35,20 @@ public:
     void add_operation(int op2) {
         op.push_back(op2+100);
     }
+    //erase the operation and the data linked to it
+    void remove_operation(int pos) {
+        if(pos<op.size()) {
+            if(op[pos]>100)  op.erase(op.begin()+(pos));  //if is unary operation, only erases de operation
+            else { //binary operation, erase operation and data
+                int dpos=0;
+                for(int i=0; i<pos; i++) {
+                    if(op[i]<=100) dpos++;
+                }
+                op.erase(op.begin()+(pos));  //erase operation
+                data.erase(data.begin()+(dpos));//erase data
+            }
+        }
+    }
     //convert d1 using the operations and data provided (conversion from unit)
     double operate(double d1) {
         int tam=op.size();
@@ -56,7 +70,7 @@ public:
         }
         return d1;
     }
-    //if there is no conversion (the unit is the standard unit of magnitude)
+    //if there is no operations
     bool null_operation() {
         if(op.size()==0) return true;
         return false;
@@ -66,4 +80,19 @@ public:
         op.clear();
         data.clear();
     }
+private:
+    //operator <<, show the operations os the standard output
+    friend ostream  &operator<< (ostream &out, const operations &oper) {
+        vector<int> a=oper.op;
+        vector<double> b=oper.data;
+        for(int i=0; i<a.size(); i++) {
+            out<<"("<<a[i]<<","; //saca operacion
+            if(i<b.size() && a[i]<=100) out<<b[i];
+            else out<<"-";
+            out<<") ";
+        }
+        out<<endl;
+        return out;
+    }
+
 };

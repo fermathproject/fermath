@@ -4,8 +4,10 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Magnitude Class
-Version:0.2
+Version:0.3
 */
+
+//This class stores a whole magnitude as a vector of units to search them and operate between them
 class magnitude {
 private:
     int id;
@@ -39,6 +41,7 @@ public:
         unidad.set_mag_id(id);
         units.push_back(unidad);
     }
+    //set all magnitude_id of the units in the magnitude
     void set_all_magnitude_id() {
         punit.set_mag_id(id);
         for(int i=0; i<units.size(); i++) units[i].set_mag_id(id);
@@ -50,6 +53,7 @@ public:
     string get_symbol() {
         return symbol;
     }
+    //if the unit is in the magitude
     bool is_unit(unit &unidad) {
         int id2=unidad.get_id();
         bool is=(id2==punit.get_id());

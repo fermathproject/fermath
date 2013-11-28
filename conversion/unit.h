@@ -4,8 +4,9 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Unit Class
-Version:0.2
+Version:0.3
 */
+//This class stores an unit, with the needed operations to convert into the standard unit of his magnitude
 class unit {
 private:
     int id;
@@ -49,6 +50,12 @@ public:
         n=conversion.inverse_operate(n);
         return n;
     }
+    //convert n from one unit to another
+    double convert_from(double n,unit &a) {
+        n=a.standard_unit_value(n);
+        n=value_from_standard_unit(n);
+        return n;
+    }
     //return true if this is the standard unit of magnitude
     bool standard_unit() {
         return conversion.null_operation();
@@ -61,13 +68,16 @@ public:
     void set_mag_id(int m) {
         magid=m;
     }
+    //return the unit id
     int get_id() {
         return id;
     }
+    //return the unit name
     string get_name(int i=-1) {
         if(i<0) return name;
         else return names.at(i);
     }
+    //return the unit symbol
     string get_symbol() {
         return symbol;
     }

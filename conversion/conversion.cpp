@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 This Program test some of the different classes oriented to convert between units, which will be included in the Fermath Project
-Version:0.1
+Version:0.3
 */
 #include <iostream>
 #include <cmath>
