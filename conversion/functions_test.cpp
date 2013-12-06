@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions Test
-Version:0.4
+Version:0.5
 
 This program test the functions.h methods
 */

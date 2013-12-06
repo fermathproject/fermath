@@ -1,3 +1,15 @@
+Fermath Conversions V0.5
+*removed id from class unit (and methods that use it)
+*added operators =,==,!= to operations class in operations.h (also changed operations_test.cpp)
+*added operators =,==,!=,+ to unit class in unit.h (also changed unit_test.cpp)
+*added new template add_vector in templates.h (also changed templates_test.cpp)
+*added operators =,==,!=,+ to magnitude class in magnitude.h (also changed magnitude_test.cpp)
+*changed operator+ in class variable in variable.h
+*added operators =,==,!= to class variable in variable.h
+*new file called variable_test.cpp to test class variable
+*small changes in const methods of classes
+**functions.h unchanged
+
 Fermath Conversions V0.4
 *added templates.h and templates_test.cpp, some templates for read/writing vectors
 *added write/read operations in a binary file in operations.h and contructor from file

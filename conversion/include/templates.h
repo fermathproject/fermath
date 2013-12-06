@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Templates
-Version:0.4
+Version:0.5
 */
 //Some templates for write/reading with vectors, neccesary for the classes of Fermeth
 
@@ -90,5 +90,26 @@ void binary_read_vector(vector<string> &v,ifstream &input) {
         v.push_back(elem);
     }
 }
+
+template <typename T>
+void add_vector(vector<T> &v1,const vector<T> &v2) { //add the elements of the second vector that are not in the first
+    int size=v2.size();
+    bool is=false;
+    T elem;
+    for(int i=0; i<size; i++) {
+        elem=v2[i];
+        for(int j=0; (j<v1.size()) && (is==false); j++) {
+            if(elem==v1[j]) is=true; //check if an element is on the vector 1
+        }
+        if(!is) v1.push_back(elem);
+        is=false;
+    }
+}
+
+
+
+
+
+
 
 

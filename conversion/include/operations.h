@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Operations Class
-Version:0.4
+Version:0.5
 */
 
 //Class to store and do simple operations with doubles
@@ -53,7 +53,7 @@ public:
         }
     }
     //convert d1 using the operations and data provided (conversion from unit)
-    double operate(double d1) {
+    double operate(double d1) const {
         int tam=op.size();
         for(int i=0; i<tam; i++) {
             if(op[i]<=100)   d1=calc(op[i],d1,data[i]); //binary operation
@@ -62,7 +62,7 @@ public:
         return d1;
     }
     //Inverse conversion, this do the operation in the inverse order and changing operation when needed (conversion to unit)
-    double inverse_operate(double d1) {
+    double inverse_operate(double d1) const {
         int op2;
         for(int i=op.size()-1; i>=0; i--) {
             op2=op[i];
@@ -74,7 +74,7 @@ public:
         return d1;
     }
     //if there is no operations
-    bool null_operation() {
+    bool null_operation() const {
         if(op.size()==0) return true;
         return false;
     }
@@ -92,6 +92,37 @@ public:
         binary_read_vector(op,input);
         binary_read_vector(data,input);
     }
+    //OPERATORS
+    //operator== (size and data of both vectors must be equal)
+    bool operator==(const operations &oper2) const {
+        bool eq=true;
+        unsigned s1,s2,s3,s4;
+        s1=(*this).op.size();
+        s2=(*this).data.size();
+        s3=oper2.op.size();
+        s4=oper2.data.size();
+        if(s1!=s3 || s2!=s4) eq=false; //if vectors size is different
+        for(int i=0; i<s1 && eq==true; i++) {
+            if((*this).op[i]!=oper2.op[i]) eq=false;
+        }
+        for(int i=0; i<s2 && eq==true; i++) {
+            if((*this).data[i]!=oper2.data[i]) eq=false;
+        }
+        return eq;
+    }
+    // operator!=
+    bool operator!=(const operations &oper2) const {
+        return !((*this)==oper2);
+    }
+    // operator=
+    operations &operator=(const operations &op2) {
+        if(this!=&op2) {
+            (*this).data=op2.data;
+            (*this).op=op2.op;
+        }
+        return *this;
+    }
+
 private:
     //operator <<, show the operations os the standard output
     friend ostream  &operator<< (ostream &out, const operations &oper) {
@@ -105,7 +136,8 @@ private:
         }
         return out;
     }
-    double calc(int cal, double n1,double n2) { //binary operations
+    //private methods for resolving operations
+    double calc(int cal, double n1,double n2) const { //binary operations
         double r=0;
         switch(cal) {
         case 1:
@@ -131,7 +163,7 @@ private:
         }
         return r;
     }
-    double calc(int cal,double n) { //unary operations
+    double calc(int cal,double n) const { //unary operations
         double r=0;
         switch(cal) {
         case 1:

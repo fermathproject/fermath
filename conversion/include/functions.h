@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions
-Version:0.4
+Version:0.5
 
 This provides functions that may be used in some classes or programs of Fermath
 */
@@ -36,7 +36,7 @@ void out_science(double r,ostream &out=cout) {
         out<<r1<<"x10^"<<r2;
     }
 }
-//*#*#*#*#*#*# --LOW COST SEPARATION-- #*#*#*#*#*#*//
+//*#*#*#*#*#*# --LOW COST GAP-- #*#*#*#*#*#*//
 double mcm(double a,double b) {
     double x, z, y=1, i=2;
     if(a<b) {
@@ -63,7 +63,7 @@ double mcm(double a,double b) {
     y=y*z*x;
     return y;
 }
-//*#*#*#*#*#*# --LOW COST SEPARATION-- #*#*#*#*#*#*//
+//*#*#*#*#*#*# --LOW COST GAP-- #*#*#*#*#*#*//
 double mcd(double num1,double num2) {
     double t,i=2,mcd=1;
     if(num1>num2) {
@@ -85,7 +85,7 @@ double mcd(double num1,double num2) {
     while(i<=num1);
     return(mcd);
 }
-//*#*#*#*#*#*# --LOW COST SEPARATION-- #*#*#*#*#*#*//
+//*#*#*#*#*#*# --LOW COST GAP-- #*#*#*#*#*#*//
 
 
 bool is_prime(unsigned x) {
@@ -113,7 +113,7 @@ unsigned prime(unsigned x) { //calcules the prime number x  (first is 1, second 
     return p;
 }
 
-//*#*#*#*#*#*# --LOW COST SEPARATION-- #*#*#*#*#*#*//
+//*#*#*#*#*#*# --LOW COST GAP-- #*#*#*#*#*#*//
 
 vector<int> prime_descomposition(unsigned n) {
     vector<int> descomposition;

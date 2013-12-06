@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project: Unit test
-Version:0.4
+Version:0.5
 */
 
 //This program tests the class unit
@@ -20,16 +20,16 @@ using namespace std;
 #include "include/functions.h"
 
 main() {
-    cout<<"Fermath Unit Test V0.4"<<endl;
+    cout<<"Fermath Unit Test V0.5"<<endl;
     cout<<"this program will create a file called unit.test"<<endl;
     operations conv;
     int id=0;
-    unit kg(string("kilogramos"),string("kg"),id++,conv); //standard unit of magnitude
+    unit kg(string("kilogramos"),string("kg"),conv); //standard unit of magnitude
     conv.add_operation(4,1000);
-    unit g(string("gramos"),string("g"),id++,conv);
+    unit g(string("gramos"),string("g"),conv);
     conv.clear();
     conv.add_operation(3,1000);
-    unit tonelada(string("toneladas"),string("T"),id++,conv);
+    unit tonelada(string("toneladas"),string("T"),conv);
     double x;
     cout<<"write a number:";
     cin>>x;
@@ -50,12 +50,23 @@ main() {
     out.close();
     cout<<"Units from file:"<<endl;
     ifstream input("unit.test");
-    unit g2(input,id++);
-    unit kg2(input,id++);
+    unit kg2(input);
+    unit g2(input);
     input.close(); //read the 2 first
     cout<<g2<<endl;
     cout<<endl<<kg2<<endl;
     cout<<endl<<"Gramillo is a name for g?"<<g.have_name("gramillo");
     cout<<endl<<"Gramillo is a name for kg?"<<kg.have_name("gramillo")<<endl;
+    cout<<endl<<"kg==g: "<<(kg==g)<<endl;
+    cout<<endl<<"g==g2: "<<(g==g2)<<endl;
+    write_vector(kg.get_names());
+    cout<<endl;
+    kg2.add_name("kiloprueba1");
+    kg2.add_name("kiloprueba2");
+    kg=kg+kg2;
+    cout<<(kg==kg2)<<endl;
+    cout<<"added names to kg using operator +"<<endl;
+    write_vector(kg.get_names());
+    cout<<endl;
     return 0;
 }

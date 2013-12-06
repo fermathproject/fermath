@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions Test
-Version:0.4
+Version:0.5
 
 This program test the functions.h methods
 */
@@ -20,30 +20,36 @@ using namespace std;
 #include "include/magnitude.h"
 
 int main() {
-    cout<<"Fermath Function Test V0.4"<<endl;
+    int magnitude_id=0;
+    cout<<"Fermath Magnitude Test V0.5"<<endl;
     cout<<"This program will create a file called magnitude.test and need the file unit.test"<<endl;
     ifstream input("unit.test");
-    int unitid=1;
-    unit uni(input,1,unitid++); //kg
+    unit uni(input); //kg
     magnitude mass("mass","M",1,uni);
-    uni.read_unit(input,unitid++);//g
+    uni.read_unit(input);//g
     mass.add_unit(uni);
-    uni.read_unit(input,unitid++);//tons
-    mass.add_unit(uni);
+    uni.read_unit(input);//tons
+    //mass.add_unit(uni);
     input.close();
     cout<<"Magnitud Created from unit.test units:"<<endl;
     cout<<mass;
     cout<<"searching for gramillo"<<endl;
-    unit x;
+    unit *x;
     x=mass.search_by_name("gramillo");
-    cout<<x;
+    cout<<*x;
     ofstream out("magnitude.test");
     mass.write_magnitude(out);
     out.close();
     ifstream in("magnitude.test");
-    magnitude mass2(in,2);
+    magnitude mass2(in,1);
     in.close();
     cout<<endl<<"----------"<<endl;
     cout<<mass2;
+    mass.add_unit(uni);
+    cout<<"mass2==mass:"<<(mass2==mass)<<endl;
+    cout<<"mass2!=mass:"<<(mass2!=mass)<<endl;
+    cout<<"mass+mass2:"<<endl;
+    mass=mass+mass2;
+    cout<<mass<<endl;
     return 0;
 }

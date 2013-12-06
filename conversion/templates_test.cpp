@@ -5,7 +5,7 @@
 
 /*
 Fermath Project:Conversion Templates test
-Version:0.4
+Version:0.5
 */
 
 //This Program tests the templates of templates.h writing and reading vectors from a file
@@ -18,7 +18,7 @@ using namespace std;
 
 
 int main() {
-    cout<<"Fermath Templates Test V0.4"<<endl;
+    cout<<"Fermath Templates Test V0.5"<<endl;
     cout<<"this program will create a file called template.test"<<endl;
     vector<char> v;
     vector<int> v2;
@@ -62,6 +62,13 @@ int main() {
     write_vector(vout2);
     cout<<endl;
     write_vector(vout3);//show vectors
+    cout<<endl;
+    vector<int> v4;
+    v4.push_back(4);
+    v4.push_back(29); //v4={4,29}
+    add_vector(v4,vout2);
+    cout<<"v4+v2"<<endl;
+    write_vector(v4);
     cout<<endl;
     return 0;
 }

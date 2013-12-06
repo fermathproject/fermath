@@ -1,5 +1,5 @@
 Fermath Project:Conversion
-Version: 0.4
+Version: 0.5
 /* (C) by:
    Antonio Jimenez Martínez
    Andrés Ortiz Corrales
@@ -7,6 +7,7 @@ Version: 0.4
 
 The Classes and functions of Fermath:Conversion are in include directory, these are:
 functions.h
+templates.h
 magnitude.h
 operations.h
 unit.h
@@ -20,4 +21,5 @@ To try all test, you must follow the next order:
 -templates_test.cpp
 -operations_test.cpp
 -unit_test.cpp
-magnitude_test.cpp
+-magnitude_test.cpp
+-variable_test.cpp
