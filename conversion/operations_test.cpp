@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project: Operations test
-Version:0.5
+Version:0.6
 */
 
 //This program tests the class operations
@@ -18,7 +18,7 @@ using namespace std;
 #include "include/operations.h"
 
 int main() {
-    cout<<"Fermath Operations Test V0.5"<<endl;
+    cout<<"Fermath Operations Test V0.6"<<endl;
     cout<<"This test will create a file called operations.test"<<endl;
     double x,y;
     operations op(1,100); //add 100

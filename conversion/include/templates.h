@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Templates
-Version:0.5
+Version:0.6
 */
 //Some templates for write/reading with vectors, neccesary for the classes of Fermeth
 
@@ -22,21 +22,21 @@ void write_vector(const vector<T> &v,ostream &out=cout) {
 
 //Writes an element in a binary file
 template <typename T>
-void binary_write(T &element,ofstream &out) {
-    out.write(reinterpret_cast<char *>(&element),sizeof(T));
+void binary_write(const T &element,ofstream &out) {
+    out.write((char *)&element,sizeof(T));
 }
 //Reads an element from a binary file
 template <typename T>
-void binary_read(T &element,ifstream &input) {
-    input.read(reinterpret_cast<char *>(&element),sizeof(T));
+void binary_read(const T &element,ifstream &input) {
+    input.read((char *) &element,sizeof(T));
 }
 //Writes a vector in a binary file, it writes the size of the vector first (unsigned)
 template <typename T>
-void binary_write_vector(vector<T> &v,ofstream &out) {
-    unsigned siz=v.size();
+void binary_write_vector(const vector<T> &v,ofstream &out) {
+    unsigned short siz=v.size();
     T elem;
     binary_write(siz,out); //writes vector size
-    for(int i=0; i<siz; i++) {
+    for(unsigned short i=0; i<siz; i++) {
         elem=v[i];
         binary_write(elem,out); //writes each element
     }
@@ -45,18 +45,18 @@ void binary_write_vector(vector<T> &v,ofstream &out) {
 //Reads a vector from a binary file
 template <typename T>
 void binary_read_vector(vector<T> &v,ifstream &input) {
-    unsigned siz;
+    unsigned short siz;
     binary_read(siz,input);//read vector size
     T elem;
     v.clear();
     v.reserve(siz); //so its not necessary to change vector capacity later
-    for(int i=0; i<siz; i++) {
+    for(unsigned short i=0; i<siz; i++) {
         binary_read(elem,input);
         v.push_back(elem);
     }
 }
 //Read/Write string cases (usign a write as a vector)
-void binary_write(string &element,ofstream &out) {
+void binary_write(const string &element,ofstream &out) {
     vector<char> data(element.begin(), element.end());
     binary_write_vector(data,out);
 }
@@ -69,23 +69,23 @@ void binary_read(string &element,ifstream &input) {
     element=str;
 }
 //read/write versions for vector<string>
-void binary_write_vector(vector<string> &v,ofstream &out) {
-    unsigned siz=v.size();
+void binary_write_vector(const vector<string> &v,ofstream &out) {
+    unsigned short siz=v.size();
     string elem;
     binary_write(siz,out); //writes vector size
-    for(int i=0; i<siz; i++) {
+    for(unsigned short i=0; i<siz; i++) {
         elem=v[i];
         binary_write(elem,out); //writes each element
     }
 }
 
 void binary_read_vector(vector<string> &v,ifstream &input) {
-    unsigned siz;
+    unsigned short siz;
     binary_read(siz,input);//read vector size
     string elem;
     v.clear();
     v.reserve(siz); //so its not necessary to change vector capacity later
-    for(int i=0; i<siz; i++) {
+    for(unsigned short i=0; i<siz; i++) {
         binary_read(elem,input);
         v.push_back(elem);
     }

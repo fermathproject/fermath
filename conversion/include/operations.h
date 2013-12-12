@@ -4,25 +4,25 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Operations Class
-Version:0.5
+Version:0.6
 */
 
 //Class to store and do simple operations with doubles
 class operations {
 private:
-    vector<int> op;
+    vector<unsigned short> op;
     vector<double> data;
 public:
     //CONSTRUCTORS
     operations() {
     }
-    operations(int op2,double dat) {
+    operations(unsigned op2,double dat) {
         add_operation(op2,dat);
     }
-    operations(int op2) {
+    operations(unsigned short op2) {
         add_operation(op2);
     }
-    operations(vector <int> &op2,vector<double> &dat) {
+    operations(vector <unsigned short> &op2,vector<double> &dat) {
         op=op2;
         data=dat;
     }
@@ -30,12 +30,12 @@ public:
         read_operations(input);
     }
     //add a new binary operation and data for conversion
-    void add_operation(int op2,double dat) {
+    void add_operation(unsigned short op2,double dat) {
         op.push_back(op2);
         data.push_back(dat);
     }
     //add a new unary operation for conversion
-    void add_operation(int op2) {
+    void add_operation(unsigned short op2) {
         op.push_back(op2+100);
     }
     //erase the operation and the data linked to it
@@ -63,7 +63,7 @@ public:
     }
     //Inverse conversion, this do the operation in the inverse order and changing operation when needed (conversion to unit)
     double inverse_operate(double d1) const {
-        int op2;
+        unsigned short op2;
         for(int i=op.size()-1; i>=0; i--) {
             op2=op[i];
             if(op2%2==0) op2--;
@@ -84,7 +84,7 @@ public:
         data.clear();
     }
     //write the operations in a binary file
-    void write_operations(ofstream &out) {
+    void write_operations(ofstream &out) const {
         binary_write_vector(op,out);
         binary_write_vector(data,out);
     }
@@ -126,7 +126,7 @@ public:
 private:
     //operator <<, show the operations os the standard output
     friend ostream  &operator<< (ostream &out, const operations &oper) {
-        vector<int> a=oper.op;
+        vector<unsigned short> a=oper.op;
         vector<double> b=oper.data;
         for(int i=0; i<a.size(); i++) {
             out<<"("<<a[i]<<",";
@@ -137,7 +137,7 @@ private:
         return out;
     }
     //private methods for resolving operations
-    double calc(int cal, double n1,double n2) const { //binary operations
+    double calc(unsigned short cal, double n1,double n2) const { //binary operations
         double r=0;
         switch(cal) {
         case 1:
@@ -163,7 +163,7 @@ private:
         }
         return r;
     }
-    double calc(int cal,double n) const { //unary operations
+    double calc(unsigned short cal,double n) const { //unary operations
         double r=0;
         switch(cal) {
         case 1:

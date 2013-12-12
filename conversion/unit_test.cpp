@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project: Unit test
-Version:0.5
+Version:0.6
 */
 
 //This program tests the class unit
@@ -20,7 +20,7 @@ using namespace std;
 #include "include/functions.h"
 
 main() {
-    cout<<"Fermath Unit Test V0.5"<<endl;
+    cout<<"Fermath Unit Test V0.6"<<endl;
     cout<<"this program will create a file called unit.test"<<endl;
     operations conv;
     int id=0;

@@ -1,3 +1,18 @@
+Fermath Conversions V0.6
+*added new methods in class variable and changed operators + and - (variable.h)
+*added operators *,/,+=,-=,*=,/= (also changed variable_test.cpp)
+*added unary minus (-) operator to variable class
+*changed vector<int> to vector<unsigned> in class operations in operations.h
+*new expression class in expression.h that solve operations using stacks (also new expression_test.cpp)
+*variable class now has unit instead of unit* and a new int that allows to work with squared units
+*magnitude_id in unit is now unsigned short
+*all write methods are now const
+*class operations works with unsigned short intead of int, less memory occupied when writting
+*more efficient file writting
+**fuctions.h not changed
+**some of the test have not been changed
+*added the script compile.sh, to compile all the tests
+
 Fermath Conversions V0.5
 *removed id from class unit (and methods that use it)
 *added operators =,==,!= to operations class in operations.h (also changed operations_test.cpp)

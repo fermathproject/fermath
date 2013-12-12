@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions
-Version:0.5
+Version:0.6
 
 This provides functions that may be used in some classes or programs of Fermath
 */
@@ -130,3 +130,26 @@ vector<int> prime_descomposition(unsigned n) {
     if(descomposition.empty()) descomposition.push_back(1);
     return descomposition;
 }
+
+//*#*#*#*#*#*# --LOW COST GAP-- #*#*#*#*#*#*//
+
+string fix_parenthesis(const string &exp) {
+    int size=exp.size();
+    int count=0;
+    string res;
+    for(int i=0; i<size; i++) {
+        if(exp[i]=='(') count++;
+        else if(exp[i]==')') count--;
+    }
+    if(count>=0) {
+        res=exp;
+        for(; count>0; count--) res.push_back(')');
+    }
+    else if(count<0) {
+        for(; count<0; count++) res.push_back('(');
+        res+=exp;
+    }
+    return res;
+}
+
+//*#*#*#*#*#*# --LOW COST GAP-- #*#*#*#*#*#*//

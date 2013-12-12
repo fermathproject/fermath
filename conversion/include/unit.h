@@ -4,32 +4,30 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Unit Class
-Version:0.5
+Version:0.6
 */
 //This class stores an unit, with the needed operations to convert into the standard unit of his magnitude
-//TODO: change vector<string> names for a set<string> names
 class unit {
 private:
-    // int id;
     vector<string> names;//the first 2 strings are the name and symbol of the unit used by the program
     operations conversion; //conversion to standard units
-    int magid; //id of magnitude
+    unsigned short magid; //id of magnitude
 public:
     //CONSTRUCTORS
     unit() {
     }
-    unit(vector<string> &names2, operations &conv2,int magid2=0) {
+    unit(vector<string> &names2, operations &conv2,unsigned short magid2=0) {
         names=names2;
         conversion=conv2;
         magid=magid2;
     }
-    unit(string name2,string symbol2,operations &conv2,int magid2=0) {
+    unit(string name2,string symbol2,operations &conv2,unsigned short magid2=0) {
         names.push_back(name2);
         names.push_back(symbol2);
         conversion=conv2;
         magid=magid2;
     }
-    unit(ifstream &input,int magid2=0) { //Constructor from a binary input
+    unit(ifstream &input,unsigned short magid2=0) { //Constructor from a binary input
         read_unit(input,magid2);
     }
 
@@ -47,7 +45,6 @@ public:
         n=conversion.operate(n);
         return n;
     }
-
     //returns the unit from a standard unit value
     double value_from_standard_unit(double n) const {
         n=conversion.inverse_operate(n);
@@ -64,20 +61,13 @@ public:
         return conversion.null_operation();
     }
     //return the id of magnitude
-    int mag_id() const {
+    unsigned short mag_id() const {
         return magid;
     }
     //set the id of magnitude
-    void set_mag_id(int m) {
+    void set_mag_id(unsigned short m) {
         magid=m;
     }
-    /* //return the unit id
-     int get_id() {
-         return id;
-     }
-     void set_id(int id2) {
-         id=id2;
-     }*/
     //return the unit name
     string get_name(int i=-1) const {
         if(i<0 || i>names.size()) return names[0];
@@ -103,11 +93,11 @@ public:
         return b;
     }
     //do binary write of unit
-    void write_unit(ofstream &out) {
+    void write_unit(ofstream &out) const {
         binary_write_vector(names,out); //Writes names string vector
         conversion.write_operations(out); //Writes conversion operations
     }
-    void read_unit(ifstream &input,int magid2=0) {
+    void read_unit(ifstream &input,unsigned short magid2=0) {
         binary_read_vector(names,input);
         conversion.read_operations(input);
         magid=magid2;

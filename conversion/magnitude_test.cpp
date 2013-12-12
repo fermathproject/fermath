@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions Test
-Version:0.5
+Version:0.6
 
 This program test the functions.h methods
 */
@@ -21,7 +21,7 @@ using namespace std;
 
 int main() {
     int magnitude_id=0;
-    cout<<"Fermath Magnitude Test V0.5"<<endl;
+    cout<<"Fermath Magnitude Test V0.6"<<endl;
     cout<<"This program will create a file called magnitude.test and need the file unit.test"<<endl;
     ifstream input("unit.test");
     unit uni(input); //kg
@@ -34,9 +34,9 @@ int main() {
     cout<<"Magnitud Created from unit.test units:"<<endl;
     cout<<mass;
     cout<<"searching for gramillo"<<endl;
-    unit *x;
+    unit x;
     x=mass.search_by_name("gramillo");
-    cout<<*x;
+    cout<<x;
     ofstream out("magnitude.test");
     mass.write_magnitude(out);
     out.close();

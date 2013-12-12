@@ -4,21 +4,20 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Magnitude Class
-Version:0.5
+Version:0.6
 */
 
 //This class stores a whole magnitude as a vector of units to search them and operate between them
-//TODO: change vector<string> names for a set<string> names
 class magnitude {
 private:
-    int id;
+    unsigned short id;
     vector<string> names; //the first and second names are considered the principal name and symbol respectively
     vector<unit> units; //the first unit is considered the principal unit
 public:
     //CONSTRUCTORS
     magnitude() {
     }
-    magnitude(int id2,vector<string> names2,vector<unit> &units2) {
+    magnitude(unsigned short id2,vector<string> names2,vector<unit> &units2) {
         id=id2;
         names=names2;
         units=units2;
@@ -53,7 +52,7 @@ public:
         }
         set_all_magnitude_id(); //all magnitude id of units are this magnitude
     }
-    magnitude(ifstream &input,int id2) {
+    magnitude(ifstream &input,unsigned short id2) {
         id=id2;
         read_magnitude(input);
     }
@@ -94,7 +93,7 @@ public:
         return is;
     }
     //return a pointer to the unit with the name given
-    unit *search_by_name(string name) {
+    unit search_by_name(string name) {
         int pos=-1;
         int size=units.size();
         for(int i=0; i<size && pos<0; i++) {
@@ -104,31 +103,31 @@ public:
             pos=0;
             cout<<"ERROR, unit "<<name<<" not found in magnitude "<<names[0]<<endl;
         }
-        unit *uni;
-        uni=&units[pos];
+        unit uni;
+        uni=units[pos];
         return uni;
     }
     const unit &get_unit(int i=0) const {
         if(i<0 || i>units.size()) i=0;
         return units[i];
     }
-    void write_magnitude(ofstream &out) {
+    void write_magnitude(ofstream &out) const {
         binary_write_vector(names,out); //Writes names string vector
-        unsigned size=units.size();
+        unsigned short size=units.size();
         binary_write(size,out);
-        for(unsigned i=0; i<size; i++) {
+        for(unsigned short i=0; i<size; i++) {
             units[i].write_unit(out);
         }
     }
 
     void read_magnitude(ifstream &input) {
         binary_read_vector(names,input);
-        unsigned size;
+        unsigned short size;
         binary_read(size,input);
         units.clear();
         units.reserve(size);
         unit uni;
-        for(unsigned i=0; i<size; i++) {
+        for(unsigned short i=0; i<size; i++) {
             uni.read_unit(input,id); //reads units and assign magnitude id
             units.push_back(uni);
         }

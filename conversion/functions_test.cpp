@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions Test
-Version:0.5
+Version:0.6
 
 This program test the functions.h methods
 */
@@ -17,7 +17,7 @@ using namespace std;
 
 
 int main() {
-    cout<<"Fermath Function Test V0.4";
+    cout<<"Fermath Function Test V0.6";
     float x=80,y=34;
     for(int i=0; i<4; i++) {
         x=x*x; //x is a big number
