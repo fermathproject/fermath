@@ -1,0 +1,3 @@
+Para probar formula_finder, cargar tests en el programa:
+
+>test/test1 > formula_finder

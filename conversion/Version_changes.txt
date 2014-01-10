@@ -1,0 +1,58 @@
+Fermath Conversions V0.6
+*added new methods in class variable and changed operators + and - (variable.h)
+*added operators *,/,+=,-=,*=,/= (also changed variable_test.cpp)
+*added unary minus (-) operator to variable class
+*changed vector<int> to vector<unsigned> in class operations in operations.h
+*new expression class in expression.h that solve operations using stacks (also new expression_test.cpp)
+*variable class now has unit instead of unit* and a new int that allows to work with squared units
+*magnitude_id in unit is now unsigned short
+*all write methods are now const
+*class operations works with unsigned short intead of int, less memory occupied when writting
+*more efficient file writting
+**fuctions.h not changed
+**some of the test have not been changed
+*added the script compile.sh, to compile all the tests
+
+Fermath Conversions V0.5
+*removed id from class unit (and methods that use it)
+*added operators =,==,!= to operations class in operations.h (also changed operations_test.cpp)
+*added operators =,==,!=,+ to unit class in unit.h (also changed unit_test.cpp)
+*added new template add_vector in templates.h (also changed templates_test.cpp)
+*added operators =,==,!=,+ to magnitude class in magnitude.h (also changed magnitude_test.cpp)
+*changed operator+ in class variable in variable.h
+*added operators =,==,!= to class variable in variable.h
+*new file called variable_test.cpp to test class variable
+*small changes in const methods of classes
+**functions.h unchanged
+
+Fermath Conversions V0.4
+*added templates.h and templates_test.cpp, some templates for read/writing vectors
+*added write/read operations in a binary file in operations.h and contructor from file
+*added operator << to class unit in unit.h
+*all math neccesary for operations class is now in the operations class in operation.h as private methods
+*now the principal name and symbol of an unit are the first and second string of names vector
+*new file functions.h with some useful functions for Fermath and function_test.cpp to test functions.h
+*all .h files are now in the /include directory
+*all test generated files will have .test extension
+*magnitude principal name,type and unit are now the first elements of vectors names and units
+*added have_name to unit class
+*added search_by name in magnitude class
+*added operator << to magnitude class
+*added write/read methods in magnitude class
+*added some new methods for searching units in magnitude class
+*new program magnitude_test.cpp to test magnitude class
+**variable.h not upgraded
+
+Fermath Conversions V0.3
+*added remove_operation and operator<< to class operations in operations .h
+*new operations_test.cpp to test only the class operations
+*small changes in math_functions.h
+*added convert_from to class unit in unit.h
+*new unit_test.cpp to test class unit
+*added operator + to class variable in variable.h(not tested)
+
+Fermath Conversions V0.2
+*changed conversion.h and class conversion into operations.h and class operations
+*added new set/get methods for unit and magnitude
+*added new class variable in variable.h
+
