@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project: Operations test
-Version:0.6
+Version:0.7
 */
 
 //This program tests the class operations
@@ -13,12 +13,12 @@ Version:0.6
 #include <cmath>
 #include <vector>
 #include <fstream>
+#include <stdlib.h>
 using namespace std;
-#include "include/templates.h"
 #include "include/operations.h"
 
 int main() {
-    cout<<"Fermath Operations Test V0.6"<<endl;
+    cout<<"Fermath Operations Test "<<version<<endl;
     cout<<"This test will create a file called operations.test"<<endl;
     double x,y;
     operations op(1,100); //add 100
@@ -27,10 +27,10 @@ int main() {
     cout<<"Write a number:";
     cin>>x;
     y=op.operate(x);
-    cout<<"Result:"<<y<<endl; //((x+100)/10)^2
-    cout<<"Inverse result:"<<op.inverse_operate(x)<<endl; //(sqrt(x)*10)-100
-    cout<<"Inverse result of operation (it hould be your number):"<<op.inverse_operate(y)<<endl; //x
-    cout<<"op:"<<op<<endl; //show operations
+    cout<<"Result((x+100)/10)^2:"<<y<<endl; //((x+100)/10)^2
+    cout<<"Inverse result(sqrt(x)*10)-100:"<<op.inverse_operate(x)<<endl; //(sqrt(x)*10)-100
+    cout<<"Inverse result of operation (it should be your number):"<<op.inverse_operate(y)<<endl; //x
+    cout<<endl<<"op:"<<op<<endl; //show operations
     ofstream out("operation.test");
     op.write_operations(out); //writes operations in binary file
     out.close();
@@ -41,7 +41,7 @@ int main() {
     operations op2(input); //read operation from binary file (3 operations)
     input.close();
     cout<<"op2(readed):"<<op2<<endl;//show operations
-    cout<<"operator test"<<endl;
+    cout<<endl<<"operator test"<<endl;
     cout<<"op==op2 and op!=op2: ";
     cout<<(op==op2)<<" "<<(op!=op2)<<endl;
     op=op2;

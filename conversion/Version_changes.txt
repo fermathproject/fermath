@@ -1,3 +1,21 @@
+Fermath Conversions V0.7
+*Added macros to change the size of some of the values of the classes like ids
+*Changed classes according to the macros
+*added a method in operations to check if all the operations are products or divisions
+*Now the units can be a basic unit (just a conversion) or complex unit (product of basic units)
+*all methods of class unit changed according to basic/complex unit
+*added private methods for testing and clean complex units in unit.h
+*added function erase in templates.h, wich erase an element of a vector if it exist and simplify_vectors
+*added new templates in templates.h
+*added operators * and / to create complex units from basic units, also added *= and /=
+*changed operators in class variable according to unit changes
+*new templates in templates.h for work with vectors of pointers (needed for unit class)
+*class variable now handle different bases when operating (dec,hex...)
+*added some method to variable for rounding off
+*new methods in beta_rep.h for checking and reporting errors
+**functions.h unchanged
+***Bug to fix in variable.h (operators *,/,<<)
+
 Fermath Conversions V0.6
 *added new methods in class variable and changed operators + and - (variable.h)
 *added operators *,/,+=,-=,*=,/= (also changed variable_test.cpp)

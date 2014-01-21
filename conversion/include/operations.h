@@ -4,38 +4,43 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Operations Class
-Version:0.6
+Version:0.7
 */
-
+#include "beta_rep.h"
+#include "templates.h"
 //Class to store and do simple operations with doubles
+typedef unsigned short operation_id; //all operations are stores in an unsigned short
 class operations {
 private:
-    vector<unsigned short> op;
+    vector<operation_id> op;
     vector<double> data;
 public:
     //CONSTRUCTORS
     operations() {
     }
-    operations(unsigned op2,double dat) {
+    operations(operation_id op2,double dat) {
         add_operation(op2,dat);
     }
-    operations(unsigned short op2) {
+    operations(operation_id op2) {
         add_operation(op2);
     }
-    operations(vector <unsigned short> &op2,vector<double> &dat) {
+    operations(vector <operation_id> &op2,vector<double> &dat) {
         op=op2;
         data=dat;
+        check();
     }
+    //Contructor from input
     operations(ifstream &input) {
         read_operations(input);
+        check();
     }
     //add a new binary operation and data for conversion
-    void add_operation(unsigned short op2,double dat) {
+    void add_operation(operation_id op2,double dat) {
         op.push_back(op2);
         data.push_back(dat);
     }
     //add a new unary operation for conversion
-    void add_operation(unsigned short op2) {
+    void add_operation(operation_id op2) {
         op.push_back(op2+100);
     }
     //erase the operation and the data linked to it
@@ -51,8 +56,29 @@ public:
                 data.erase(data.begin()+(dpos));//erase data
             }
         }
+        check();
     }
-    //convert d1 using the operations and data provided (conversion from unit)
+    //erase all operations
+    void clear() {
+        op.clear();
+        data.clear();
+    }
+    //ACCESS
+    //if there is no operations
+    bool null_operation() const {
+        if(op.size()==0) return true;
+        return false;
+    }
+    //if all the operations are products or divisions
+    bool product_operation() const {
+        bool b=true;
+        for(int i=0; i<op.size() && b; i++) {
+            if(op[i]!=3 && op[i]!=4) b=false; //only true if all operations are * or /
+        }
+        return b;
+    }
+    //CLASS JOBS
+    //Return the result of the operations using d1 (conversion from unit)
     double operate(double d1) const {
         int tam=op.size();
         for(int i=0; i<tam; i++) {
@@ -63,7 +89,7 @@ public:
     }
     //Inverse conversion, this do the operation in the inverse order and changing operation when needed (conversion to unit)
     double inverse_operate(double d1) const {
-        unsigned short op2;
+        operation_id op2;
         for(int i=op.size()-1; i>=0; i--) {
             op2=op[i];
             if(op2%2==0) op2--;
@@ -73,16 +99,8 @@ public:
         }
         return d1;
     }
-    //if there is no operations
-    bool null_operation() const {
-        if(op.size()==0) return true;
-        return false;
-    }
-    //erase all operations
-    void clear() {
-        op.clear();
-        data.clear();
-    }
+
+    //READ AND WRITE
     //write the operations in a binary file
     void write_operations(ofstream &out) const {
         binary_write_vector(op,out);
@@ -92,6 +110,7 @@ public:
         binary_read_vector(op,input);
         binary_read_vector(data,input);
     }
+
     //OPERATORS
     //operator== (size and data of both vectors must be equal)
     bool operator==(const operations &oper2) const {
@@ -120,13 +139,14 @@ public:
             (*this).data=op2.data;
             (*this).op=op2.op;
         }
+        check();
         return *this;
     }
 
 private:
     //operator <<, show the operations os the standard output
     friend ostream  &operator<< (ostream &out, const operations &oper) {
-        vector<unsigned short> a=oper.op;
+        vector<operation_id> a=oper.op;
         vector<double> b=oper.data;
         for(int i=0; i<a.size(); i++) {
             out<<"("<<a[i]<<",";
@@ -137,7 +157,7 @@ private:
         return out;
     }
     //private methods for resolving operations
-    double calc(unsigned short cal, double n1,double n2) const { //binary operations
+    double calc(operation_id cal, double n1,double n2) const { //binary operations
         double r=0;
         switch(cal) {
         case 1:
@@ -163,7 +183,7 @@ private:
         }
         return r;
     }
-    double calc(unsigned short cal,double n) const { //unary operations
+    double calc(operation_id cal,double n) const { //unary operations
         double r=0;
         switch(cal) {
         case 1:
@@ -203,6 +223,13 @@ private:
         }
         return r;
     }
-
+    void check() {
+        int siz1=op.size();
+        int c=0;
+        for(int i=0; i<siz1; i++) {
+            if(op[i]<=100) c++;
+        }
+        if(c!=data.size()) error_report("Error in class operations while checking",1,1);
+    }
 
 };

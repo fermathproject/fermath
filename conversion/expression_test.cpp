@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Expression Test
-Version:0.6
+Version:0.7
 
 This program test the expresion.h methods
 */
@@ -14,17 +14,14 @@ This program test the expresion.h methods
 #include <fstream>
 #include <string>
 #include <stack>
+#include <stdlib.h>
 using namespace std;
-#include "include/templates.h"
-#include "include/operations.h"
-#include "include/unit.h"
 #include "include/magnitude.h"
-#include "include/variable.h"
 #include "include/expression.h"
 
 
 int main() {
-    cout<<"Fermath Expression Test V0.6"<<endl;
+    cout<<"Fermath Expression Test V0.7"<<endl;
     cout<<"this program needs the file magnitude.test"<<endl;
     ifstream in("magnitude.test");
     magnitude mass(in,1);

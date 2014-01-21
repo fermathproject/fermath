@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions Test
-Version:0.6
+Version:0.7
 
 This program test the functions.h methods
 */
@@ -12,12 +12,16 @@ This program test the functions.h methods
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include<fstream>
+#include<string>
+#include<stdlib.h>
 using namespace std;
+#include "include/beta_rep.h"
 #include "include/functions.h"
 
 
 int main() {
-    cout<<"Fermath Function Test V0.6";
+    cout<<"Fermath Function Test "<<version;
     float x=80,y=34;
     for(int i=0; i<4; i++) {
         x=x*x; //x is a big number

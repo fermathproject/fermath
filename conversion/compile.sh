@@ -1,5 +1,5 @@
 #Fermath:Conversion tests
-#Version 0.6
+#Version 0.7
 #This Script compiles all the Fermath:Conversion tests
 
 g++ functions_test.cpp -o functions_test

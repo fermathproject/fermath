@@ -5,7 +5,7 @@
 
 /*
 Fermath Project:Conversion Templates test
-Version:0.6
+Version:0.7
 */
 
 //This Program tests the templates of templates.h writing and reading vectors from a file
@@ -14,16 +14,19 @@ Version:0.6
 #include<vector>
 #include<fstream>
 #include<string>
+#include<stdlib.h>
 using namespace std;
-#include"include/templates.h"
+#include "include/beta_rep.h"
+#include "include/templates.h"
 
 
 int main() {
-    cout<<"Fermath Templates Test V0.6"<<endl;
-    cout<<"this program will create a file called template.test"<<endl;
+    cout<<"Fermath Templates Test "<<version<<endl;
+    cout<<"This program will create a file called template.test"<<endl;
     vector<char> v;
     vector<int> v2;
     vector<string> v3;
+    //Different types of vectors to test
     v.push_back('a');
     v.push_back('b');
     v.push_back('f');//v={a,b,f}
@@ -40,7 +43,7 @@ int main() {
     write_vector(v2);
     cout<<endl;
     write_vector(v3);//show vector on standard output
-    cout<<endl;
+    cout<<endl<<endl;
     ofstream out("template.test");
     binary_write_vector(v,out);
     binary_write_vector(v2,out);
@@ -57,18 +60,27 @@ int main() {
     v.clear();
     v2.clear();
     v3.clear(); //clears original vectors (if the copied vectors are just pointers, they will fail)
-    cout<<"Readed vectors:"<<endl;
+    cout<<"Readed vectors from file:"<<endl;
     write_vector(vout);
     cout<<endl;
     write_vector(vout2);
     cout<<endl;
     write_vector(vout3);//show vectors
-    cout<<endl;
+    cout<<endl<<endl;
     vector<int> v4;
     v4.push_back(4);
     v4.push_back(29); //v4={4,29}
-    add_vector(v4,vout2);
+    cout<<"v4:";
+    write_vector(v4);
+    cout<<endl;
+    add_vector(v4,vout2); //adds elements from one vector to second if they are not in
     cout<<"v4+v2"<<endl;
+    write_vector(v4);
+    cout<<endl<<endl;
+    cout<<"Simplify v2 and v4"<<endl;
+    simplify_vectors(vout2,v4);
+    write_vector(vout2);
+    cout<<endl;
     write_vector(v4);
     cout<<endl;
     return 0;

@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Functions
-Version:0.6
+Version:0.7
 
 This provides functions that may be used in some classes or programs of Fermath
 */
