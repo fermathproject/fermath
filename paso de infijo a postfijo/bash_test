@@ -1,0 +1,4 @@
+#!/bin/bash
+g++ postfijoV3.cpp -o postfijo
+./postfijo
+./postfijo >>test.txt
