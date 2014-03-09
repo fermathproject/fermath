@@ -1,0 +1,50 @@
+/* (C) Programmed by:
+   Antonio Jimenez Martínez
+   Andrés Ortiz Corrales
+   Mariano Palomo Villafranca  
+*/
+/*
+Fermath Project:turn Postfijo
+Version:3
+*/
+
+Breve explicación sobre lo que realiza:
+
+El ejecutable ./crearset. Genera un menu en el cual creamos la base de datos de operadores, la cuala se almacena en un archivo binario llamado op.fermath.
+Cada operador con un identificador determinado.
+
+El ejecutable ./postfijo. Crea a partir de una formula en un string en formato infijo una vectro de string cada uno con una varible o operador o parentesis. 
+También genera 3 cola, formando una estructura en fomato postfijo:
+	-Un cola con las variables.
+	-Un cola con operadores.
+	-Un cola con 0 o 1 para determinar si va 0=variable y 1=operador.
+
+Debemos tener en cuenta:
+-eliminar espacios.
+-comprobar parentesis.
+-modificar los corchetes por ().
+
+Un ejemplo de la ejecucion es la siguiente, a partir de la siguiente formula "(a/b+1kg)":
+
+mostramos en infijo
+(  a  #  /  b  #  +  1kg  )  
+Pasar de infijo a postfijo
+mostramos el vector de string en postfijo
+a  b  /  1kg  +              
+mostramos la pila de las variables
+1kg b a 
+mostramos la pila de los operadores
++ / 
+mostramos la pila de las posiciones01 0=variable y 1=operador 
+1 0 1 0 0
+
+De esta manera tomamos de la pila de posiciones01:
+1º: 0->a
+2º: 0->b
+3º: 1->/
+4º: 0->1kg
+5º: 1->+
+
+De esta manera generamos la siguiente formula en postfijo: a b / 1kg +
+
+Para completar, le dejamos un conjuntos de ejemplo, en el archivo test.txt, para comprobar el funcionamiento del algoritmo. 
