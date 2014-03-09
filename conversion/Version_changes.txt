@@ -1,3 +1,25 @@
+Fermath Conversions V0.8
+*Added class op in operator.h to store and process operators in fermath, using strings and operation_id
+*changed operations class according to class op and class renamed conversion (now is in conversion.h)
+*added operator_test.cpp to test new class op
+*operations_test.cpp now changed and renamed as conversion_test.cpp
+*added operators ==,=,<,> in class op
+*changed class unit according to class conversion, also changed unit_test.cpp
+*class unit only stores name and symbol instead of vector<string>
+*class unit operator+ removed
+*class magnitude changed according to new class unit
+*class magnitude now stores two strings instead of vector<string>
+*class magnitude now stores a principal unit and set of secondary units
+*added class names_list in names.h (not tested)
+**templates.h unchanged
+
+***operator *,/ in class unit bug fixed
+****Warning: class variable not working properly
+****Warning: class expression not tested
+****Warning: class names not tested
+
+
+
 Fermath Conversions V0.7
 *Added macros to change the size of some of the values of the classes like ids
 *Changed classes according to the macros

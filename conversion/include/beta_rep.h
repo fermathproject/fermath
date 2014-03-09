@@ -1,6 +1,6 @@
 typedef unsigned short error_id;
 const bool hide_assert=false;
-const bool hide_write=false;
+const bool hide_write=true;
 const bool hide_show=false; //true to hide errors
 
 const bool force_assert=false;
@@ -10,7 +10,7 @@ const bool force_show=true; //true to force errors(indepent of hide value)
 
 
 bool show_contact_message=false;
-const string version="V0.7";
+const string version="V0.8";
 const error_id correct_check=0,warning_check=1,error_check=2,user_error=3,class_error=4,fatal_error=5;
 #define error_file "fermath.error"
 
