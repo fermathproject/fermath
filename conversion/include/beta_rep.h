@@ -10,7 +10,7 @@ const bool force_show=true; //true to force errors(indepent of hide value)
 
 
 bool show_contact_message=false;
-const string version="V0.8";
+const string version="V0.9";
 const error_id correct_check=0,warning_check=1,error_check=2,user_error=3,class_error=4,fatal_error=5;
 #define error_file "fermath.error"
 

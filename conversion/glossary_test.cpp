@@ -3,10 +3,8 @@
    Andrés Ortiz Corrales
    Mariano Palomo Villafranca  */
 /*
-Fermath Project:Unit Test
+Fermath Project:Glossary Test
 Version:0.9
-
-This program test the units aka. complex units
 */
 #include <iostream>
 #include <cmath>
@@ -17,7 +15,7 @@ This program test the units aka. complex units
 #include <map>
 #include<set>
 using namespace std;
-#include "include/complex_unit.h"
+#include "include/glossary.h"
 
 
 int main() {
