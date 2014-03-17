@@ -1,0 +1,7 @@
+Programa para la resolución de sistemas de ecuaciones de hasta 5 ecuaciones y 5
+incógnitas para FerMath.
+
+Para ello se debe usar la libreria eigen e incluirla en el directorio.
+
+Programado por: 
+	Mariano Palomo Villafranca con la ayuda de Alberto Piñero Lardín.
