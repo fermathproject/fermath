@@ -68,6 +68,7 @@ public:
         clean_units();
         check();
     }
+    //TODO:void add_units(const vector<complex_unit> &v,const vector<complex_unit> &v)
     void clear() {
         avect.clear();
         bvect.clear();
@@ -175,6 +176,40 @@ public:
             if((*it)>maxid) b=false;
         }
         return b;
+    }
+    //I/O
+    void write(ofstream &out) const {
+        string name; //if the unit has another name different of basic units as default name (Newtons)
+        multiset<basic_unit_id>::iterator it;
+        unsigned short siz1=avect.size(),siz2=bvect.size();
+        binary_write(name,out); //write name
+        binary_write(siz1,out);
+        for(it=avect.begin(); it!=avect.end(); it++) { //writes avect
+            binary_write(*it,out);
+        }
+        binary_write(siz2,out);
+        for(it=bvect.begin(); it!=bvect.end(); it++) {//writes bvect
+            binary_write(*it,out);
+        }
+    }
+    void read(ifstream &input) {
+        unsigned short siz;
+        basic_unit_id id;
+        string n;
+        binary_read(n,input);
+        name=n;
+        binary_read(siz,input);
+        avect.clear();
+        for(int i=0; i<siz; i++) {
+            binary_read(id,input);
+            avect.insert(id);
+        }
+        binary_read(siz,input);
+        bvect.clear();
+        for(int i=0; i<siz; i++) {
+            binary_read(id,input);
+            bvect.insert(id);
+        }
     }
 private:
     //operator <<, show the operations os the standard output
@@ -295,9 +330,9 @@ public:
     }
 
     //removes unit, warning!!
-      /*  bool remove_unit(complex_unit_id id) {
-            return src.erase(id);
-        }*/
+    /*  bool remove_unit(complex_unit_id id) {
+          return src.erase(id);
+      }*/
 
     void set_name(string n) {
         name=n;
@@ -386,6 +421,32 @@ public:
         check();
         return (*this);
     }
+    //I/O
+    void write(ofstream &out) const {
+        unsigned short siz=src.size();
+        binary_write(name,out);
+        binary_write(standard_unit,out);
+        binary_write(siz,out);
+        map<complex_unit_id,complex_unit>::const_iterator it;
+        for(it=src.begin(); it!=src.end(); it++) {
+            binary_write((*it).first,out);
+            ((*it).second).write(out);
+        }
+    }
+
+    void read(ifstream &input) {
+        pair<complex_unit_id,complex_unit> p;
+        binary_read(name,input);
+        binary_read(standard_unit,input);
+        unsigned short siz;
+        binary_read(siz,input);
+        src.clear();
+        for(int i=0; i<siz; i++) {
+            binary_read(p.first,input);
+            (p.second).read(input);
+            src.insert(p);
+        }
+    }
 
     /*        //operator + //TODO:maybe impossible to do this way
            	//merge two magnitude
@@ -473,7 +534,7 @@ public:
     magnitude_id add_magnitude(const magnitude &mag) {
         string n1=mag.get_name();
         magnitude_id res;
-        res=search_magnitude(n1);
+        res=search_magnitude_id(n1);
         if(res==0) {
             res=next_id(); //obtains magnitude id
             pair<magnitude_id,magnitude> p;
@@ -484,14 +545,16 @@ public:
         return res;
     }
     //add unit to src and basic_src
-    void add_basic_unit(const basic_unit &bunit,magnitude_id magid) {
+    unit_id add_basic_unit(const basic_unit &bunit,magnitude_id magid) {
         basic_unit_id bid;
+        unit_id resid;
         bid=basic_src.add(bunit); //the unit is added to basic source
         complex_unit unit2(bid,basic_src); //complex_unit version of a basic_unit
-        add_complex_unit(unit2,magid); //the unit is added to complex source
+        resid=add_complex_unit(unit2,magid); //the unit is added to complex source
+        return resid;
     }
     //add a complex unit
-    complex_unit_id add_complex_unit(const complex_unit &unit2,magnitude_id magid) {
+    unit_id add_complex_unit(const complex_unit &unit2,magnitude_id magid) {
         complex_unit_id uid=0;
         if(unit2.check_with_basic(basic_src)==false) error_report("Error,complex_unit with non-exstent basic ids",1,1);
         else {
@@ -504,7 +567,14 @@ public:
                 error_report("Error,magnitude of the unit not found",1,1);
             }
         }
-        return uid;
+        unit_id u;
+        u.first=magid;
+        u.second=uid;
+        return u;
+    }
+    void clear() {
+        basic_src.clear();
+        src.clear();
     }
     //ACCESS
     bool is_unit(unit_id p) const {
@@ -523,7 +593,7 @@ public:
         id=size()+1;
         return id;
     }
-    complex_unit search(unit_id p) const {
+    complex_unit search_unit(unit_id p) const {
         complex_unit result;
         magnitude m=search_magnitude(p.first);
         result=m.search(p.second);
@@ -545,7 +615,7 @@ public:
         else error_report("Warning, searching for a non-existent id",1,1);
         return u;
     }
-    magnitude_id search_magnitude(string n) const {
+    magnitude_id search_magnitude_id(string n) const {
         map<magnitude_id,magnitude>::const_iterator it;
         magnitude_id res=0;
         bool found=false;
@@ -563,6 +633,30 @@ public:
         return result;
     }
 
+    //I/O
+    void write(ofstream &out) const {
+        unsigned short siz=src.size();
+        map<magnitude_id,magnitude>::const_iterator it;
+        basic_src.write(out);
+        binary_write(siz,out);
+        for(it=src.begin(); it!=src.end(); it++) {
+            binary_write((*it).first,out);
+            ((*it).second).write(out);
+        }
+    }
+
+    void read(ifstream &input) {
+        clear();
+        unsigned short siz;
+        pair<magnitude_id,magnitude> p;
+        basic_src.read(input);
+        binary_read(siz,input);
+        for(int i=0; i<siz; i++) {
+            binary_read(p.first,input);
+            (p.second).read(input);
+            src.insert(p);
+        }
+    }
 private:
     void check() {
         if(is_magnitude(0)==true) error_report("Error, magnitude with id=0",1,1);

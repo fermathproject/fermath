@@ -37,7 +37,7 @@ public:
         text=s;
     }
     op(ifstream &input) {
-        read_operator(input);
+        read(input);
     }
     //Modificators
     void set_text(string text2) {

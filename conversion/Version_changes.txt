@@ -3,6 +3,7 @@ Fermath Conversions V0.9
 *created class complex_unit in complex_unit.h file
 *added "source" classes for storage
 *new glossary class to store all the names of units,magnitudes etd..
+*data_src class control the relation between units and the gossary
 **class op unchanged
 
 Fermath Conversions V0.8

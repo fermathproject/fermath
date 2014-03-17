@@ -37,6 +37,9 @@ public:
         name=name2;
         add_operation(oper,dat);
     }
+    basic_unit(const string &n) {
+        name=n;
+    }
     basic_unit(ifstream &input) {
         (*this).read(input);
     }
@@ -173,11 +176,9 @@ public:
         clear();
         binary_read_vector(data,input);
         binary_read(opsize,input);
-        operations.reserve(opsize);
-        op op2;
+        operations.resize(opsize);
         for(unsigned short i=0; i<opsize; i++) {
-            op2.read(input);
-            operations.push_back(op2);
+            operations[i].read(input);
         }
         check();
     }
@@ -340,6 +341,9 @@ public:
         basic_unit_id i=next_id();
         src.push_back(uni);
     }
+    void clear() {
+        src.clear();
+    }
     //ACCESS
     //convert to standard
     data_type convert(data_type d1,basic_unit_id id1) const {
@@ -366,6 +370,24 @@ public:
     int max_id() const {
         return src.size()-1;
     }
+    //I/O
+    void write(ofstream &out) const {
+        unsigned short siz=src.size();
+        binary_write(siz,out);
+        for(int i=0; i<siz; i++) {
+            src[i].write(out);
+        }
+    }
+    void read(ifstream &input) {
+        unsigned short siz;
+        binary_read(siz,input);
+        src.clear();
+        src.resize(siz);
+        for(int i=0; i<siz; i++) {
+            src[i].read(input);
+        }
+    }
+
 private:
     void check() const {
         for(int i=0; i<src.size()-1; i++) {

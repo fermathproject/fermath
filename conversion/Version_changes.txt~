@@ -1,8 +1,10 @@
-Fermath Conversions V0.8
+Fermath Conversions V0.9
 *Created class basic_unit in basic_unit.h file, removed conversion.h and unit.h
 *created class complex_unit in complex_unit.h file
 *added "source" classes for storage
-**clas op unchanged
+*new glossary class to store all the names of units,magnitudes etd..
+*data_src class control the relation between units and the gossary
+**class op unchanged
 
 Fermath Conversions V0.8
 *Added class op in operator.h to store and process operators in fermath, using strings and operation_id

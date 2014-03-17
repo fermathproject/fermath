@@ -28,6 +28,10 @@ public:
         id=id2;
         type=bin;
     }
+    op(operation_id id2,bool bin) {
+        id=id2;
+        type=bin;
+    }
     op(const op &oper2) {
         (*this)=oper2;
         text=oper2.get_text();

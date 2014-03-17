@@ -68,19 +68,6 @@ void binary_read(string &element,ifstream &input) {
     string str(data.begin(),data.end());
     element=str;
 }
-
-//Writes an element in a binary file
-template <typename T,typename P>
-void binary_write(const pair<T,P> &element,ofstream &out) {
-    binary_write(element.first,out);
-    binary_write(element.second,out);
-}
-//Reads an element from a binary file
-template <typename T,typename P>
-void binary_read(const pair<T,P> &element,ifstream &input) {
-    binary_read(element.first,input);
-    binary_read(element.second,input);
-}
 //read/write versions for vector<string>
 void binary_write_vector(const vector<string> &v,ofstream &out) {
     max_size siz=v.size();
