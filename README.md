@@ -9,3 +9,5 @@ Proyecto de Software Libre para la realización de una calculadora con Base de d
 
 *Cambio de formato: Pasa de formato infijo, a postfijo.
 
+*Algebra: resolver ecuaciones.
+
