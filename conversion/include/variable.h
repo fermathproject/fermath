@@ -4,10 +4,11 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Variable Class
-Version:0.8
+Version:0.9.2
 */
-
+#include "data_source.h"
 //this class stores and operate with a variable, it can have an unit or not, also operates with undefined variables (variables without a value)
+//WARNING: this class just operates with the data, cant check the meaning of units and magnitudes!!
 typedef unsigned short base;
 #define DEC_BASE 10
 #define HEX_BASE 16
@@ -18,7 +19,7 @@ class variable {
 private:
     unit variable_unit;
     string name;
-    double value;
+    data_type value;
     base variable_base; //decimal,hexadecimal.... (deafult is dec)
     bool dim_unit; //if variable has an unit
     bool numeric_value; //if variable has a value
@@ -29,7 +30,7 @@ public:
         set_base();
         check();
     }
-    variable(string name2,double val2,const unit &uni,base vb=DEC_BASE) {//a variable with name, value and unit
+    variable(string name2,data_type val2,const unit &uni,base vb=DEC_BASE) {//a variable with name, value and unit
         name=name2;
         dim_unit=false;
         set_unit(uni);
@@ -37,20 +38,20 @@ public:
         set_value(val2);
         check();
     }
-    variable(double n,base vb=DEC_BASE) { //a variable with no dimension
+    variable(data_type n,base vb=DEC_BASE) { //a variable with no dimension
         set_value(n);
         dim_unit=false;
         set_base(vb);
         check();
     }
-    variable(string name2,double val2,base vb=DEC_BASE) { //a variable with name and value
+    variable(string name2,data_type val2,base vb=DEC_BASE) { //a variable with name and value
         dim_unit=false;
         name=name2;
         set_base(vb);
         set_value(val2);
         check();
     }
-    variable(double val2,unit &uni,base vb=DEC_BASE) { //a variable with no name
+    variable(data_type val2,unit &uni,base vb=DEC_BASE) { //a variable with no name
         dim_unit=false;
         set_unit(uni);
         numeric_value=true;
@@ -75,71 +76,58 @@ public:
     }
     //the value is set in dec
     void set_value(double x) {
-        // if(standard_base()==false) error_report("Warning, non standard base, value may change",0,1);
         value=x;
         numeric_value=true;
         check();
     }
+    //set value as from a string (the number written will be in the base)
     void set_value(string s) {
         value=to_dec(s,variable_base);
         numeric_value=true;
         check();
     }
-    //sets variable base (if is an incorrect base, it uses decimal base
+    //sets variable base (if is an incorrect base, it uses decimal base)
     void set_base(base vb=DEC_BASE) {
         if(vb<BIN_BASE || vb>MAX_BASE) {
-            error_report("ERROR, base not allowed",0,1);
+            error_report(user_error,"base not allowed",0,1);
             vb=DEC_BASE;
         }
-        else if(vb>HEX_BASE) error_report("WARNING, base>16",0,1);
+        else if(vb>HEX_BASE) error_report(warning_check,"base>16",0,1);
         variable_base=vb;
         check();
     }
+    //sets the unit
     void set_unit(const unit &uni) {
-        if(uni.null_unit()==false) {
+        if(uni.is_null()==false) {
             dim_unit=true;
             variable_unit=uni;
         }
-        else error_report("Error,impossible set_unit",1,1);
+        else error_report(error_check,"impossible set_unit",1,1);
     }
-    //set new unit changing the value
-    void change_unit(const unit &uni) {
-        if(uni.null_unit()==false) {
-            bool ch=true;
-            if(dim_unit==false) {
-                dim_unit=true;
-                ch=false;
-            }
-            if(numeric_value==false) ch=false;
-            if(same_magnitude(uni)==false) {
-                ch=false;
-                error_report("Warning, different magnitude in variable",1,1);
-            }
-            if(ch==true) {
-                double x;
-                x=get_standard_value();
-                set_unit(uni);
-                set_value_from_standard(x);
-            }
-            else set_unit(uni);
-            check();
-        }
+
+    //set new unit changing the value (warning: dont check if the unit has the same magnitude)
+    void change_unit(const unit &uni,const basic_unit_source &bsrc) {
+        double v;
+        if(have_value())  v=get_standard_value(bsrc); //gets actual value (standard)
+        set_unit(uni); //sets new unit
+        if(have_value()) set_value_from_standard(v,bsrc); //sets the changed value
+        check();
     }
     void trunc_var() {
         value=(int) value;
     }
-    void round_off_var(unsigned int prec=0) {
+    //round decimals
+    void round_off(unsigned short prec=0) {
         if(is_int()==false && standard_base()==true) {
             unsigned int prec2=pow(10,prec);
             value=floor(value*prec2+0.5)/prec2;
         }
         else if(standard_base()==false) {
-            error_report("Warning, not possible to round a not dec variable",1,0);
+            error_report(warning_check,"not possible to round a not dec variable",1,0);
         }
         if(numeric_value==false) {
-            error_report("ERROR,rouding off a non numerica value",1,1);
+            error_report(error_check,"rouding off a non numerical value",1,1);
         }
-        check();
     }
     void clear_unit() {
         dim_unit=false;
@@ -152,49 +140,40 @@ public:
     void clear() {
         clear_unit();
         erase_name();
-        set_base();
+        set_base(); //set base to default
         clear_value();
     }
 
     //ACCESS
-    //returns the magnitude of the variable unit
-    magnitude_id mag_id() const {
-        magnitude_id m=0;
-        if(dim_unit==true) m=variable_unit.mag_id();
-        return m;
-    }
-    unit_id get_unit_id() const {
-        unit_id i=0;
-        if(dim_unit==true) i=variable_unit.get_id();
-        return i;
-    }
     unit get_unit() const {
         return variable_unit;
     }
     string get_name() const {
         return name;
     }
+    //Get the value in dec
     double get_value() const {
-        if(standard_base()==false) error_report("Warning,non standard base,returning value in DEC",1,1);
         if(have_value()==true) return value;
         else {
-            error_report("ERROR, not value to return",1,1);
+            error_report(error_check,"not value to return",0,1);
             return 0;
         }
     }
-
     base get_base() const {
         return variable_base;
     }
+    //true if base is decimal
     bool standard_base() const {
         if(variable_base==DEC_BASE) return true;
         else return false;
     }
+    //return true if the value is an int number
     bool is_int() const {
         int val2=value;
         if(val2==value) return true;
         else return false;
     }
+    //true if the value is positive (>=0)
     bool is_positive() const {
         if(value>=0) return true;
         else return false;
@@ -212,34 +191,66 @@ public:
     bool have_value() const {
         return numeric_value;
     }
-    //return true if are the same magnitude
-    bool same_magnitude(const variable &other)const {
-        return variable_unit.same_magnitude(other.variable_unit);
-    }
-    bool same_magnitude(const unit &other) const {
-        return variable_unit.same_magnitude(other);
-    }
+
     //return true if has the same value (only checks value!!!)
     bool same_value(const variable &other) const {
-        if(have_value()==false || other.have_value()==false) return false;
+        if((*this).have_value()==false || other.have_value()==false) return false;
         else if(value==other.value) return true;
         else return false;
     }
-    bool same_unit(const variable &other) const {
-        return variable_unit.same_unit(other.variable_unit);
+    //true if the standard_unit value of both variables is the same
+    bool same_standard_value(const variable &other,const basic_unit_source &bsrc) const {
+        if((*this).have_value()==false || other.have_value()==false) return false;
+        else {
+            double var1,var2;
+            var1=(*this).get_standard_value(bsrc);
+            var2=other.get_standard_value(bsrc);
+            if(var1==var2) return true;
+            else return false;
+        }
     }
-    string show_value() const {
+    bool same_unit(const variable &other) const {
+        return variable_unit==other.variable_unit;
+    }
+    //show the value according to the base
+    string show_value() const {//TODO:use for double
         string val;
         if(have_value()==true)        val=to_base(value,variable_base);
-        else        error_report("ERROR,not value to return",1,1);
+        else        error_report(error_check,"no value to return",1,1);
         return val;
     }
 
-    void show(ostream &out=cout) {
+    void show(const basic_unit_source &src,ostream &out=cout) {
         if(have_name()) out<<name<<":";
         if(have_value()) out<<value;
-        if(have_unit()) out<<"   "<<variable_unit;
+        if(have_unit()) {
+            out<<"   ";
+            variable_unit.show(src,out);
+        }
     }
+    void set_value_from_standard(data_type x,const basic_unit_source &bsrc) { //set the value of x to the variable according to the unit
+        if(standard_base()==false) error_report("Warning, non standard base, value may change",0,1);
+        if(!dim_unit) {
+            set_value(x);
+        }
+        else {
+            x=variable_unit.convert_from_standard(x,bsrc);
+            set_value(x);
+        }
+        check();
+    }
+    data_type get_standard_value(const basic_unit_source &bsrc) const { //get standard value of unit
+        if(!numeric_value) error_report(error_check,"not numeric value",1,1);
+        if(standard_base()==false) error_report(warning_check,"non standard base",1,1);
+        if(dim_unit) {
+            data_type v=variable_unit.convert_to_standard(value,bsrc);
+            return v;
+        }
+        else return value;
+    }
+
+
+
 
     //READ/WRITE
     /*  void write_variable(ofstream &out) const {
@@ -263,23 +274,111 @@ public:
           }
       }*/
 
-    //OPERATORS
-    //operator==
-    bool operator==(const variable &var2) const { //check if the value of variables and magnitudes are equal
-        bool eq=false;
-        bool v1,v2,d1,d2;
-        v1=(*this).numeric_value;
-        v2=var2.numeric_value;
-        if(v1 && v2) {
-            double x=(*this).value;
-            double y=var2.value;
-            if(same_magnitude(var2)) {
-                x=(*this).get_standard_value();
-                y=var2.get_standard_value();
-                if(x==y) eq=true;
+    //adds one variable to another if the magnitude is the same
+    variable add(const variable &other,const data_src &src) const {
+        variable result(*this);
+        if(result.have_value() && other.have_value()) {
+            if(result.have_unit()!=other.have_unit()) error_report(class_error,"operating dimensional unit with no dimensional unit",1,1);
+            else {
+                if(result.have_unit()) { //adding dimensional units
+                    if(src.same_magnitude(result.get_unit(),other.get_unit())==false) error_report(user_error,"adding units with different magnitude",1,1);
+                    else {
+                        data_type x=result.get_standard_value(src.get_basic_source());
+                        data_type y=other.get_standard_value(src.get_basic_source());
+                        x=x+y;
+                        result.set_value_from_standard(x,src.get_basic_source());
+                    }
+                }
+                else { //adding non dimensional units
+                    data_type x=result.value;
+                    x=x+other.value;
+                    result.set_value(x);
+                }
             }
         }
-        return eq;
+        else error_report(class_error,"operating with variables with no value (+)",1,1);
+        result.erase_name();
+        result.check();
+        return result;
+    }
+    //var1-var2
+    variable deduct(const variable &other,const data_src &src) const {
+        variable result(*this);
+        if(result.have_value() && other.have_value()) {
+            if(result.have_unit()!=other.have_unit()) error_report(class_error,"operating dimensional unit with no dimensional unit",1,1);
+            else {
+                if(result.have_unit()) { //adding dimensional units
+                    if(src.same_magnitude(result.get_unit(),other.get_unit())==false) error_report(user_error,"adding units with different magnitude",1,1);
+                    else {
+                        data_type x=result.get_standard_value(src.get_basic_source());
+                        data_type y=other.get_standard_value(src.get_basic_source());
+                        x=x-y;
+                        result.set_value_from_standard(x,src.get_basic_source());
+                    }
+                }
+                else { //adding non dimensional units
+                    data_type x=result.value;
+                    x=x+other.value;
+                    result.set_value(x);
+                }
+            }
+        }
+        else error_report(class_error,"operating with variables with no value (+)",1,1);
+        result.erase_name();
+        result.check();
+        return result;
+    }
+    //var1*var2
+    variable multiply(const variable &other) const {
+        variable result(*this);
+        if(result.have_value()==false || other.have_value()==false) error_report(user_error,"error, cannot multiply variables with no value",0,1);
+        else {
+            data_type x=other.get_value();
+            data_type y=result.get_value();
+            x=x*y;
+            result.set_value(x);
+            if(result.have_unit()==false) result.clear_unit();
+            if(other.have_unit()==true) result.add_unit(other.get_unit()); //"Multiply" units
+        }
+        //TODO: if magnitude is the same, change unit
+        return result;
+    }
+    //var1/var2
+    variable divide(const variable &other) const {
+        variable result(*this);
+        if(result.have_value()==false || other.have_value()==false) error_report(user_error,"error, cannot multiply variables with no value",0,1);
+        else {
+            data_type x=other.get_value();
+            data_type y=result.get_value();
+            x=x/y;
+            result.set_value(x);
+            if(result.have_unit()==false) result.clear_unit();
+            if(other.have_unit()==true) result.add_inverse_unit(other.get_unit()); //"Multiply" units
+        }
+        //TODO: if magnitude is the same, change unit
+        return result;
+    }
+
+
+    //OPERATORS
+    //operator==
+    bool operator==(const variable &var2) const { //check if the value,name,units, and base are equal
+        bool v1,v2,n1,n2,u1,u2;
+        v1=(*this).numeric_value;
+        v2=var2.numeric_value;
+        n1=(*this).have_name();
+        n2=var2.have_name();
+        u1=(*this).have_unit();
+        u2=var2.have_unit();
+        if(v1!=v2) return false;
+        else if(n1!=n2) return false;
+        else if(u1!=u2) return false;
+        else {
+            if(n1==true && (*this).name!=var2.name) return false;
+            else if(v1==true && ((*this).value!=var2.value || (*this).variable_base!=var2.variable_base)) return false;
+            else if(u1==true && (*this).variable_unit!=var2.variable_unit) return false;
+            else  return true;
+        }
     }
     // operator!=
     bool operator!=(const variable &var2) const {
@@ -299,20 +398,7 @@ public:
     }
 
 
-    //operator+:adds two variables if they have a value and are the same magnitude (or dont have magnitude)
-    const variable operator+(const variable &other) const {
-        variable result(*this);
-        if(result.can_operate_with(other)) {
-            double x=result.get_standard_value();
-            double y=other.get_standard_value();
-            x=x+y;
-            result.set_value_from_standard(x);
-        }
-        else error_report("ERROR OPERATING",1,1);
-        result.erase_name();
-        result.check();
-        return result;
-    }
+    /*
     //operator -
     const variable operator-(const variable &other) const {
         variable result(*this);
@@ -419,16 +505,16 @@ public:
         (*this)=(*this)-var;
         return *this;
     }
-    //operator *=
-    variable operator*=(const variable &var) {
-        (*this)=(*this)*var;
-        return *this;
-    }
-    //operator /=
-    variable operator/=(const variable &var) {
-        (*this)=(*this)/var;
-        return *this;
-    }
+     //operator *=
+     variable operator*=(const variable &var) {
+         (*this)=(*this)*var;
+         return *this;
+     }
+     //operator /=
+     variable operator/=(const variable &var) {
+         (*this)=(*this)/var;
+         return *this;
+     }*/
     //operator unary -:return the negative value of the unit
     variable operator-() const {
         variable result=(*this);
@@ -436,37 +522,20 @@ public:
         return result;
     }
 private:
-    //operator <<, show the variable on the standard output
-    friend ostream  &operator<< (ostream &out, const variable &var) {
-        if(var.have_name()) out<<var.name<<":";
-        if(var.have_value()) {
-            if(var.standard_base()==false) {
-                string val;
-                val=var.show_value();
-                out<<val;
-                out<<")"<<" "<<var.get_base();
-            }
-            else out<<var.value;
-        }
-        if(var.have_unit()) {
-            out<<" "<<var.variable_unit;
-        }
-        return out;
-    }
     //check if is possible to operate
-    bool can_operate_with(const variable &var2) const {
-        bool b=true;
-        bool un1=(*this).have_unit();
-        bool un2=var2.have_unit();
-        bool v1=(*this).have_value();
-        bool v2=var2.have_value();
-        if(!v1 || !v2) b=false; //if one of them dont have numeric_value
-        // else if((un1 && !un2) || (!un1 && un2)) b=false; //if one of them has unit but the other dont
-        else if(un1 && un2) { //if both have units, it has to be the same magnitude
-            if(same_magnitude(var2)==false) b=false;
-        }
-        return b;
-    }
+    /*  bool can_operate_with(const variable &var2) const {
+          bool b=true;
+          bool un1=(*this).have_unit();
+          bool un2=var2.have_unit();
+          bool v1=(*this).have_value();
+          bool v2=var2.have_value();
+          if(!v1 || !v2) b=false; //if one of them dont have numeric_value
+          // else if((un1 && !un2) || (!un1 && un2)) b=false; //if one of them has unit but the other dont
+          else if(un1 && un2) { //if both have units, it has to be the same magnitude
+              if(same_magnitude(var2)==false) b=false;
+          }
+          return b;
+      }*/
 
     string to_base(int v, base b)const {
         bool neg=false;
@@ -496,32 +565,16 @@ private:
         }
         return strtol(s.c_str(),NULL,b);
     }
-    void set_value_from_standard(double x) { //set the value of x to the variable according to the unit
-        if(standard_base()==false) error_report("Warning, non standard base, value may change",0,1);
-        if(!dim_unit) {
-            set_value(x);
-        }
-        else {
-            x=variable_unit.value_from_standard_unit(x);
-            set_value(x);
-        }
-        check();
+    void add_unit(const unit &u) {
+        variable_unit.add_unit(u);
+        dim_unit=true;
     }
-    double get_standard_value() const { //get standard value of unit
-        if(!numeric_value) error_report("ERROR, not numric value",1,1);
-        if(standard_base()==false) error_report("Warning,non standard base",1,1);
-        if(dim_unit) {
-            double v=variable_unit.standard_unit_value(value);
-            return v;
-        }
-        else return value;
+    void add_inverse_unit(const unit &u) {
+        variable_unit.add_inverse_unit(u);
+        dim_unit=true;
     }
-
     void check() const {
-        bool b=true;
-        if(variable_base<2 || variable_base>36)     b=false;
-        // if(variable_unit.null_unit()==true && dim_unit==false) b=false;
-        if(b==false) error_report("error checking variable",1,1);
+        if(variable_base<2 || variable_base>36)    error_report(warning_check,"error in variable base",1,1);
     }
 
 };

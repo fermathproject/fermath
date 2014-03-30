@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Basic Unit Class & Basic Unit Source Class
-Version:0.9
+Version:0.9.2
 */
 
 #include "operator.h"
@@ -50,10 +50,10 @@ public:
     //add a new binary operation and data for conversion
     void add_operation(op op2,conversion_data dat) {
         op2.erase_name();
-        if(op2.is_null()==true) error_report("Error,no es posible añadir operacion nula a conversion",1,1);
+        if(op2.is_null()==true) error_report(user_error,"no es posible añadir operacion nula a conversion",0,1);
         else {
             if(op2.is_binary()==false) {
-                error_report("Warning, añadiendo operacion unaria, el valor sera eliminado",1,1);
+                error_report(user_error,"añadiendo operacion unaria, el valor de operacion sera eliminado",0,1);
                 add_operation(op2);
             }
             else {
@@ -66,21 +66,21 @@ public:
     //add a new unary operation for conversion
     void add_operation(op op2) {
         op2.erase_name();
-        if(op2.is_null()==true) error_report("Error,no es posible añadir operacion nula a conversion",1,1);
+        if(op2.is_null()==true) error_report(user_error,"no es posible añadir operacion nula a conversion",0,1);
         else {
-            if(op2.is_binary()==true)  error_report("Error, necesario valor para añadir operacion binaria",1,1);
+            if(op2.is_binary()==true)  error_report(user_error,"necesario valor para añadir operacion binaria",0,1);
             else    operations.push_back(op2);
         }
         check();
     }
 
     //erase the operation and the data linked to it
-    void remove_operation(int pos) {
+    void remove_operation(unsigned int pos) {
         if(pos<operations.size()) {
             if(operations[pos].is_binary()==false)  operations.erase(operations.begin()+(pos));  //if is unary operation, only erases de operation
             else { //binary operation, erase operation and data
                 int dpos=0;
-                for(int i=0; i<pos; i++) {
+                for(unsigned int i=0; i<pos; i++) {
                     if(operations[i].is_binary()==true) dpos++;
                 }
                 operations.erase(operations.begin()+(pos));  //erase operation
@@ -91,7 +91,7 @@ public:
     }
     void set_name(const string &name2) {
         name=name2;
-        if(name.empty()) error_report("Error,basic_unit should have a name",1,1);
+        if(name.empty()) error_report(class_error,"basic_unit should have a name",1,1);
     }
     void clear() {
         operations.clear();
@@ -113,7 +113,7 @@ public:
     bool product_conversion() const {
         bool b=true;
         operation_id x;
-        for(int i=0; i<operations.size() && b; i++) {
+        for(unsigned int i=0; i<operations.size() && b; i++) {
             x=operations[i].get_id();
             if(x!=3 && x!=4) b=false; //only true if all operations are * or /
         }
@@ -151,19 +151,11 @@ public:
         }
         return d1;
     }
-    //show the complete information of basic_unit
-    void show(ostream &out=cout) const {
-        out<<name<<":"<<endl;
-        for(int i=0; i<operations.size(); i++) {
-            out<<"("<<operations[i].get_id()<<",";
-            if(i<data.size() && operations[i].is_binary()) out<<data[i];
-            else out<<"-";
-            out<<") ";
-        }
-    }
-    //READ AND WRITE
-    //write the operations in a binary file
+
+    //I/O
+    //write the basic unit in a binary file
     void write(ofstream &out) const {
+        binary_write(name,out);
         binary_write_vector(data,out);
         unsigned short opsize=operations.size();
         binary_write(opsize,out);
@@ -174,6 +166,7 @@ public:
     void read(ifstream &input) {
         unsigned short opsize;
         clear();
+        binary_read(name,input);
         binary_read_vector(data,input);
         binary_read(opsize,input);
         operations.resize(opsize);
@@ -181,6 +174,16 @@ public:
             operations[i].read(input);
         }
         check();
+    }
+    //show the complete information of basic_unit
+    void show(ostream &out=cout) const {
+        out<<name<<":";
+        for(unsigned int i=0; i<operations.size(); i++) {
+            out<<"("<<operations[i].get_id()<<",";
+            if(i<data.size() && operations[i].is_binary()) out<<data[i];
+            else out<<"-";
+            out<<") ";
+        }
     }
     //OPERATORS
     //operator==
@@ -212,29 +215,30 @@ private:
         return out;
     }
     void erase_operations_names() {
-        for(int i=0; i<operations.size(); i++) {
+        for(unsigned int i=0; i<operations.size(); i++) {
             operations[i].erase_name();
         }
     }
 
     bool same_conversion(const basic_unit &unit2) const {
         bool eq=true;
-        unsigned s1,s2,s3,s4;
+        unsigned int s1,s2,s3,s4;
         s1=(*this).operations.size();
         s2=(*this).data.size();
         s3=unit2.operations.size();
         s4=unit2.data.size();
         if(get_name()!=unit2.get_name()) eq=false;
         if(s1!=s3 || s2!=s4) eq=false; //if vectors size is different
-        for(int i=0; i<s1 && eq==true; i++) {
+        for(unsigned int i=0; i<s1 && eq==true; i++) {
             if((*this).operations[i]!=unit2.operations[i]) eq=false;
         }
-        for(int i=0; i<s2 && eq==true; i++) {
+        for(unsigned int i=0; i<s2 && eq==true; i++) {
             if((*this).data[i]!=unit2.data[i]) eq=false;
         }
         return eq;
     }
     //private methods for resolving operations
+    //TODO:move the methods out of the class
     data_type calc(operation_id cal, data_type n1,data_type n2) const { //binary operations
         data_type r=0;
         switch(cal) {
@@ -300,18 +304,19 @@ private:
     }
 
     void check() const {
-        int siz1=operations.size();
-        int c=0;
-        if(name.empty()) error_report("Error,basic unit should have name",1,1);
-        //  if(null_conversion()==true) error_report("Error, basic_unit should not be null",0,1);
-        for(int i=0; i<siz1; i++) {
-            if(operations[i].is_null()==true) error_report("Error, operation in conversion should not be null",1,1);
-            if(operations[i].have_name()==true) error_report("Warning, operation in conversion should not have a name",0,1);
+        unsigned  int siz1=operations.size();
+        unsigned int c=0;
+        if(name.empty()) error_report(error_check,"basic unit should have name",1,1);
+        for(unsigned int i=0; i<siz1; i++) {
+            if(operations[i].is_null()==true) error_report(warning_check,"operation in conversion should not be null",1,1);
+            if(operations[i].have_name()==true) error_report(warning_check,"operation in conversion should not have a name",0,1);
             if(operations[i].is_binary()==true) c++;
         }
-        if(c!=data.size()) error_report("Error in class operations while checking",1,1);
+        if(c!=data.size()) error_report(class_error,"problem in conversion of basic unit",1,1);
     }
 };
+
+//*********************************************++
 
 /*This class stores all the basic units in a vector, the units can be added but not removed or changed of position, also,
 all the units should be different, the position in the vector will be considerate as the basic_unit_id, which will be returned when added a unit
@@ -334,12 +339,13 @@ public:
                 return i;
             }
             else if(uni.same_name(src[i])==true) { //if exist a different unit with same name, error
-                error_report("Fatal Error,two basic units with same name",1,1);
+                error_report(fatal_error,"two basic units with same name",1,1);
                 return 0;
             }
         }
         basic_unit_id i=next_id();
         src.push_back(uni);
+        return i;
     }
     void clear() {
         src.clear();
@@ -356,7 +362,10 @@ public:
         return d1;
     }
     string get_name(basic_unit_id id1) const {
-        return src[id1].get_name();
+        string s;
+        if(id1<src.size()) s=src[id1].get_name();
+        else error_report(class_error,"Error,basic_unit id not found",1,1);
+        return s;
     }
     bool product_conversion(basic_unit_id id1) const {
         return src[id1].product_conversion();
@@ -382,17 +391,25 @@ public:
         unsigned short siz;
         binary_read(siz,input);
         src.clear();
-        src.resize(siz);
+        src.reserve(siz);
         for(int i=0; i<siz; i++) {
-            src[i].read(input);
+            basic_unit bunit(input);
+            src.push_back(bunit);
+        }
+    }
+    void show(ostream &out=cout) const {
+        for(unsigned int i=0; i<src.size(); i++) {
+            cout<<i<<":";
+            src[i].show(out);
+            out<<endl;
         }
     }
 
 private:
     void check() const {
-        for(int i=0; i<src.size()-1; i++) {
-            for(int j=i+1; j<src.size(); j++) {
-                if(src[j].same_name(src[i])) error_report("FATAL ERROR, basic units with same name",1,1);
+        for(unsigned int i=0; i<src.size()-1; i++) {
+            for(unsigned int j=i+1; j<src.size(); j++) {
+                if(src[j].same_name(src[i])) error_report(fatal_error," basic units with same name",1,1);
             }
         }
     }

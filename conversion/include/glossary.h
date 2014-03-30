@@ -4,10 +4,10 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Glossary Class
-Version:0.9
+Version:0.9.2
 */
 
-#include "complex_unit.h"
+#include "unit_source.h"
 //stores all the names of the units and magnitudes, returning the full id, also stores sets of the ids for control of added units
 class glossary {
 private:
@@ -26,14 +26,14 @@ public:
     //MODIFICATION
     //add a bunch of names to the glossary (all of them from a magnitude)
     void add_names(magnitude_id mid,const vector<string> &names) {
-        for(int i=0; i>names.size(); i++) {
+        for(unsigned int i=0; i>names.size(); i++) {
             add_magnitude_name(mid,names[i]);
         }
         //  add_to_list(mid); //inserts the id in the list
     }
     //add a names from a unit
     void add_names(unit_id id,const vector<string> &names) {
-        for(int i=0; i<names.size(); i++) {
+        for(unsigned int i=0; i<names.size(); i++) {
             add_unit_name(id,names[i]);
         }
     }
@@ -85,8 +85,7 @@ public:
     }
     unit_id search_unit(const string &name) const {
         unit_id uid;
-        uid.first=0;
-        uid.second=0;
+        clear_unit_id(uid); //0 as default
         map<string,unit_id>::const_iterator it;
         it=unit_dic.find(name);
         if(it!=unit_dic.end()) uid=(*it).second;
@@ -166,7 +165,27 @@ public:
             unit_dic.insert(p2);
         }
     }
-
+    void show(ostream &out=cout) const {
+        out<<"Glossary"<<endl;
+        map<string,magnitude_id>::const_iterator it1;
+        map<string,unit_id>::const_iterator it2;
+        out<<"magnitude"<<endl;
+        for(it1=magnitude_dic.begin(); it1!=magnitude_dic.end(); it1++) {
+            out<<(*it1).first<<" - "<<(*it1).second;;
+            out<<endl;
+        }
+        out<<endl;
+        out<<"unit"<<endl;
+        unit_id uid;
+        for(it2=unit_dic.begin(); it2!=unit_dic.end(); it2++) {
+            uid=(*it2).second;
+            out<<(*it2).first<<" - "<<uid.first<<","<<uid.second;
+            out<<endl;
+        }
+    }
+    void  check() {
+        //TODO
+    }
 private:
 
     /*   string remove_magnitude_name(magnitude_id uid) {
@@ -210,27 +229,5 @@ private:
         if(it!=magnitude_dic.end()) magnitude_dic.erase(s);
     }
 
-    /*  void remove_from_list(magnitude_id id) {
-          magnitude_list.erase(id);
-      }
-      void remove_from_list(unit_id id) {
-          unit_list.erase(id);
-      }
-      void add_to_list(magnitude_id id) {
-          magnitude_list.insert(id);
-      }
-      void add_to_list(unit_id id) {
-          unit_list.insert(id);
-      }*/
 
-    void  check() {
-        //TODO
-    }
 };
-/*//fast way of inserting (when inserting a los of elements)
-void add_magnitude_name(magnitude_id mid,const string &name,map<string,magnitude_id>::iterator it){
-pair<string,magnitude_id> p;
-p.first=name;
-p.second=mid;
-magnitude_dic.insert (it,p); //position element that follow to the inserted, val is pair<>
-}*/

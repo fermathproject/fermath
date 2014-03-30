@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Templates
-Version:0.8
+Version:0.9.2
 */
 //Some templates for write/reading with vectors, neccesary for the classes of Fermeth
 
@@ -221,4 +221,14 @@ bool compare_vector_elements(const vector<const T *> &v1,const vector<const T *>
         if(found==false) eq=false;
     }
     return eq;
+}
+
+
+template <typename T>
+void show_stack(stack<T> s) {
+    while(!s.empty()) {
+        cout<<s.top()<<" ";
+        s.pop();
+    }
+    cout << '\n';
 }
