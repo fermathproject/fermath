@@ -6,7 +6,7 @@
 Fermath Project:Unit Source Class
 Version:0.9.2
 */
-#include "complex_unit.h"
+#include "unit.h"
 
 //##############################
 //This class stores all the complex unit according to the basic_unit_source
@@ -28,6 +28,7 @@ public:
     void set_basic_source(basic_unit_source bsrc2) {
         basic_src=bsrc2;
     }
+    //returns the id of magnitude with the name given, if it dont exists, creates new magnitude
     magnitude_id add_magnitude(const magnitude &mag) {
         string n1=mag.get_name();
         magnitude_id res;
@@ -40,6 +41,18 @@ public:
             src.insert(p);
         }
         return res;
+    }
+    void set_magnitude_standard_unit(magnitude_id mid,complex_unit_id cuid) {
+        map<magnitude_id,magnitude>::iterator it;
+        it=src.find(mid);
+        if(it==src.end()) error_report(warning_check,"searching for a non-existent id",1,0);
+        else((*it).second).set_standard_unit(cuid);
+    }
+    //add basic unit (no complex version)
+    basic_unit_id add_basic_unit(const basic_unit &bunit) {
+        basic_unit_id bid;
+        bid=basic_src.add(bunit);
+        return bid;
     }
     //add unit to src and basic_src
     unit_id add_basic_unit(const basic_unit &bunit,magnitude_id magid) {
@@ -81,10 +94,18 @@ public:
     unsigned int size()const {
         return src.size();
     }
-    magnitude_id next_id() {
+    magnitude_id next_id() const {
         magnitude_id id;
         id=size()+1;
         return id;
+    }
+    vector<magnitude_id> get_magnitude_ids() const {
+        map<magnitude_id,magnitude>::iterator it;
+        vector<magnitude_id> v;
+        for(it==src.begin(); it!=src.end(); it++) {
+            v.push_back((*it).first);
+        }
+        return v;
     }
     unit search_unit(unit_id p) const {
         unit result;

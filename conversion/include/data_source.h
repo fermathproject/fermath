@@ -65,8 +65,56 @@ public:
         names.clear();
         src.clear();
     }
-    void merge(data_src &dat) {
-        //TODO
+    //merge two different data_sources
+    void merge(const data_src &dat) {     //TODO:test
+        basic_unit_source  bus;
+        bus=dat.get_basic_source(); //the basic unit source of dat
+        vector<magnitude_id> midvect;
+        midvect=(dat.src).get_magnitude_ids();
+        magnitude_id mid1,mid2;
+        for(unsigned int i=0; i<midvect.size(); i++) { //add all magnitudes
+            vector<string> mnames;
+            vector<complex_unit_id> cuid;
+            magnitude m;
+            mid1=midvect[i];
+            m=get_magnitude(mid1); //get magnitude
+            mnames=(dat.names).get_magnitude_names(mid1); //get all the names of the magnitude
+            mid2=add_magnitude(m.get_name(),mnames); //creates new magnitude with names of original
+            cuid=m.get_units_ids(); //gets the ids of units in magnitude
+            for(unsigned int j=0; j<cuid.size(); j++) { //adds all units of magnitude (resolving problems with the basic units)
+                unit u1,u2;
+                u1=m.search(cuid[j]); //takes one unit from the magnitude
+                u2.set_name(u1.get_name()); //u2 have the same name as u1
+                pair< multiset<basic_unit_id>,multiset<basic_unit_id> > bunits;
+                multiset<basic_unit_id>::const_iterator bunit_it;
+                bunits=u1.get_basic_units(); //takes all the basic units
+                //resolve and add every basic unit used in the unit
+                multiset<basic_unit_id> v1,v2; //new basic units of u2
+                for(bunit_it==(bunits.first).begin(); bunit_it!=(bunits.first).end(); bunit_it++) {
+                    basic_unit_id buid1=(*bunit_it);
+                    basic_unit_id buid2;
+                    basic_unit bu;
+                    bu=bus.get_basic_unit(buid1);
+                    buid2=src.add_basic_unit(bu); //adds basic unit, buid2 is the new id
+                    v1.insert(buid2);
+                }
+                for(bunit_it==(bunits.second).begin(); bunit_it!=(bunits.second).end(); bunit_it++) {
+                    basic_unit_id buid1=(*bunit_it);
+                    basic_unit_id buid2;
+                    basic_unit bu;
+                    bu=bus.get_basic_unit(buid1);
+                    buid2=src.add_basic_unit(bu); //adds basic unit, buid2 is the new id
+                    v2.insert(buid2);
+                }
+                u2.add_basic_units(v1,v2); //u2 is the unit with resolved basic_units_ids
+                unit_id new_uid;
+                vector<string> unames=(dat.names).get_unit_names(make_pair(mid1,cuid[j])); //get all the names of the magnitude
+                new_uid=add_unit(u2,mid2,unames); //add the unit to the source
+                if(cuid[j]==m.get_standard_unit_id()) { //set standard unit with new id
+                    src.set_magnitude_standard_unit(mid2,new_uid.first);
+                }
+            }
+        }
     }
 
     //ACCESS
@@ -155,42 +203,6 @@ public:
         id2=get_complex_unit_id(bid2);
         return same_magnitude_id(id1,id2);
     }
-
-    /*   //change the basic units of the multisets according to the magnitude of the basic units of the unit
-    pair< multiset<basic_unit_id>,multiset<basic_unit_id> > change_basic_units(pair< multiset<basic_unit_id>,multiset<basic_unit_id> > p,const unit &u){
-       pair< multiset<basic_unit_id>,multiset<basic_unit_id> >  p2=u.get_basic_units();
-        set<basic_unit_id> bunits; //to stores all the basic units with no repeated units from u
-        set<basic_unit_id>::iterator bit; //iterator to move along the set
-       multiset<basic_unit_id>::iterator it1,it2;
-       set<unit_id> cid;
-       it1=(p2.first).begin();
-       it2=(p2.first).end();
-       bunits.insert(it1,it2);
-       (p2.first).clear(); //clear first multiset
-        it1=(p2.second).begin();
-       it2=(p2.second).end();
-       bunits.insert(it1,it2);
-       (p2.second).clear();//clear second multiset
-       //Transform the basic_unit_id set in unit_id set
-    	unit_id  id2;
-       for(bit=bunits.begin();bit!=bunits.end();bit++){
-    	   id2=get_complex_unit_id(*bit);
-    	   cid.insert(id2);
-       }
-       bunits.clear();
-
-
-       for(it1=(p.first).begin();it1!=(p.first).end();it1++){
-
-
-
-       }
-
-
-
-    return p;
-    }*/
-
 
     void write(ofstream &out) const {
         names.write(out);

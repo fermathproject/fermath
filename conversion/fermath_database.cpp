@@ -19,8 +19,7 @@ This program test units,magnitudes,operators and glossary
 #include <stack>
 using namespace std;
 #include "include/data_source.h"
-unit_id input_basic_unit(ifstream &input,magnitude_id mid,data_src &database);
-magnitude_id input_magnitude(ifstream &input,data_src &database);
+
 
 /*README:
  * The file database.dev needed has the next structure:
@@ -31,12 +30,14 @@ magnitude_id input_magnitude(ifstream &input,data_src &database);
  * principal name of unit  - number of secondary names - vector<string> secondary names
  *  operation id - data id (0,0 if there is no conversion) (op_id: 1+,2-,3*,4/)
  * (if the unit is complex:)
- *
- * //TODO:
- *
+ *principal name of unit - number of secondary names - vector<string> secondary name
+ * number of basic units in numerator - vector<string>  (name of unit (doesnt matter if principal name or secondary name or complex/basic, but it has to be previously declared))
+ * number of basic units in denominator - vector<string>
  */
 
-
+unit_id input_basic_unit(ifstream &input,magnitude_id mid,data_src &database);
+magnitude_id input_magnitude(ifstream &input,data_src &database);
+unit_id input_unit(ifstream &input,magnitude_id mid,data_src &database);
 
 int main() {
     cout<<"Fermath Database Test "<<version<<endl;
@@ -75,7 +76,30 @@ int main() {
 
 
 unit_id input_unit(ifstream &input,magnitude_id mid,data_src &database) {
-    //TODO
+    string s;
+    vector<string> v;
+    int n_names;
+    input>>s;
+    unit u(s); //unit with name s
+    input>>n_names;
+    for(int i=0; i<n_names; i++) {
+        input>>s;
+        v.push_back(s);
+    }
+    int n_bunit;
+    input>>n_bunit;
+    for(int i=0; i<n_bunit; i++) { //numerators
+        input>>s; //name of basic_unit
+        unit u2= database.get_unit(s) ;
+        u.add_unit(u2); //adds us to u
+    }
+    input>>n_bunit;
+    for(int i=0; i<n_bunit; i++) { //denominators
+        input>>s; //name of basic_unit
+        unit u2= database.get_unit(s) ;
+        u.add_inverse_unit(u2); //adds us to u
+    }
+    return  database.add_unit(u,mid,v);
 }
 
 

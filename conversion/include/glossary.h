@@ -58,23 +58,6 @@ public:
         magnitude_dic.clear();
         unit_dic.clear();
     }
-    /*    void change_magnitude_id(magnitude_id oldid,magnitude_id newid) {
-            if(is_magnitude(oldid)==false)("Error, magnitude dont exist",1,1);
-            else if(is_magnitude(newid)==true) error_report("Error,new id exists",1,1);
-            else {
-                remove_from_list(oldid);
-                add_to_list(newid); //change id from the list
-                string s=remove_magnitude_name(oldid);
-                add_magnitude_name(newid,s); //change id from the dic
-                map<string,unit_id>::iterator it1,it2; //change magnitudes of unit_id
-                pair<string,unit_id> p;
-                for(it=unit_dic.begin(); it!=unit_dic.end(); it++) {
-                    if(
-                        remove_unit_name(map<string,unit_id>::iterator it)
-                }
-        }
-    }*/
-
     //ACCESS
     magnitude_id search_magnitude(const string &name) const {
         magnitude_id mid=0;
@@ -91,43 +74,25 @@ public:
         if(it!=unit_dic.end()) uid=(*it).second;
         return uid;
     }
-
-    /*   bool is_magnitude(magnitude_id id) const {
-           set<magnitude_id>::const_iterator it;
-           it=magnitude_list.find(id);
-           if(it!=magnitude_list.end()) return true;
-           else return false;
-       }
-       bool is_unit(unit_id id) const {
-           set<unit_id>::const_iterator it;
-           it=unit_list.find(id);
-           if(it!=unit_list.end()) return true;
-           else return false;
-       }*/
     //search all the names of unit
-    vector<string> unit_names(unit_id id) const {
+    vector<string> get_unit_names(unit_id id) const {
         vector<string> v;
-        //if(is_unit(id)==true){
         map<string,unit_id>::const_iterator it;
         for(it=unit_dic.begin(); it!=unit_dic.end(); it++) {
             if((*it).second==id) v.push_back((*it).first);
-            //}
         }
         return v;
     }
     //search all the names of magnitude
-    vector<string> magnitude_names(magnitude_id id) const {
+    vector<string> get_magnitude_names(magnitude_id id) const {
         vector<string> v;
-        //if(is_magnitude(id)==true){
         map<string,magnitude_id>::const_iterator it;
         for(it=magnitude_dic.begin(); it!=magnitude_dic.end(); it++) {
             if((*it).second==id) v.push_back((*it).first);
-            //}
         }
         return v;
     }
 
-    //OPERATORS
     //I/O
     void write(ofstream &out) const {
         unsigned short siz;
