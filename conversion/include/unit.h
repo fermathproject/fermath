@@ -475,7 +475,6 @@ public:
             ((*it).second).write(out);
         }
     }
-
     void read(ifstream &input) {
         pair<complex_unit_id,unit> p;
         binary_read(name,input);

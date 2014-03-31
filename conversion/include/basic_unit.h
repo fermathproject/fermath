@@ -316,7 +316,7 @@ private:
     }
 };
 
-//*********************************************++
+//*********************************************
 
 /*This class stores all the basic units in a vector, the units can be added but not removed or changed of position, also,
 all the units should be different, the position in the vector will be considerate as the basic_unit_id, which will be returned when added a unit

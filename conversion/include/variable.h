@@ -360,7 +360,6 @@ public:
         return result;
     }
 
-
     //OPERATORS
     //operator==
     bool operator==(const variable &var2) const { //check if the value,name,units, and base are equal

@@ -201,7 +201,6 @@ bool compare_vector_elements(const vector<T> &v1,const vector<T> &v2) {
     }
     return eq;
 }
-
 template <typename T>
 bool compare_vector_elements(const vector<const T *> &v1,const vector<const T *> &v2) {
     if(v1.size()!=v2.size()) return false;

@@ -7,7 +7,6 @@ Fermath Project:Beta Version Reports
 Version:0.9.2
 */
 
-
 typedef unsigned short error_id;
 const bool hide_assert=false;
 const bool hide_write=true;

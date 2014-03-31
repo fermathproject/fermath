@@ -194,6 +194,4 @@ private:
         it=magnitude_dic.find(s);
         if(it!=magnitude_dic.end()) magnitude_dic.erase(s);
     }
-
-
 };

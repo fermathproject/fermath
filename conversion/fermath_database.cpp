@@ -126,7 +126,6 @@ unit_id input_basic_unit(ifstream &input,magnitude_id mid,data_src &database) {
     return  database.add_unit(bunit,mid,v);
 }
 
-
 magnitude_id input_magnitude(ifstream &input,data_src &database) {
     string n;
     string s2;

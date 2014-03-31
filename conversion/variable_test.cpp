@@ -31,7 +31,6 @@ int main() {
     input.close();
     data_type n1,n2;
     string s1,s2;
-    
     variable x,y;
     cout<<"variable x:";
     cin>>n1>>s1;

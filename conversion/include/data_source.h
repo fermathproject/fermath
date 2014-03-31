@@ -34,7 +34,6 @@ public:
         add_magnitude_name(id,n);//adds the principal name of magnitude (if it isnt in v)
         return id;
     }
-
     unit_id add_unit(const unit &u,magnitude_id id,vector<string> &v) {
         unit_id uid;
         uid=src.add_unit(u,id);

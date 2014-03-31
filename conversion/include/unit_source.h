@@ -121,7 +121,6 @@ public:
         if(it!=src.end()) return true;
         else return false;
     }
-
     magnitude search_magnitude(magnitude_id id) const {
         magnitude u;
         map<magnitude_id,magnitude>::const_iterator it;
