@@ -78,7 +78,7 @@ public:
         unit_id u=make_pair(magid,uid);
         return u;
     }
-    
+
     void clear() {
         basic_src.clear();
         src.clear();

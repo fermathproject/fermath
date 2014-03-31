@@ -228,7 +228,7 @@ public:
             variable_unit.show(src,out);
         }
     }
-    
+
     void set_value_from_standard(data_type x,const basic_unit_source &bsrc) { //set the value of x to the variable according to the unit
         if(standard_base()==false) error_report("Warning, non standard base, value may change",0,1);
         if(!dim_unit) {

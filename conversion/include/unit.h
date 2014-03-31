@@ -47,7 +47,7 @@ public:
     }
     //costructor for complex unit(with name)
     unit(string name2,const multiset<basic_unit_id> &a,const multiset<basic_unit_id> &b) {
-        name=name2;
+        set_name(name2);
         avect=a;
         bvect=b;
         check();
@@ -113,7 +113,7 @@ public:
         name.clear();
     }
     void set_name(string n) {
-        name=n;
+        name=format_string(n);
     }
 
     //ACCESS

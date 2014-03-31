@@ -231,3 +231,13 @@ void show_stack(stack<T> s) {
     }
     cout << '\n';
 }
+
+//format the string to the need of names
+string format_string(string s) {
+    unsigned int siz=s.size();
+    for(unsigned int i=0; i<siz; i++) {
+        if(s[i]>'A' && s[i]<'Z') s[i]=s[i]+32;
+        //TODO:ñ¿?
+    }
+    return s;
+}

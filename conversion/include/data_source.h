@@ -41,7 +41,7 @@ public:
         if(u.have_default_name()) add_unit_name(uid,u.get_name());
         return uid;
     }
-    
+
     unit_id add_unit(const basic_unit &bunit,magnitude_id magid,vector<string> &v) {
         unit_id uid;
         uid=src.add_basic_unit(bunit,magid);
@@ -121,7 +121,7 @@ public:
     magnitude get_magnitude(string &n) const {
         magnitude m;
         magnitude_id mid=0;
-        mid=get_magnitude_id(n);
+        mid=get_magnitude_id(format_string(n));
         m=get_magnitude(mid);
         return m;
     }
@@ -131,7 +131,7 @@ public:
         unit_id uid;
         uid.first=0;
         uid.second=0;
-        uid=get_unit_id(n);
+        uid=get_unit_id(format_string(n));
         u=get_unit(uid);
         return u;
     }
@@ -150,13 +150,13 @@ public:
 
     unit_id get_unit_id(const string &n) const {
         unit_id id;
-        id=names.search_unit(n);
+        id=names.search_unit(format_string(n));
         return id;
     }
 
     magnitude_id get_magnitude_id(const string &n) const {
         magnitude_id id;
-        id=names.search_magnitude(n);
+        id=names.search_magnitude(format_string(n));
         return id;
     }
     //returns the id of the complex unit version of the basic unit

@@ -25,20 +25,20 @@ public:
     basic_unit(const string &name2,const vector<op> &operations2,const vector<conversion_data> &data2) {
         operations=operations2;
         data=data2;
-        name=name2;
+        set_name(name2);
         erase_operations_names();
         check();
     }
     basic_unit(const string &name2,const op &oper) {
-        name=name2;
+        set_name(name2);
         add_operation(oper);
     }
     basic_unit(const string &name2,const op &oper,const conversion_data &dat) {
-        name=name2;
+        set_name(name2);
         add_operation(oper,dat);
     }
-    basic_unit(const string &n) {
-        name=n;
+    basic_unit(const string &name2) {
+        set_name(name2);
     }
     basic_unit(ifstream &input) {
         (*this).read(input);
@@ -90,7 +90,7 @@ public:
         check();
     }
     void set_name(const string &name2) {
-        name=name2;
+        name=format_string(name2);
         if(name.empty()) error_report(class_error,"basic_unit should have a name",1,1);
     }
     void clear() {
@@ -359,7 +359,7 @@ public:
     basic_unit get_basic_unit(basic_unit_id buid) {
         return src[buid];
     }
-    
+
     //convert from standard
     data_type inverse_convert(data_type d1,basic_unit_id id1) const {
         d1=src[id1].inverse_convert(d1);

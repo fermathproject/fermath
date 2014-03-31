@@ -40,21 +40,18 @@ public:
     //add one name of the magnitude, return false if the unit exists and couldn be added
     void add_magnitude_name(magnitude_id mid,const string &name) {
         pair<string,magnitude_id> p;
-        p.first=name;
+        p.first=format_string(name);
         p.second=mid;
         magnitude_dic.insert(p);
     }
     void add_unit_name(unit_id uid,const string &name) {
         pair<string,unit_id> p;
-        p.first=name;
+        p.first=format_string(name);
         p.second=uid;
         unit_dic.insert(p);
-        //  add_to_list(id); //inserts the id in the list
     }
 
     void clear() {
-        //  magnitude_list.clear();
-        // unit_list.clear();
         magnitude_dic.clear();
         unit_dic.clear();
     }
@@ -151,7 +148,7 @@ public:
     void  check() {
         //TODO
     }
-    
+
 private:
 
     /*   string remove_magnitude_name(magnitude_id uid) {

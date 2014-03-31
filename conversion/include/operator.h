@@ -8,7 +8,7 @@ Version:0.9.2
 */
 #include "beta_rep.h"
 #include "templates.h"
-using namespace std;
+
 typedef unsigned short operation_id; //0 es null
 const operation_id binary_max=6;
 const operation_id unary_max=10; //maximun values for an operator
