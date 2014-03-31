@@ -75,7 +75,7 @@ public:
         else {
             error_report(user_error,"magnitude of the unit not found",1,1);
         }
-        unit_id u=set_unit_id(magid,uid);
+        unit_id u=make_pair(magid,uid);
         return u;
     }
     void clear() {

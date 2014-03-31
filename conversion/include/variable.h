@@ -224,7 +224,7 @@ public:
         if(have_name()) out<<name<<":";
         if(have_value()) out<<value;
         if(have_unit()) {
-            out<<"   ";
+            out<<" ";
             variable_unit.show(src,out);
         }
     }

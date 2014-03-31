@@ -166,6 +166,9 @@ public:
     const basic_unit_source &get_basic_source() const {
         return src.get_basic_source();
     }
+    const basic_unit_source *get_basic_source2() const {
+        return &(src.get_basic_source());
+    }
     //check if two units are the same magnitude, if the size of avect and bevect is the same, and the magnitude of the basic unit is the same, the unit is the same magnitude
     bool same_magnitude(const unit &a,const unit &b) const {
         pair<unsigned int,unsigned int> siz1,siz2;

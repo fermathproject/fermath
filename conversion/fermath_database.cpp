@@ -66,8 +66,8 @@ int main() {
         }
     }
     input.close();
-    //   cout<<endl<<"DATABASE:"<<endl;
-    //  database.show();
+    cout<<endl<<"DATABASE:"<<endl;
+    database.show();
     ofstream out("database.fermath");
     database.write(out);
     out.close();

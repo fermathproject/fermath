@@ -26,12 +26,12 @@ unit_id change_magnitude_id(unit_id id,magnitude_id newid) {
     id.first=newid;
     return id;
 }
-unit_id set_unit_id(complex_unit_id uid, magnitude_id newid) {
+/*unit_id set_unit_id(complex_unit_id uid, magnitude_id newid) {
     unit_id result;
     result.first=newid;
     result.second=uid;
     return result;
-}
+}*/
 bool is_null_id(unit_id id) {
     if(id.first==0 && id.second==0) return true;
     else return false;
