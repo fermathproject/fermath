@@ -42,6 +42,7 @@ public:
         if(u.have_default_name()) add_unit_name(uid,u.get_name());
         return uid;
     }
+    
     unit_id add_unit(const basic_unit &bunit,magnitude_id magid,vector<string> &v) {
         unit_id uid;
         uid=src.add_basic_unit(bunit,magid);

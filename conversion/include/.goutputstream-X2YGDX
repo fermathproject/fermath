@@ -151,7 +151,6 @@ public:
     void  check() {
         //TODO
     }
-    
 private:
 
     /*   string remove_magnitude_name(magnitude_id uid) {

@@ -115,6 +115,7 @@ unit_id input_basic_unit(ifstream &input,magnitude_id mid,data_src &database) {
         input>>s2;
         v.push_back(s2);
     }
+    
     basic_unit bunit(s);
     int opid,data;
     input>>opid>>data; //conversion of basic unit
