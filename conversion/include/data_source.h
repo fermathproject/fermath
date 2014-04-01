@@ -200,6 +200,23 @@ public:
             return found;
         }
     }
+    //search the standard unit of u
+    unit get_standard_unit(const unit &u) const {
+        unit result;
+        pair< multiset<basic_unit_id>,multiset<basic_unit_id> > p;
+        unit_id id;
+        multiset<basic_unit_id>::iterator it;
+        p=u.get_basic_units();
+        for(it=(p.first).begin(); it!=(p.first).end(); it++) {
+            id=get_complex_unit_id(*it); //gets the complex unit version of the basic id
+            result.add_unit(src.get_standard_unit(id.first));  //returns the standard unit and add to the unit
+        }
+        for(it=(p.second).begin(); it!=(p.second).end(); it++) {
+            id=get_complex_unit_id(*it); //gets the complex unit version of the basic id
+            result.add_inverse_unit(src.get_standard_unit(id.first));  //returns the standard unit and add to the unit
+        }
+        return result;
+    }
     bool same_magnitude(basic_unit_id bid1,basic_unit_id bid2) const {
         unit_id id1,id2;
         id1=get_complex_unit_id(bid1);

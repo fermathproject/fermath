@@ -143,6 +143,14 @@ public:
         set_base(); //set base to default
         clear_value();
     }
+    void set_variable_to_standard(const data_src &database) {
+        data_type std;
+        const basic_unit_source *bsrc=database.get_basic_source2();
+        std=get_standard_value(*bsrc); //gets standard_value
+        unit u=database.get_standard_unit(variable_unit); //gets standard_unit
+        set_unit(u);
+        set_value(std);
+    }
 
     //ACCESS
     unit get_unit() const {
@@ -252,7 +260,6 @@ public:
 
 
 
-
     //READ/WRITE
     /*  void write_variable(ofstream &out) const {
           binary_write(name,out);
@@ -330,31 +337,50 @@ public:
         return result;
     }
     //var1*var2
-    variable multiply(const variable &other) const {
+    variable multiply(const variable &other,const data_src &src) const {
         variable result(*this);
         if(result.have_value()==false || other.have_value()==false) error_report(user_error,"error, cannot multiply variables with no value",0,1);
         else {
-            data_type x=other.get_value();
-            data_type y=result.get_value();
-            x=x*y;
-            result.set_value(x);
-            if(result.have_unit()==false) result.clear_unit();
-            if(other.have_unit()==true) result.add_unit(other.get_unit()); //"Multiply" units
+            if(src.same_magnitude(result.get_unit(),other.get_unit())==false || result.have_unit()==false || other.have_unit()==false) { //multiply of units from different magnitudes (or dont have units)
+                data_type x=other.get_value();
+                data_type y=result.get_value();
+                x=x*y;
+                result.set_value(x);
+                if(result.have_unit()==false) result.clear_unit();
+                if(other.have_unit()==true) result.add_unit(other.get_unit()); //"Multiply" units
+            }
+            else { //same magnitude, change unit and multipy
+                const basic_unit_source *bsrc=src.get_basic_source2();
+                data_type x=result.get_standard_value(*bsrc);
+                data_type y=other.get_standard_value(*bsrc);
+                x=x*y; //multiply in the standard unit
+                result.set_value_from_standard(x,*bsrc); //set the value to the result variable
+                result.add_unit(result.get_unit()); //adds the same unit (so it is the unit^2)
+            }
         }
-        //TODO: if magnitude is the same, change unit
         return result;
     }
     //var1/var2
-    variable divide(const variable &other) const {
+    variable divide(const variable &other,const data_src &src) const {
         variable result(*this);
         if(result.have_value()==false || other.have_value()==false) error_report(user_error,"error, cannot multiply variables with no value",0,1);
         else {
-            data_type x=other.get_value();
-            data_type y=result.get_value();
-            x=x/y;
-            result.set_value(x);
-            if(result.have_unit()==false) result.clear_unit();
-            if(other.have_unit()==true) result.add_inverse_unit(other.get_unit()); //"Multiply" units
+            if(src.same_magnitude(result.get_unit(),other.get_unit())==false || result.have_unit()==false || other.have_unit()==false) { //multiply of units from different magnitudes
+                data_type x=other.get_value();
+                data_type y=result.get_value();
+                x=y/x;
+                result.set_value(x);
+                if(result.have_unit()==false) result.clear_unit();
+                if(other.have_unit()==true) result.add_inverse_unit(other.get_unit()); //"Multiply" units
+            }
+            else { //same magnitude, change unit and multipy
+                const basic_unit_source *bsrc=src.get_basic_source2();
+                data_type x=result.get_standard_value(*bsrc);
+                data_type y=other.get_standard_value(*bsrc);
+                x=x/y; //multiply in the standard unit
+                result.set_value_from_standard(x,*bsrc); //set the value to the result variable
+                result.clear_unit(); //divides the same unit, so the variable dont have unit now
+            }
         }
         //TODO: if magnitude is the same, change unit
         return result;
@@ -522,6 +548,7 @@ public:
         return result;
     }
 private:
+
     //check if is possible to operate
     /*  bool can_operate_with(const variable &var2) const {
           bool b=true;

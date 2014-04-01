@@ -32,6 +32,7 @@ int main() {
     data_type n1,n2;
     string s1,s2;
     variable x,y;
+    variable res;
     cout<<"variable x:";
     cin>>n1>>s1;
     cout<<"variable y:";
@@ -45,6 +46,29 @@ int main() {
     y.show(*bsrc);
     cout<<"=";
     (x.add(y,database)).show(*bsrc);
+    cout<<endl;
+    x.show(*bsrc);
+    cout<<"-";
+    y.show(*bsrc);
+    cout<<"=";
+    (x.deduct(y,database)).show(*bsrc);
+    cout<<endl;
+    x.show(*bsrc);
+    cout<<"*";
+    y.show(*bsrc);
+    cout<<"=";
+    (x.multiply(y,database)).show(*bsrc);
+    cout<<endl;
+    x.show(*bsrc);
+    cout<<"/";
+    y.show(*bsrc);
+    cout<<"=";
+    res=x.divide(y,database);
+    res.show(*bsrc);
+    cout<<endl;
+    res.set_variable_to_standard(database);
+    cout<<"standard unit:";
+    res.show(*bsrc);
     cout<<endl;
     return 0;
 }

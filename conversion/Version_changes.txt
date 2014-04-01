@@ -1,3 +1,8 @@
+Fermath Conversions V0.0.2
+*Adapted variable.h to unit
+*new merge method for data_src class
+*new fermath_database.cpp file, wich creates new database for fermath from a file (.dev)
+
 Fermath Conversions V0.9
 *Created class basic_unit in basic_unit.h file, removed conversion.h and unit.h
 *created class complex_unit in complex_unit.h file

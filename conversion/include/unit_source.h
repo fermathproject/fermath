@@ -6,7 +6,7 @@
 Fermath Project:Unit Source Class
 Version:0.9.2
 */
-#include "unit.h"
+#include "magnitude.h"
 
 //##############################
 //This class stores all the complex unit according to the basic_unit_source
@@ -128,6 +128,12 @@ public:
         if(it!=src.end()) u=(*it).second;
         else error_report(warning_check,"searching for a non-existent id",1,0);
         return u;
+    }
+    //returns the standard unit of given magnitude
+    unit get_standard_unit(magnitude_id id) const {
+        unit result;
+        result=search_magnitude(id).get_standard_unit();
+        return result;
     }
     magnitude_id search_magnitude_id(string n) const {
         map<magnitude_id,magnitude>::const_iterator it;

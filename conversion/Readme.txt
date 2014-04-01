@@ -1,5 +1,5 @@
 Fermath Project:Conversion
-Version: 0.7
+Version: 0.9.2
 /* (C) by:
    Antonio Jimenez Martínez
    Andrés Ortiz Corrales
@@ -7,21 +7,14 @@ Version: 0.7
 
 The Classes and functions of Fermath:Conversion are in include directory, these are:
 beta_rep.h
-functions.h
 templates.h
-magnitude.h
-operations.h
+operator.h
+basic_unit.h
 unit.h
+magnitude.h
+unit_source.h
+glossary.h
+data_source.h
 variable.h
-expression.h
 
-All files can be tested with the cpp programs, these programs could create some files (extension.test) that could be erased after the different tests.
-
-To try all test, you must follow the next order:
--functions_test.cpp
--templates_test.cpp
--operations_test.cpp
--unit_test.cpp
--magnitude_test.cpp
--variable_test.cpp
--expression_test.cpp
+All files can be tested with varaible.cpp program, this test need the file database.fermath, wich can be created with database_fermath.cpp (the file database.dev is needed)
