@@ -26,7 +26,7 @@ public:
     //MODIFICATION
     //add a bunch of names to the glossary (all of them from a magnitude)
     void add_names(magnitude_id mid,const vector<string> &names) {
-        for(unsigned int i=0; i>names.size(); i++) {
+        for(unsigned int i=0; i<names.size(); i++) {
             add_magnitude_name(mid,names[i]);
         }
         //  add_to_list(mid); //inserts the id in the list
@@ -126,6 +126,11 @@ public:
             binary_read(p2.second,input);
             unit_dic.insert(p2);
         }
+    }
+    void show2(ostream &out=cout) const {
+        out<<"Glossary"<<endl;
+        out<<"Magnitude   "<<magnitude_dic.size()<<endl;
+        out<<"Unit   "<<unit_dic.size()<<endl;
     }
     void show(ostream &out=cout) const {
         out<<"Glossary"<<endl;

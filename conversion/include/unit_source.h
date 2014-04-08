@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Unit Source Class
-Version:0.9.2
+Version:0.9.3
 */
 #include "magnitude.h"
 
@@ -135,6 +135,8 @@ public:
         result=search_magnitude(id).get_standard_unit();
         return result;
     }
+
+
     magnitude_id search_magnitude_id(string n) const {
         map<magnitude_id,magnitude>::const_iterator it;
         magnitude_id res=0;
@@ -183,6 +185,16 @@ public:
             src.insert(p);
         }
     }
+    void show2(ostream &out=cout) const {
+        out<<"Basic Units   "<<basic_src.size()<<endl;
+        out<<"Magnitudes   "<<src.size()<<endl;
+        map<magnitude_id,magnitude>::const_iterator it; //source
+        for(it=src.begin(); it!=src.end(); it++) {
+            out<<(*it).first<<":";
+            ((*it).second).show(basic_src,out);
+            out<<endl;
+        }
+    }
     void show(ostream &out=cout) const {
         out<<"Basic Units"<<endl;
         basic_src.show(out);
@@ -202,6 +214,29 @@ public:
             ((*it).second).check(basic_src);
         }
     }
+    //returns the unused basic units
+    set<basic_unit_id> unused_basic_units() const {
+        set<basic_unit_id> used;
+        set<basic_unit_id> unused;
+        used=used_basic_units();
+        vector<basic_unit_id> v=basic_src.get_basic_units();
+        for(int i=0; i<v.size(); i++) {
+            if(used.find(v[i])==used.end()) unused.insert(v[i]); //if dont find the unit in used, puts it in unused
+        }
+        return unused;
+    }
 private:
 
+
+    //returns all the used basic_units
+    set<basic_unit_id> used_basic_units() const {
+        set<basic_unit_id> result;
+        map<magnitude_id,magnitude>::const_iterator it;
+        for(it=src.begin(); it!=src.end(); it++) {
+            set<basic_unit_id> v;
+            v=(*it).second.get_basic_units();
+            result.insert(v.begin(),v.end());
+        }
+        return result;
+    }
 };

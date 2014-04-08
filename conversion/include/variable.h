@@ -8,7 +8,7 @@ Version:0.9.2
 */
 #include "data_source.h"
 //this class stores and operate with a variable, it can have an unit or not, also operates with undefined variables (variables without a value)
-//WARNING: this class just operates with the data, cant check the meaning of units and magnitudes!!
+//WARNING: this class just operates with the data, cant check the meaning of units and magnitudes by itself!!
 typedef unsigned short base;
 #define DEC_BASE 10
 #define HEX_BASE 16
@@ -75,17 +75,17 @@ public:
         name.clear();
     }
     //the value is set in dec
-    void set_value(double x) {
+    void set_value(data_type x) {
         value=x;
         numeric_value=true;
         check();
     }
     //set value as from a string (the number written will be in the base)
-    void set_value(string s) {
+    /*void set_value(string s) {
         value=to_dec(s,variable_base);
         numeric_value=true;
         check();
-    }
+    }*/
     //sets variable base (if is an incorrect base, it uses decimal base)
     void set_base(base vb=DEC_BASE) {
         if(vb<BIN_BASE || vb>MAX_BASE) {
@@ -160,7 +160,7 @@ public:
         return name;
     }
     //Get the value in dec
-    double get_value() const {
+    data_type get_value() const {
         if(have_value()==true) return value;
         else {
             error_report(error_check,"not value to return",0,1);
@@ -382,7 +382,6 @@ public:
                 result.clear_unit(); //divides the same unit, so the variable dont have unit now
             }
         }
-        //TODO: if magnitude is the same, change unit
         return result;
     }
 
@@ -423,124 +422,6 @@ public:
         return (*this);
     }
 
-
-    /*
-    //operator -
-    const variable operator-(const variable &other) const {
-        variable result(*this);
-        if(result.can_operate_with(other)) {
-            double x=result.get_standard_value();
-            double y=other.get_standard_value();
-            x=x-y;
-            result.set_value_from_standard(x);
-        }
-        else error_report("ERROR OPERATING",1,1);
-        result.erase_name();
-        result.check();
-        return result;
-    }
-
-    //operator *
-    const variable operator*(const variable &other) const { //FIXME
-        variable result(*this);
-        if(result.have_value() && other.have_value()) {
-            if(result.have_unit() && other.have_unit()) { //if both have units
-                if(result.same_magnitude(other)) { //if the same magnitude, it changes the value to same unit (kg*g -> kg*kg)
-                    double x=result.get_standard_value();
-                    double y=other.get_standard_value();
-                    x=x*y;
-                    result.set_value_from_standard(x);
-                    unit unid2=result.variable_unit;
-                    unid2=unid2*result.variable_unit;
-                    result.set_unit(unid2);
-                }
-                else { //if its no the same magnitude, just multiply value and units
-                    cout<<"here\n";
-                    double x=result.get_value();
-                    double y=other.get_value();
-                    x=x*y;
-                    result.set_value(x);
-                    unit r;
-                    r=result.variable_unit*other.variable_unit;
-                    (result.variable_unit).show();
-                    cout<<endl<<endl;
-                    (other.variable_unit).show();
-                    cout<<endl<<endl;
-                    r.show();
-                    cout<<endl;
-                    result.set_unit(r); //problem with pointers!!!
-                    cout<<"finish\n";
-                }
-            }
-            else { //if one of them (or both) are adimensional variables
-                if(result.have_unit()==false && other.have_unit()==false) {
-                    double x;
-                    x=other.value*result.value;
-                    result.set_value(x);
-                    result.dim_unit=false;
-                }
-                else if(result.have_unit()==true && other.have_unit()==false) {
-                    double x;
-                    x=other.value*result.value;
-                    result.set_value(x);
-                }
-                else if(result.have_unit()==false && other.have_unit()==true) {
-                    result.set_unit(other.get_unit());
-                    double x;
-                    x=other.value*result.value;
-                    result.set_value(x);
-                }
-            }
-        }
-        else error_report("ERROR OPERATING (not value in var)",1,1);
-        result.erase_name(); //CHANGE?
-        result.check();
-        return result;
-    }
-    //operator /
-    const variable operator/(const variable &other) const {//FIXME
-        variable result(*this);
-        if(result.have_value() && other.have_value()) {
-            if(result.same_magnitude(other)) { //if the same magnitude, it changes the value to same unit (kg*g -> kg*kg)
-                double x=result.get_standard_value();
-                double y=other.get_standard_value();
-                x=x/y;
-                result.set_unit((result.variable_unit/result.variable_unit));
-                result.set_value_from_standard(x);
-            }
-            else { //if its no the same magnitude, just multiply value and units
-                double x=result.get_value();
-                double y=other.get_value();
-                x=x/y;
-                result.set_value(x);
-                result.set_unit((result.variable_unit/other.variable_unit));
-            }
-        }
-        else error_report("ERROR OPERATING",1,1);
-        result.erase_name(); //CHANGE?
-        result.check();
-        return result;
-    }
-    //operator +=
-    variable operator+=(const variable &var) {
-        (*this)=(*this)+var;
-        return *this;
-    }
-    //operator -=
-    variable operator-=(const variable &var) {
-        (*this)=(*this)-var;
-        return *this;
-    }
-     //operator *=
-     variable operator*=(const variable &var) {
-         (*this)=(*this)*var;
-         return *this;
-     }
-     //operator /=
-     variable operator/=(const variable &var) {
-         (*this)=(*this)/var;
-         return *this;
-     }*/
     //operator unary -:return the negative value of the unit
     variable operator-() const {
         variable result=(*this);
@@ -549,7 +430,7 @@ public:
     }
 private:
 
-    //check if is possible to operate
+    //check if is possible to operate //TODO
     /*  bool can_operate_with(const variable &var2) const {
           bool b=true;
           bool un1=(*this).have_unit();

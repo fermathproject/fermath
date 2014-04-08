@@ -4,9 +4,9 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Data Source Test
-Version:0.9.2
+Version:0.9.3
 
-This program test units,magnitudes,operators and glossary
+Interface for creating and modifiying the database (operators,unts and magnitudes)
 */
 #include <iostream>
 #include <cmath>
@@ -20,123 +20,221 @@ This program test units,magnitudes,operators and glossary
 using namespace std;
 #include "include/data_source.h"
 
+void merge_database(string name,data_src &database); //merge another database from a document
+vector<string> get_names(); //feedback with user to get names
+//Each of the next functions has his own feedback with user to create/remove elements
+unit_id add_basic_unit(magnitude_id mid,data_src &database);
+unit_id add_unit(magnitude_id mid,data_src &database);
+magnitude_id add_magnitude(data_src &database);
+void add_operation(data_src &database);
 
-/*README:
- * The file database.dev needed has the next structure:
- * number of magnitudes (int)
- * principal name of  magnitude - number of seconddary names - vector<string> secondary names
- *  bool basic (1 if the units of magnitude are basic (g,kg,m..) 0 if complex (m/s,Newtons) - number of units in magnitude
- * (if the unit is basic:)
- * principal name of unit  - number of secondary names - vector<string> secondary names
- *  operation id - data id (0,0 if there is no conversion) (op_id: 1+,2-,3*,4/)
- * (if the unit is complex:)
- *principal name of unit - number of secondary names - vector<string> secondary name
- * number of basic units in numerator - vector<string>  (name of unit (doesnt matter if principal name or secondary name or complex/basic, but it has to be previously declared))
- * number of basic units in denominator - vector<string>
- */
+bool add_name(const string &name,magnitude_id mid,data_src &database); //adds a name for a magnitude
+bool add_name(const string &name,unit_id uid,data_src &database); //add a name for a unit
 
-unit_id input_basic_unit(ifstream &input,magnitude_id mid,data_src &database);
-magnitude_id input_magnitude(ifstream &input,data_src &database);
-unit_id input_unit(ifstream &input,magnitude_id mid,data_src &database);
+void remove_unit(unit_id uid,data_src &database);
+//void remove_basic_unit(unit_id uid ,data_src &database);
+void remove_magnitude(magnitude_id mid,data_src &database);
+void remove_operation(const op &oper,data_src &database);
+
+
+void remove_name(const string &name,magnitude_id mid,data_src &database);
+void remove_name(const string &name,unit_id id,data_src &database);
+
+void cls() { //clear_screen
+    cout<<endl<<"-------------------------------"<<endl;
+    // cout<<string(50,'\n');
+}
+void show_database(data_src dtbs) {
+    cout<<endl<<"DATABASE:"<<endl;
+    dtbs.show2();
+}
+unsigned int menu(vector<string> opt); //shows menu and returns selection
 
 int main() {
-    cout<<"Fermath Database Test "<<version<<endl;
-    cout<<"This program will create a file called database.fermath and need the file database.dev"<<endl;
-    op add(1,binary_operator);
-    op sub(2,binary_operator);
-    op mul(3,binary_operator);
-    op div(4,binary_operator); //operators
     data_src database;
-    ifstream input("database.dev");
-    int n_mag=0;
-    input>>n_mag; //number of magnitudes
-    for(int i=0; i<n_mag; i++) {
-        magnitude_id mid;
-        bool basic; //if units are basic
-        int n_units; //number of units in magnitude
-        mid=input_magnitude(input,database); //read one magnitude
-        input>>basic>>n_units;
-        for(int j=0; j<n_units; j++) {
-            if(basic==false) {
-                input_unit(input,mid,database);
-            }
-            else {
-                input_basic_unit(input,mid,database);
-            }
-        }
-    }
+    ifstream input("database.fermath"); //reads database (if exists)
+    if(input) database.read(input);
     input.close();
-    cout<<endl<<"DATABASE:"<<endl;
-    database.show();
+    cout<<"Fermath Database Creator "<<version<<endl;
+    cout<<"Working with database.fermath"<<endl;
+    cin.get();
+    unsigned int cmd=0; //command selected
+    string nam;
+    magnitude_id current_mag;
+    vector<string> opt; //options of menu
+    opt.push_back("Add Operation");
+    opt.push_back("Add Magnitude");
+    opt.push_back("Add Basic Unit");
+    opt.push_back("Add Unit");
+    opt.push_back("Show Database");
+    opt.push_back("Save and Exit");
+    cls();
+    while(cmd!=6) {
+        cout<<"Fermath Database Creator "<<version<<endl;
+        cmd=menu(opt);
+        switch(cmd) {
+        case 1: //Add operation
+            add_operation(database);
+            break;
+        case 2: //Add magnitude
+            add_magnitude(database);
+            break;
+        case 3: //Add basic_unit
+            cout<<"Enter Name of magnitude:";
+            cin>>nam;
+            current_mag=database.get_magnitude_id(nam);
+            if(current_mag!=0) add_basic_unit(current_mag,database);
+            break;
+        case 4: //Add unit
+            cout<<"Enter Name of magnitude:";
+            cin>>nam;
+            current_mag=database.get_magnitude_id(nam);
+            if(current_mag!=0) add_unit(current_mag,database);
+            break;
+        case 5: //show database
+            show_database(database);
+            break;
+        case 6: //exit
+            break;
+        }
+        cls();
+    }
+    //Writes database into file
     ofstream out("database.fermath");
     database.write(out);
     out.close();
     return 0;
 }
 
-
-unit_id input_unit(ifstream &input,magnitude_id mid,data_src &database) {
-    string s;
-    vector<string> v;
-    int n_names;
-    input>>s;
-    unit u(s); //unit with name s
-    input>>n_names;
-    for(int i=0; i<n_names; i++) {
-        input>>s;
-        v.push_back(s);
+unsigned int menu(vector<string> opt) {
+    unsigned int cmd;
+    for(int i=0; i<opt.size(); i++) {
+        cout<<i+1<<"-"<<opt[i]<<endl;
     }
-    int n_bunit;
-    input>>n_bunit;
-    for(int i=0; i<n_bunit; i++) { //numerators
-        input>>s; //name of basic_unit
-        unit u2= database.get_unit(s) ;
-        u.add_unit(u2); //adds us to u
-    }
-    input>>n_bunit;
-    for(int i=0; i<n_bunit; i++) { //denominators
-        input>>s; //name of basic_unit
-        unit u2= database.get_unit(s) ;
-        u.add_inverse_unit(u2); //adds us to u
-    }
-    return  database.add_unit(u,mid,v);
+    cin>>cmd;
+    if(cmd>opt.size()) cmd=0;
+    return cmd;
 }
 
 
 
-unit_id input_basic_unit(ifstream &input,magnitude_id mid,data_src &database) {
-    string s;
-    vector<string> v;
-    string s2;
-    int n_names;
-    input>>s; //name of unit
-    input>>n_names; //number of names
-    for(int i=0; i<n_names; i++) {
-        input>>s2;
-        v.push_back(s2);
+
+
+
+void merge_database(string name,data_src &database) {
+    ifstream input(name.c_str()); //transform name into a c_string (char)
+    if(!input) error_report(class_error," cant read file",1,1);
+    else {
+        data_src database2(input);
+        input.close();
+        database.merge(database2);
     }
-    basic_unit bunit(s);
-    int opid,data;
-    input>>opid>>data; //conversion of basic unit
-    if(opid!=0 && data!=0) {
-        op oper(opid,binary_operator);
-        bunit.add_operation(oper,data);
-    }
-    return  database.add_unit(bunit,mid,v);
 }
 
-magnitude_id input_magnitude(ifstream &input,data_src &database) {
+vector<string> get_names() {
+    unsigned int n_names;
+    vector<string> v;
+    string name2;
+    cout<<"Number of extra names:";
+    cin>>n_names;
+    for(unsigned int i=0; i<n_names; i++) {
+        cin>>name2;
+        v.push_back(name2);
+    }
+    return v;
+}
+
+unit_id add_basic_unit(magnitude_id mid,data_src &database) {
+    unit_id uid=null_id;
+    string name;
+    vector<string> v;
+    unsigned int n_op;
+    cout<<"Basic Unit Name (short):";
+    cin>>name;
+    cout<<"Number of operations for conversion:";
+    cin>>n_op;
+    basic_unit bunit(name);
+    for(int i=0; i<n_op; i++) {
+        op oper;
+        string name_op;
+        cout<<"Operation:";
+        cin>>name_op;
+        oper=database.get_operator(name_op);
+        if(oper.is_unary()==true) bunit.add_operation(oper);
+        else {
+            conversion_data dataop;
+            cout<<"Data of operation:";
+            cin>>dataop;
+            bunit.add_operation(oper,dataop);
+        }
+    }
+    v=get_names();
+    uid=database.add_unit(bunit,mid,v);
+    return uid;
+}
+
+unit_id add_unit(magnitude_id mid,data_src &database) {
+    unit result;
+    unit_id id=null_id;
+    int has_name;
+    unsigned int a,b;
+    string name;
+    vector<string> v;
+    cout<<"1-Add name\n2-Dont add name\n";
+    cin>>has_name;
+    if(has_name==1) {
+        cout<<"Name of unit:";
+        cin>>name;
+        result.set_name(name);
+    }
+    cout<<"Number of units (a/b) (two numbers):";
+    cin>>a>>b;
+    for(int i=0; i<a; i++) {
+        string name2;
+        unit unit2;
+        cout<<i<<"-";
+        cin>>name2;
+        unit2=database.get_unit(name2);
+        result.add_unit(unit2);
+    }
+    for(int i=0; i<b; i++) {
+        string name2;
+        unit unit2;
+        cout<<i<<"-";
+        cin>>name2;
+        unit2=database.get_unit(name2);
+        result.add_inverse_unit(unit2);
+    }
+    v=get_names();
+    id=database.add_unit(result,mid,v);
+    return id;
+}
+magnitude_id add_magnitude(data_src &database) {
+    magnitude_id mid;
     string n;
-    string s2;
-    vector<string> s;
-    int number;
-    input>>n;
-    input>>number;
-    for(int i=0; i<number; i++) {
-        input>>s2;
-        s.push_back(s2);
+    vector<string> names;
+    cout<<"Name of magnitude:";
+    cin>>n;
+    names=get_names();
+    mid=database.add_magnitude(n,names);
+    return mid;
+}
+
+void add_operation(data_src &database) {
+    operation_id id;
+    string name;
+    bool bin;
+    cout<<"Operation id:";
+    cin>>id;
+    cout<<"1-Binary operator\n2-Unary operator\n";
+    cin>>bin;
+    if(bin==1 && (id>binary_max || id<=0)) cout<<"ID out of range"<<endl;
+    else if(bin==2 && (id>unary_max || id<=0)) cout<<"ID out of range"<<endl;
+    else {
+        cout<<"Name of operator:";
+        cin>>name;
+        database.add_operator(name,id,bin);
     }
-    return database.add_magnitude(n,s);
 }
 
 

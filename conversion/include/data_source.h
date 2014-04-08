@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Data Source Class
-Version:0.9.2
+Version:0.9.3
 */
 
 #include "glossary.h"
@@ -12,15 +12,18 @@ Version:0.9.2
 
 class data_src {
 private:
+    set<op> operations; //stores all operators
     glossary names; //stores names for units and magnitudes
     unit_source src; //stores basic and complex units and magnitudes
 public:
     //CONSTRUCTOR
     data_src() {
     }
-    data_src(const unit_source &src2,const glossary &names2) {
+    data_src(const unit_source &src2,const glossary &names2,const set<op> &oper) {
         names=names2;
         src=src2;
+        operations=oper;
+        check();
     }
     data_src(ifstream &input) {
         read(input);
@@ -49,6 +52,17 @@ public:
         add_unit_name(uid,bunit.get_name());
         return uid;
     }
+    void add_operator(const string &name,operation_id opid,bool bina) {
+        op op2(name,opid,bina);
+        operations.insert(op2);
+    }
+    void add_operator(const op &op2) {
+        operations.insert(op2);
+        check();
+    }
+    void remove_operator(const op &op2) {
+        operations.erase(op2);
+    }
     void add_names(magnitude_id id,const vector<string> &v) {
         names.add_names(id,v);
     }
@@ -64,6 +78,7 @@ public:
     void clear() {
         names.clear();
         src.clear();
+        operations.clear();
     }
     //merge two different data_sources
     void merge(const data_src &dat) {     //TODO:test
@@ -169,6 +184,37 @@ public:
     const basic_unit_source *get_basic_source2() const {
         return &(src.get_basic_source());
     }
+    vector<op> get_operators(operation_id opid) const {
+        vector<op> result;
+        set<op>::const_iterator it;
+        for(it=operations.begin(); it!=operations.end(); it++) {
+            if((*it).get_id()==opid) result.push_back(*it);
+        }
+        return result;
+    }
+    //devuelve true si el operador dado por el string esta en el conjunto
+    bool is_operator(const string &txt) const {
+        return operations.find(txt)!=operations.end();
+    }
+    //devuelve el operador, a partir del nombre
+    op get_operator(const string &txt) const {
+        set<op>::iterator it=operations.find(txt);
+        op result;
+        if(it!=operations.end())  result=*it;
+        else error_report(error_check,"operation not found",1,1);
+        return result;
+    }
+    //devuelve el id de un operador a partir de su string. Teniendo en cuenta que devuelve -1 si es unary y el ide si es unario
+    int get_id(const string &txt) const { //Tiene esta salida ya que se isa para la prioridad.
+        set<op>::iterator it=operations.find(txt);
+        if(it!=operations.end())  return (*it).get_id();
+        else {
+            error_report(error_check,"operation not found",1,1);
+            return -1;
+        }
+    }
+
+
     //check if two units are the same magnitude, if the size of avect and bevect is the same, and the magnitude of the basic unit is the same, the unit is the same magnitude
     bool same_magnitude(const unit &a,const unit &b) const {
         pair<unsigned int,unsigned int> siz1,siz2;
@@ -227,14 +273,27 @@ public:
     void write(ofstream &out) const {
         names.write(out);
         src.write(out);
+        write_operations(out);
     }
     void read(ifstream &input) {
         clear();
         names.read(input);
         src.read(input);
+        read_operations(input);
     }
-    void show(ostream &out=cout) {
+    void show2(ostream &out=cout) const {
+        src.show2(out);
+        out<<endl<<"operations   "<<operations.size()<<endl;
+        names.show2(out);
+    }
+    void show(ostream &out=cout) const {
         src.show(out);
+        out<<endl<<"operations"<<endl;
+        set<op>::const_iterator it;
+        for(it=operations.begin(); it!=operations.end(); it++) {
+            (*it).show();
+            out<<endl;
+        }
         out<<endl;
         names.show(out);
     }
@@ -242,7 +301,33 @@ private:
     string get_basic_unit_name(basic_unit_id bid) const {
         return src.get_basic_unit_name(bid);
     }
+
+    //write the operations in a binary file
+    void write_operations(ofstream &out) const {
+        unsigned short size=operations.size();
+        binary_write(size,out);
+        set<op>::iterator it;
+        for(it=operations.begin(); it!=operations.end(); it++) {
+            (*it).write(out);
+        }
+    }
+    //read the operations of a binary file
+    void read_operations(ifstream &input) {
+        unsigned short size;
+        binary_read(size,input);
+        op x;
+        for(unsigned int i=0; i<size; i++) {
+            x.read(input);
+            add_operator(x);
+        }
+    }
     void check() {
+        set<op>::iterator it;
+        for(it=operations.begin(); it!=operations.end(); ++it) {
+            if((*it).have_name()==false) error_report(warning_check,"Error, operator in data_src with no name",1,1);
+            if((*it).get_type()==unary_operator && (*it).get_id()>unary_max) error_report(class_error,"Error in operators (out of range)",1,1);
+            else if((*it).get_type()==binary_operator && (*it).get_id()>binary_max) error_report(class_error,"Error in operators (out of range)",1,1);
+        }
         names.check();
         src.check();
     }

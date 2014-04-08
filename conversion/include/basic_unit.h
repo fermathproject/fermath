@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Basic Unit Class & Basic Unit Source Class
-Version:0.9.2
+Version:0.9.3
 */
 
 #include "operator.h"
@@ -382,6 +382,16 @@ public:
     }
     int max_id() const {
         return src.size()-1;
+    }
+    unsigned int size() const {
+        return src.size();
+    }
+    vector<basic_unit_id> get_basic_units() const {
+        vector<basic_unit_id> v;
+        for(unsigned int i=0; i<src.size(); i++) {
+            v.push_back(i);
+        }
+        return v;
     }
     //I/O
     void write(ofstream &out) const {

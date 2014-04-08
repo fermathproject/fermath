@@ -4,13 +4,14 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project: Magnitude Class
-Version:0.9.2
+Version:0.9.3
 */
 
 #include "unit.h"
 typedef unsigned short magnitude_id; //id for difference between magnitude
 typedef unsigned short complex_unit_id; //id for a complex unit in a magnitude
 typedef pair<magnitude_id,complex_unit_id> unit_id; //full id needed for an unit (magnitude and unit)
+unit_id null_id=make_pair(0,0);
 //FUNCTIONS to work with ids ****
 bool same_magnitude_id(unit_id id1,unit_id id2) {
     return (id1.first==id2.first);
@@ -26,11 +27,7 @@ unit_id change_magnitude_id(unit_id id,magnitude_id newid) {
     id.first=newid;
     return id;
 }
-bool is_null_id(unit_id id) {
-    if(id.first==0 && id.second==0) return true;
-    else return false;
-}
-void clear_unit_id(unit_id &id) {
+void clear_unit_id(unit_id  id) {
     id.first=0;
     id.second=0;
 }
@@ -146,6 +143,18 @@ public:
         for(it=src.begin(); it!=src.end(); it++)  v.push_back((*it).first);
         return v;
     }
+    //returns all the basic units used in magnitude
+    set<basic_unit_id> get_basic_units() const {
+        map<complex_unit_id,unit>::const_iterator it;
+        set<basic_unit_id> result;
+        for(it=src.begin(); it!=src.end(); it++) {
+            pair< multiset<basic_unit_id>,multiset<basic_unit_id> > p;
+            p=((*it).second).get_basic_units();
+            merge_basic_id(p.first,result);
+            merge_basic_id(p.second,result); //adds all the basic units in the result
+        }
+        return result;
+    }
     //if is the same magnitude
     bool same_magnitude(const magnitude &mag2) const {
         unit a,b;
@@ -234,6 +243,10 @@ private:
              if(u.standard_unit(src)) standard_unit=id;
          }
      }*/
+    void merge_basic_id(const multiset<basic_unit_id> &v,set<basic_unit_id> &result) const {
+        multiset<basic_unit_id>::const_iterator it;
+        for(it=v.begin(); it!=v.end(); it++) result.insert(*it);
+    }
     //search the next "free" id
     complex_unit_id next_id() const {
         complex_unit_id id;

@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Variable Test
-Version:0.9.2
+Version:0.9.3
 
 This program test units,magnitudes,operators and glossary
 */

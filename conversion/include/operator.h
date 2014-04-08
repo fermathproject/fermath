@@ -4,46 +4,49 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Operators Class
-Version:0.9.2
+Version:0.9.3
 */
+
 #include "beta_rep.h"
 #include "templates.h"
-
+using namespace std;
 typedef unsigned short operation_id; //0 es null
 const operation_id binary_max=6;
-const operation_id unary_max=10; //maximun values for an operator
+const operation_id unary_max=4; //maximun values for an operator
 #define unary_operator 0
 #define binary_operator 1
 class op {
-private://le ponemos un identificador a cada operador.
+private://cada operador esta formado por:un nombre, un identificador y un tipo(0 unary y 1 binary)
     string text;
     operation_id id;
     bool type;//binary operator or unary operator
 public:
-    op() {
+    //constructor
+    op() {//constructor por defecto
         id=0;
+    }
+    op(operation_id id2,bool bin) {
+        id=id2;
+        type=bin;
     }
     op(string text2,operation_id id2,bool bin) {
         text=text2;
         id=id2;
         type=bin;
     }
-    op(operation_id id2,bool bin) {
-        id=id2;
-        type=bin;
-    }
-    op(const op &oper2) {
+    op(const op &oper2) {//constructor de copia
         (*this)=oper2;
         text=oper2.get_text();
     }
-    op(const string &s) {
+    op(const string &s) { //construcctor a partir de un string
         id=0;
         text=s;
     }
-    op(ifstream &input) {
+    op(ifstream &input) { //construcctor a partir de un archivo
         read(input);
     }
-    //Modificators
+
+    //Modificators SET
     void set_text(string text2) {
         text=text2;
     }
@@ -65,7 +68,8 @@ public:
         id=0;
         text="";
     }
-    //Access
+
+    //Access GET
     string get_text() const {
         return text;
     }
@@ -89,15 +93,22 @@ public:
     bool is_binary() const {
         return type;
     }
-    bool same_name(op oper2) const {
+    //true si es una operacion unaria
+    bool is_unary() const {
+        return !type;
+    }
+    bool have_name() const {
+        return !text.empty();
+    }
+    bool same_name(op oper2) const {//devuelve true si los operadores tiene el mismo nombre
         if(text==oper2.get_text()) return true;
         else return false;
     }
-    bool is_null() const {
+    bool is_null() const {//devuelve true si operator es nulo
         if(id==0) return true;
         else return false;
     }
-    bool same_op(const op &oper2) {
+    bool same_op(const op &oper2) { //devuelve true si los operadores son el mismo( tiene el mismo id y el mismo tipo)
         bool eq=true;
         if(id!=oper2.get_id()) eq=false;
         if(type!=oper2.is_binary()) eq=false;
@@ -109,28 +120,32 @@ public:
         binary_write(id,out);
         binary_write(type,out);
     }
+    //read the operation of binary file
     void read(ifstream &input) {
         binary_read(text,input);
         binary_read(id,input);
         binary_read(type,input);
     }
-    //show operator in detail
+    //show operator in detail(text,id,type)
     void show_operator(ostream &out=cout) const {
         out<<text<<"  "<<"id:"<<id<<"  ";
         if(is_binary()) out<<"binary";
         else out<<"unary";
         out<<"\n";
     }
-    bool have_name() const {
-        return !(text.empty());
-    }
+    //elimina el nombre dle operador. Mantiene el ide y el tipo
     void erase_name() {
         text.clear();
     }
 
+    void  show(ostream &out=cout) const {
+        out<<text<<"  "<<id<<"  ";
+        if(is_binary()) out<<"(bin)";
+        else out<<"(un)";
+    }
     //OPERATORS
     //operator==
-    //dos operaciones son iguales si nombre son iguales
+    //dos operaciones son iguales si nombre son iguales, no tiene en cuenta id no tipo.
     bool operator==(const op &oper2) const {
         bool eq=true;
         //  if(id!=oper2.get_id()) eq=false;
@@ -151,14 +166,17 @@ public:
         if(text<oper2.text) return true;
         else return false;
     }
+    //operator <,> (compares text)
     bool operator>(const op &oper2) const {
         if(text>oper2.text) return true;
         else return false;
     }
+    //operator <,> (compares text)
     bool operator<=(const op &oper2) const {
         if(text<=oper2.text) return true;
         else return false;
     }
+    //operator <,> (compares text)
     bool operator>=(const op &oper2) const {
         if(text>=oper2.text) return true;
         else return false;
@@ -176,116 +194,16 @@ public:
     }
 
 private:
-    //operator <<, show the operator os the standard output
+    //operator <<, show the operator os the standard output. Solo muestra el nombre del operador.
     friend ostream  &operator<< (ostream &out, const op &oper) {
         out<<oper.text;
         return out;
     }
-
+    //cheque las operaciones. Tiene en cuenta el el ide y el numero maximo del ide de dicho tipo.
     void check() {
-        if(type==unary_operator && id>unary_max) error_report(error_check,"Operator id out of range",1,1);
-        if(type==binary_operator && id>binary_max) error_report(error_check,"Operator id our of range",1,1);
+        if(type==unary_operator && id>unary_max) error_report("Error in operator while checking",1,1);
+        if(type==binary_operator && id>binary_max) error_report("Error in operator while checking",1,1);
     }
 };
 
-//*************************************************
-/*
-class op_list {
-private://op_lista es un conjunto de operadores ordenados por el nombre.
-    set<op> list;
-public:
-	//constructores
-    op_list() {//constructor por defecto
-    }
-    op_list(const op &o) {
-        add_operator(o);
-    }
-    op_list(const vector<op> &v) {// constructor a partir de un vector
-        for(int i=0; i<v.size(); i++) add_operator(v.at(i));
-    }
-    op_list(const set<op> &l) {//constructor a partir de un set
-        set<op>::iterator it;
-        for(it=list.begin();it!=list.end(); ++it) add_operator(*it);
-    }
-    op_list(const op_list &op2) {//constructor de copia
-        (*this)=op2;
-    }
-	//Operacion de añadir un operador al conjunto.
-    void add_operator(const op &o) {
-        list.insert(o);
-        check();
-    }
-	//Operacion de eliminar un operador al conjunto.
-    void remove_operator(const op &op2) {
-	list.erase(op2);
-    }
-	//devuelve true si el operador dado por el string esta en el conjunto
-    bool is_operator(const string &txt) const{ //TODO: cambiar find_operator por is_operator!! (antonio)
-		return list.find(txt)!=list.end();
-    }
-	//devuelve el operador, a partir del nombre
-	op get_op(const string &txt) const{
-	op result;
-	set<op>::iterator it=list.find(txt);
-	if(it==list.end()) error_report(class_error,"operator not found",1,1);
-	else result=(*it);
 
-		return result;
-	}
-	//devuelve el ide de un operador a partir de su string. Teniendo en cuenta que devuelve -1 si es unary y el ide si es unario
-	int get_id(string txt) const{//antonio: cambiar get_ide por get_id //FIXME
-		set<op>::iterator it=list.find(txt);
-		assert (it!=list.end());//si el operador no esta en el conjunto salta se produce un assert
-		if ((*it).is_binary()) return (*it).get_id();
-		else return -1;
-	}
-
-    // operator=
-    //iguala la id y el tipo (no el texto)
-    op_list &operator=(const op_list &op2) {
-        if(this!=&op2) {
-            (*this).list=op2.list;
-        }
-        return *this;
-    }
-
-	//devuevle el iterador begin del conjunto
-	set<op>::iterator begin() const {
-		return list.begin();
-	}
-	//devuevle el iterador end del conjunto
-	set<op>::iterator end() const {
-		return list.end();
-	}
-
-	//write the operations in a binary file
-    void write(ofstream &out) const { //TODO: antonio, cambiar por write
-		int size=list.size();
-		binary_write(size,out);
-		set<op>::iterator it;
-    	for(it=begin(); it!=end(); ++it) {
-        	(*it).write_operator(out);
-    	}
-    }
-	//read the operations of a binary file
-    void read_setoperator(ifstream &input) {
-		int size;
-		binary_read(size,input);
-		op x;
-		for(int i=0;i<size;i++){
-			x.read_operator(input);
-			add_operator(x);
-		}
-
-    }
-private:
-	//chequea. Recorre el conjunto comprodando que el ide del operador se encuentra dentro de un rango.
-    void check() {
-        set<op>::iterator it;
-        for(it=list.begin();it!=list.end(); ++it) {
-            if((*it).get_type()==unary_operator && (*it).get_id()>unary_max) error_report("Error in operator list while checking",1,1);
-            if((*it).get_type()==binary_operator && (*it).get_id()>binary_max) error_report("Error in operator list while checking",1,1);
-        }
-    }
-
-};*/

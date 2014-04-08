@@ -130,6 +130,8 @@ public:
         p.second=bvect;
         return p;
     }
+
+
     pair<unsigned int,unsigned int> get_basic_units_size() const {
         pair<unsigned int,unsigned int> p;
         p.first=avect.size();
