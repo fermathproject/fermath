@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Variable Class
-Version:0.9.2
+Version:0.9.3
 */
 #include "data_source.h"
 //this class stores and operate with a variable, it can have an unit or not, also operates with undefined variables (variables without a value)
@@ -354,8 +354,8 @@ public:
                 data_type x=result.get_standard_value(*bsrc);
                 data_type y=other.get_standard_value(*bsrc);
                 x=x*y; //multiply in the standard unit
-                result.set_value_from_standard(x,*bsrc); //set the value to the result variable
                 result.add_unit(result.get_unit()); //adds the same unit (so it is the unit^2)
+                result.set_value_from_standard(x,*bsrc); //set the value to the result variable
             }
         }
         return result;
@@ -378,8 +378,8 @@ public:
                 data_type x=result.get_standard_value(*bsrc);
                 data_type y=other.get_standard_value(*bsrc);
                 x=x/y; //multiply in the standard unit
-                result.set_value_from_standard(x,*bsrc); //set the value to the result variable
                 result.clear_unit(); //divides the same unit, so the variable dont have unit now
+                result.set_value(x); //set the value to the result variable
             }
         }
         return result;

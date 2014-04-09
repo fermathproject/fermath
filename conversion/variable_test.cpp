@@ -66,9 +66,5 @@ int main() {
     res=x.divide(y,database);
     res.show(*bsrc);
     cout<<endl;
-    res.set_variable_to_standard(database);
-    cout<<"standard unit:";
-    res.show(*bsrc);
-    cout<<endl;
     return 0;
 }
