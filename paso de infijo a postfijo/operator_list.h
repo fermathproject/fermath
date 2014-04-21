@@ -56,13 +56,7 @@ public:
 		return *(it);
 
 	}
-	//devuelve el ide de un operador a partir de su string. Teniendo en cuenta que devuelve -1 si es unary y el ide si es unario
-	int get_ide(string txt) const{//Tiene esta salida ya que se isa para la prioridad.
-		set<op>::iterator it=list.find(txt);
-		assert (it!=list.end());//si el operador no esta en el conjunto salta se produce un assert
-		if ((*it).is_binary()) return (*it).get_id();
-		else return -1;
-	}
+	
 
     // operator=
     //iguala la id y el tipo (no el texto)
