@@ -8,7 +8,7 @@ Version:0.9.3
 */
 
 //Operations with variables
-
+#include "variable.h"
 //Binary operations
 variable calc_add(const variable &var1,const variable &var2,const data_src &src) {
     variable result;
@@ -63,7 +63,9 @@ variable calc_square_root(const variable &var1) {
     if(var1.have_unit()==true) error_report(user_error,"square root not possible with units (discarting units)",1,1); //FIXME¿?
     data_type d1,res;
     d1=var1.get_value();
-    res=sqrt(var1);
+    res=sqrt(d1);
     variable result(res);
     return result;
 }
+
+//variable calculate(const variable &var1,const variable &var2,operation_id oper)

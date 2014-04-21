@@ -220,7 +220,7 @@ public:
         set<basic_unit_id> unused;
         used=used_basic_units();
         vector<basic_unit_id> v=basic_src.get_basic_units();
-        for(int i=0; i<v.size(); i++) {
+        for(unsigned int i=0; i<v.size(); i++) {
             if(used.find(v[i])==used.end()) unused.insert(v[i]); //if dont find the unit in used, puts it in unused
         }
         return unused;

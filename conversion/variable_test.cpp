@@ -19,7 +19,7 @@ This program test units,magnitudes,operators and glossary
 #include <set>
 #include <stack>
 using namespace std;
-#include "include/variable.h"
+#include "include/variable_calc.h"
 
 int main() {
     cout<<"Fermath Variable Test "<<version<<endl;
