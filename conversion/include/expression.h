@@ -8,26 +8,32 @@ Version:0.9.3
 */
 
 #include "variable_calc.h"
-//This class stores an expresion as vectors of operators and variables
+//This class stores an expresion as vectors of operators and variables in posfix form
+//For example: 5kg + 8kg * 3 --> 8kg 3 * 5 kg +
+#define selec_data 0
+#define selec_operation 1
 class expression {
 private:
     string name; //if expr has a name
     vector<variable> data_v;
     vector<op> operation_v;
+    vector<bool> selection;
 public:
     //CONSTRUCTORS
     expression() {
     }
-    expression(const string &name2,const vector<variable> &data_v2,const vector<op> &op2) {
+    expression(const string &name2,const vector<variable> &data_v2,const vector<op> &op2, const vector<bool> &selec2) {
         name=name2;
         data_v=data_v2;
         operation_v=op2;
+        selection=selec2;
         clean_operators();
         check();
     }
-    expression(const vector<variable> &data_v2,const vector<op> &op2) {
+    expression(const vector<variable> &data_v2,const vector<op> &op2,const vector<bool> &selec2) {
         data_v=data_v2;
         operation_v=op2;
+        slection=selec2;
         clean_operators();
         check()
     }
@@ -35,6 +41,9 @@ public:
         add_variable(var1,oper);
         clean_operators();
         check();
+    }
+    expression(const expression &expr2) {
+        (*this)=expr2;
     }
     //MODIFICATION
     void add_variable(const variable &var1) {
@@ -50,6 +59,7 @@ public:
         erase_name();
         data_v.clear();
         operation_v.clear();
+        selection.clear();
     }
     //add unary operation
     void add_operation(operation_id oper) {
@@ -88,7 +98,7 @@ public:
 
     //JOBS
     expression evaluate(const data_src &src) const {
-        //TODO
+        stack<variable> stck;
     }
     variable get_result(const data_src &src) const {
         variable result;
@@ -98,7 +108,17 @@ public:
         return result;
     }
     //TODO:show expression
-
+    // operator=
+    expression &operator=(const expression &expr2) {
+        if(this!=&expr2) {
+            ⁽*this).clear();
+            (*this).name=expr2.name;
+            (*this).data_v=expr2.data_v;
+            (*this).operation_v=expr2.operation_v;
+            (*this).selection=expr2.selection;
+        }
+        return (*this);
+    }
 
 private:
     void clean_operators() {

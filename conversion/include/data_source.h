@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Data Source Class
-Version:0.9.3
+Version:0.9.4
 */
 
 #include "glossary.h"
@@ -203,6 +203,12 @@ public:
         if(it!=operations.end())  result=*it;
         else error_report(error_check,"operation not found",1,1);
         return result;
+    }
+    set<op>::const_iterator op_begin() const {
+        return operations.begin();
+    }
+    set<op>::const_iterator op_end() const {
+        return operations.end();
     }
     //devuelve el id de un operador a partir de su string. Teniendo en cuenta que devuelve -1 si es unary y el ide si es unario
     int get_id(const string &txt) const { //Tiene esta salida ya que se isa para la prioridad.

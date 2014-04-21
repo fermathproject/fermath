@@ -422,6 +422,7 @@ public:
         return (*this);
     }
 
+
     //operator unary -:return the negative value of the unit
     variable operator-() const {
         variable result=(*this);
