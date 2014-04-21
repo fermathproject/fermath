@@ -89,24 +89,24 @@ variable calculate(const variable &var1,const variable &var2,operation_id oper,c
             var=calc_pow(var1,var2,src);
             break;
         case 6:
-            var=calc_root(var1,var2,src);
+            var=calc_root(var1,var2);
             break;
         }
     }
     return var;
 }
 variable calculate(const variable &var,operation_id oper,const data_src &src) {
-    variable var;
+    variable res;
     if(oper==0 || oper>unary_max) error_report(user_error,"operation id not valid",1,1);
     else {
         switch(oper) {
         case 1:
-            var=calc_square(var,src);
+            res=calc_square(var,src);
             break;
         case 2:
-            var=calc_square_root(var,src);
+            res=calc_square_root(var);
             break;
         }
     }
-    return var;
+    return res;
 }

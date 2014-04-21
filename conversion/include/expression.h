@@ -33,12 +33,12 @@ public:
     expression(const vector<variable> &data_v2,const vector<op> &op2,const vector<bool> &selec2) {
         data_v=data_v2;
         operation_v=op2;
-        slection=selec2;
+        selection=selec2;
         clean_operators();
-        check()
+        check();
     }
     expression(const variable &var1) {
-        add_variable(var1,oper);
+        add_variable(var1);
         clean_operators();
         check();
     }
@@ -52,7 +52,7 @@ public:
     void set_name(const string &name2) {
         name=name2;
     }
-    void erase_mame() {
+    void erase_name() {
         name.clear();
     }
     void clear() {
@@ -66,7 +66,7 @@ public:
         if(oper>unary_max || oper==0) error_report(fatal_error,"operation_id not valid",1,1);
         else {
             op oper2(oper,unary_operator);
-            operation_v.push_back(oper);
+            operation_v.push_back(oper2);
         }
         clean_operators();
         check();
@@ -77,7 +77,7 @@ public:
         else {
             data_v.push_back(var);
             op oper2(oper,binary_operator);
-            operation_v.push_back(oper);
+            operation_v.push_back(oper2);
         }
         clean_operators();
         check();
@@ -91,10 +91,10 @@ public:
         return !name.empty();
     }
     //true if only has a variable and no operations
-    bool is_variable() const {
-        if(data_v.size()==1 && operations.empty()==true) return true;
+    /*bool is_variable() const {
+        if(data_v.size()==1 && operation_v.empty()==true) return true;
         else return false;
-    }
+    }*/
 
     //JOBS
     variable evaluate(const data_src &src) const { //TODO:solve if dont have solution
@@ -115,13 +115,13 @@ public:
                     res.pop();
                     b=res.top();
                     res.pop();
-                    res.push(calculate(a,b,oper.get_id(),src);
+                    res.push(calculate(a,b,oper.get_id(),src));
                 }
                 else { //unary operation
                     variable a;
                     a=res.top();
                     res.pop();
-                    res.push(calculate(a,oper.get_id(),src);
+                    res.push(calculate(a,oper.get_id(),src));
                 }
                 p2++;
             }
@@ -139,7 +139,7 @@ public:
     // operator=
     expression &operator=(const expression &expr2) {
         if(this!=&expr2) {
-            ⁽*this).clear();
+            (*this).clear();
             (*this).name=expr2.name;
             (*this).data_v=expr2.data_v;
             (*this).operation_v=expr2.operation_v;
@@ -154,7 +154,7 @@ private:
             operation_v[i].erase_name();
         }
     }
-    void check() {
+    void check() const {
         unsigned int j=1;
         for(unsigned int i=0; i<operation_v.size(); i++) {
             if(operation_v[i].get_id()==0) error_report(user_error,"null operator in expr",1,1);
