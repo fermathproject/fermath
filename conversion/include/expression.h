@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca*/
 /*
 Fermath Project:Expression
-Version:0.9.3
+Version:0.9.4
 */
 
 #include "variable_calc.h"
@@ -97,16 +97,44 @@ public:
     }
 
     //JOBS
-    expression evaluate(const data_src &src) const {
-        stack<variable> stck;
+    variable evaluate(const data_src &src) const { //TODO:solve if dont have solution
+        check();
+        stack<variable> res;
+        op oper;
+        unsigned int p1=0,p2=0;
+        for(unsigned int i=0; i<selection.size(); i++) {
+            if(selection[i]==selec_data) {
+                res.push(data_v[p1]);
+                p1++;
+            }
+            else { //gets variables from stack, operate, and insert the again at top
+                oper=operation_v[p2];
+                if(oper.is_binary()) { //binary operation
+                    variable a,b;
+                    a=res.top();
+                    res.pop();
+                    b=res.top();
+                    res.pop();
+                    res.push(calculate(a,b,oper.get_id(),src);
+                }
+                else { //unary operation
+                    variable a;
+                    a=res.top();
+                    res.pop();
+                    res.push(calculate(a,oper.get_id(),src);
+                }
+                p2++;
+            }
+        }
+        return res.top();
     }
-    variable get_result(const data_src &src) const {
-        variable result;
-        expression expr2=(*this).evaluate(src);
-        if(expr2.is_variable()==true) result=expr2;
-        else error_report(user_error,"no result in expresion",0,1);
-        return result;
-    }
+    /* variable get_result(const data_src &src) const {
+         variable result;
+         expression expr2=(*this).evaluate(src);
+         if(expr2.is_variable()==true) result=expr2;
+         else error_report(user_error,"no result in expresion",0,1);
+         return result;
+     }*/
     //TODO:show expression
     // operator=
     expression &operator=(const expression &expr2) {

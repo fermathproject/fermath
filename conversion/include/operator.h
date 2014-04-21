@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Operators Class
-Version:0.9.3
+Version:0.9.4
 */
 
 #include "beta_rep.h"

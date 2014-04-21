@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Variable Class
-Version:0.9.3
+Version:0.9.4
 */
 #include "data_source.h"
 //this class stores and operate with a variable, it can have an unit or not, also operates with undefined variables (variables without a value)

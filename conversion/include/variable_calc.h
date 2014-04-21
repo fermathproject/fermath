@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca*/
 /*
 Fermath Project:Variable Calculus
-Version:0.9.3
+Version:0.9.4
 */
 
 //Operations with variables
@@ -68,4 +68,45 @@ variable calc_square_root(const variable &var1) {
     return result;
 }
 
-//variable calculate(const variable &var1,const variable &var2,operation_id oper)
+variable calculate(const variable &var1,const variable &var2,operation_id oper,const data_src &src) {
+    variable var;
+    if(oper==0 || oper>binary_max) error_report(user_error,"operation id not valid",1,1);
+    else {
+        switch(oper) {
+        case 1:
+            var=calc_add(var1,var2,src);
+            break;
+        case 2:
+            var=calc_substract(var1,var2,src);
+            break;
+        case 3:
+            var=calc_multiply(var1,var2,src);
+            break;
+        case 4:
+            var=calc_divide(var1,var2,src);
+            break;
+        case 5:
+            var=calc_pow(var1,var2,src);
+            break;
+        case 6:
+            var=calc_root(var1,var2,src);
+            break;
+        }
+    }
+    return var;
+}
+variable calculate(const variable &var,operation_id oper,const data_src &src) {
+    variable var;
+    if(oper==0 || oper>unary_max) error_report(user_error,"operation id not valid",1,1);
+    else {
+        switch(oper) {
+        case 1:
+            var=calc_square(var,src);
+            break;
+        case 2:
+            var=calc_square_root(var,src);
+            break;
+        }
+    }
+    return var;
+}
