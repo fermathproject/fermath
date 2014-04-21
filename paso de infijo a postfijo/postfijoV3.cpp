@@ -109,25 +109,26 @@ vector<string> convertir(const string & infijo,const op_list & vop) {//convierte
 //la prioridad va de unary */ -+
 int fprioridad(const string & pila,const string & infijo,const op_list & vop) { //tener en cuenta ^
 
+	op oppila=vop.get_op(pila);
+	op opinfijo=vop.get_op(infijo);
     int p=1;
-    int idPilatope=vop.get_ide(pila);//calculamso el identificador del operador de pila[tope]
-    int idinfijoci=vop.get_ide(infijo);//calculamso el identificador del operador deinfijo[ci]
-
-    if(idPilatope==-1) {//si en al pila encontramos un operador unario este tiene siempre preferencia.
-        p=0;
-    }
-    else {
-        if(idPilatope!=-1 && idinfijoci!=-1 ) {//si ambos operadores son binarios
-            if(idPilatope==5 && idinfijoci<=5) 	p=0;//id=5 -> ^
+	if(oppila.is_unary()){//si en al pila encontramos un operador unario este tiene siempre preferencia.
+		p=0;
+	}
+	else{
+		if(oppila.is_binary() && opinfijo.is_binary()){//si ambos operadores son binarios
+				int idPilatope=oppila.get_id();//calculamso el identificador del operador de pila[tope]
+    			int idinfijoci=opinfijo.get_id();//calculamso el identificador del operador deinfijo[ci]
+				if(idPilatope==5 && idinfijoci<=5) 	p=0;//id=5 -> ^
             else {
                 if((idPilatope==4 || idPilatope==3) && (idinfijoci<=4 || idinfijoci<=3 )) p=0;//id=4 -> /. id=3 -> *
                 else {
                     if((idPilatope==1 || idPilatope==2) && (idinfijoci==1 || idinfijoci==2)) p=0;//id=1 -> +. id=2 -> -
                 }
             }
-        }
-    }
-    return p;
+		}	
+	}
+	return p;
 }
 
 //pasa de formato infijo a formato postfijo
