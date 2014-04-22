@@ -37,7 +37,7 @@ bool parentesis(const char &a) {
 
 //muestra un vector de string.
 void mostrar(const vector<string> &a) {
-    for(int i=0; i<a.size(); ++i) {
+    for(unsigned int i=0; i<a.size(); ++i) {
         cout<<a[i]<<"  ";
     }
     cout<<endl;
@@ -131,7 +131,7 @@ vector<string> pasarpostfijo(const vector<string> &infijo,const data_src &datasr
     vector< string > Pila;//vector auxiliar, donde ser cargaran los operadores
     Pila.resize(infijo.size());
     cout<<"Pasar de infijo a postfijo"<<endl;
-    for(ci=0; ci<infijo.size(); ci++) {//recorre el vector de infijo
+    for(unsigned ci=0; ci<infijo.size(); ci++) {//recorre el vector de infijo
         if("("==infijo[ci]) {//si es un parentesis abierto lo metemos en la pila.
             tope++;
             Pila[tope]=infijo[ci];

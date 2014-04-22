@@ -25,13 +25,13 @@ using namespace std;
 int main() {
     cout<<"Fermath posfijo Test "<<endl;
     data_src database;
-    const basic_unit_source *bsrc;
-    bsrc=database.get_basic_source2();
+    //   const basic_unit_source *bsrc;
+    //  bsrc=database.get_basic_source2();
     ifstream input("database.fermath");
     database.read(input);
     input.close();
     vector< string > Postfijo;
-    string infijo("((cos(b)-1kg)*sen(5)-(1T*5m))");
+    string infijo("(1kg*(5)-(1T*5m))");
     Postfijo=convertirpostfijo(infijo,database);
     cout<<endl;
     return 0;

@@ -48,6 +48,12 @@ public:
     //MODIFICATION
     void add_variable(const variable &var1) {
         data_v.push_back(var1);
+        selection.push_back(selec_data);
+    }
+    void add_operation(op oper) {
+        oper.erase_name();
+        operation_v.push_back(oper);
+        selection.push_back(selec_operation);
     }
     void set_name(const string &name2) {
         name=name2;
@@ -61,27 +67,28 @@ public:
         operation_v.clear();
         selection.clear();
     }
-    //add unary operation
-    void add_operation(operation_id oper) {
-        if(oper>unary_max || oper==0) error_report(fatal_error,"operation_id not valid",1,1);
-        else {
-            op oper2(oper,unary_operator);
-            operation_v.push_back(oper2);
-        }
-        clean_operators();
-        check();
-    }
-    //add binary operation
-    void add_operation(const variable &var,operation_id oper) {
-        if(oper>binary_max || oper==0) error_report(fatal_error,"operation_id not valid",1,1);
-        else {
-            data_v.push_back(var);
-            op oper2(oper,binary_operator);
-            operation_v.push_back(oper2);
-        }
-        clean_operators();
-        check();
-    }
+    /*  //add unary operation
+      void add_operation(operation_id oper) {
+          if(oper>unary_max || oper==0) error_report(fatal_error,"operation_id not valid",1,1);
+          else {
+              op oper2(oper,unary_operator);
+              operation_v.push_back(oper2);
+          }
+          clean_operators();
+          check();
+      }
+      //add binary operation
+      void add_operation(const variable &var,operation_id oper) {
+          if(oper>binary_max || oper==0) error_report(fatal_error,"operation_id not valid",1,1);
+          else {
+              data_v.push_back(var);
+              op oper2(oper,binary_operator);
+              operation_v.push_back(oper2);
+          }
+          clean_operators();
+          check();
+      }*/
+
 
     //ACCESS
     string get_name()const {
@@ -155,12 +162,13 @@ private:
         }
     }
     void check() const {
-        unsigned int j=1;
-        for(unsigned int i=0; i<operation_v.size(); i++) {
-            if(operation_v[i].get_id()==0) error_report(user_error,"null operator in expr",1,1);
-            if(operation_v[i].have_name()==true) error_report(warning_check,"operation in expr with name",1,1);
-            if(operation_v[i].is_binary()==true) j+=1;
-            if(j!=data_v.size()) error_report(class_error,"Data and expression with different sizes",1,1);
+        unsigned int p1=0,p2=0;
+        for(unsigned int i=0; i<selection.size(); i++) {
+            if(selection[i]==selec_data) p1++;
+            else p2++;
         }
+        //TODO: check if operations and data have the same "size"
+        if(p1!=data_v.size()) error_report(class_error,"data size of expr incorrect",1,1);
+        if(p2!=operation_v.size()) error_report(class_error,"operations of expr incorrect",1,1);
     }
 };
