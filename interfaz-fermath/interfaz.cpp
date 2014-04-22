@@ -71,7 +71,7 @@ void show_about(GtkWidget *widget, gpointer data)
     GtkWidget *dialog = gtk_about_dialog_new();
     gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog),"Fermath");
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog),"0.1");
-    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"(c) Antonio Jimenez");
+    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"(C) Programmed by:\nAntonio Jimenez Martínez\nAndrés Ortiz Corrales\nMariano Palomo Villafranca  ");
     gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog),"Calculadora multifunción.");
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),"https://github.com/fermathproject/fermath");
     gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), pixbuf);
@@ -95,7 +95,7 @@ int main(int argc, char** argv) {
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);//creamos una GtkWindow widge
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);//centramos la ventana
-    gtk_window_set_default_size(GTK_WINDOW(window), 500, 500);//determinamos el tamaño
+    gtk_window_set_default_size(GTK_WINDOW(window), 500, 250);//determinamos el tamaño
     gtk_window_set_title(GTK_WINDOW(window), "fermath");//le ponemos un titulo a la ventana
 
     frame = gtk_fixed_new();//creamos un panel
@@ -103,18 +103,18 @@ int main(int argc, char** argv) {
 
     calcular = gtk_button_new_with_label("calcular");//creamos el boton escribe
     gtk_widget_set_size_request(calcular, 80, 35);//determinamso el tamaño del boton escribe
-    gtk_fixed_put(GTK_FIXED(frame), calcular, 50, 200);//situamos el boton en la ventana
+    gtk_fixed_put(GTK_FIXED(frame), calcular, 50, 100);//situamos el boton en la ventana
 
 
 
     font = gtk_button_new_with_label("formato");//creamos el boton del formato
     gtk_widget_set_size_request(font, 80, 35);//determinamso el tamaño del boton formato
-    gtk_fixed_put(GTK_FIXED(frame), font, 50, 400);//situamos el boton en la ventana
+    gtk_fixed_put(GTK_FIXED(frame), font, 50, 150);//situamos el boton en la ventana
 
 	
 	binfo = gtk_button_new_with_label("info");//creamos el boton info
     gtk_widget_set_size_request(binfo, 80, 35);//determinamso el tamaño del boton info
-    gtk_fixed_put(GTK_FIXED(frame), binfo, 400, 400);//situamos el boton en la ventana
+    gtk_fixed_put(GTK_FIXED(frame), binfo, 250, 150);//situamos el boton en la ventana
 
 
 	label1 = gtk_label_new("Escriba expresion: ");//creamos una etiqueta con el numero 0
@@ -122,10 +122,10 @@ int main(int argc, char** argv) {
 
 
     label = gtk_label_new("0");//creamos una etiqueta con el numero 0
-    gtk_fixed_put(GTK_FIXED(frame), label, 200, 200);//situamos la etiqueta en la ventana
+    gtk_fixed_put(GTK_FIXED(frame), label, 250, 100);//situamos la etiqueta en la ventana
 
 	entry1 = gtk_entry_new();//creamos una entiqueta para introducir texto
-	gtk_fixed_put(GTK_FIXED(frame), entry1, 200,50);//situamos la etiqueta en la ventana
+	gtk_fixed_put(GTK_FIXED(frame), entry1, 250,50);//situamos la etiqueta en la ventana
 
     gtk_window_set_icon(GTK_WINDOW(window), create_pixbuf("logo.jpg"));//pone de icono de la ventana la foto "logo.jpg"
     gtk_widget_show_all(window);//mostrmaos la ventana
