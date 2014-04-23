@@ -6,7 +6,7 @@
 */
 /*
 Fermath Project: interfaz.cpp
-Version:0.2
+Version:0.4
 */
 #include <gtk/gtk.h>
 #include <iostream>
@@ -67,7 +67,7 @@ GdkPixbuf *create_pixbuf(const gchar * filename)
 //genera una nueva ventana donde apaecera la información de la aplicación
 void show_about(GtkWidget *widget, gpointer data)
 {
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file("logo.jpg", NULL);
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file("logo.png", NULL);
     GtkWidget *dialog = gtk_about_dialog_new();
     gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog),"Fermath");
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog),"0.1");
@@ -87,35 +87,49 @@ int main(int argc, char** argv) {
     GtkWidget *window;//ventana principal
     GtkWidget *frame;//cremaos un planel con los diferentes botones
     GtkWidget *calcular;//creamos un boton para calcular
-    GtkWidget *font;//cremaos un boton para modificar el formato
-	GtkWidget *binfo;//creamos un boton para acceder a la información del sistema.
 	GtkWidget *entry1;//entrada de texto
+
+	GtkWidget *menubar;
+  	GtkWidget *filemenu;
+  	GtkWidget *file;
+  	GtkWidget *quit;
+	GtkWidget *font;
+	GtkWidget *binfo;
 
     gtk_init(&argc, &argv);//aqui se inicializa GTK+ lbrary
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);//creamos una GtkWindow widge
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);//centramos la ventana
-    gtk_window_set_default_size(GTK_WINDOW(window), 500, 250);//determinamos el tamaño
+    gtk_window_set_default_size(GTK_WINDOW(window), 500, 200);//determinamos el tamaño
     gtk_window_set_title(GTK_WINDOW(window), "fermath");//le ponemos un titulo a la ventana
 
     frame = gtk_fixed_new();//creamos un panel
     gtk_container_add(GTK_CONTAINER(window), frame);//añadimos el panel a la ventana
 
+
+
+
+	//creamos el menu
+	menubar = gtk_menu_bar_new();//creamos el menus
+  	filemenu = gtk_menu_new();//creamos el 1º apartado menu
+
+  	file = gtk_menu_item_new_with_label("menu");
+  	quit = gtk_menu_item_new_with_label("salir");
+	font = gtk_menu_item_new_with_label("formato");
+	binfo = gtk_menu_item_new_with_label("informacion");
+
+
+  	gtk_menu_item_set_submenu(GTK_MENU_ITEM(file), filemenu);
+  	gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), font);
+  	gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), binfo);
+  	gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
+  	gtk_menu_shell_append(GTK_MENU_SHELL(menubar), file);
+  	gtk_fixed_put(GTK_FIXED(frame),menubar,0,0);
+	//creamos el menu
     calcular = gtk_button_new_with_label("calcular");//creamos el boton escribe
     gtk_widget_set_size_request(calcular, 80, 35);//determinamso el tamaño del boton escribe
     gtk_fixed_put(GTK_FIXED(frame), calcular, 50, 100);//situamos el boton en la ventana
-
-
-
-    font = gtk_button_new_with_label("formato");//creamos el boton del formato
-    gtk_widget_set_size_request(font, 80, 35);//determinamso el tamaño del boton formato
-    gtk_fixed_put(GTK_FIXED(frame), font, 50, 150);//situamos el boton en la ventana
-
 	
-	binfo = gtk_button_new_with_label("info");//creamos el boton info
-    gtk_widget_set_size_request(binfo, 80, 35);//determinamso el tamaño del boton info
-    gtk_fixed_put(GTK_FIXED(frame), binfo, 250, 150);//situamos el boton en la ventana
-
 
 	label1 = gtk_label_new("Escriba expresion: ");//creamos una etiqueta con el numero 0
     gtk_fixed_put(GTK_FIXED(frame), label1, 50, 50);//situamos la etiqueta en la ventana	
@@ -132,10 +146,10 @@ int main(int argc, char** argv) {
 
 
 
-    g_signal_connect(font, "clicked", G_CALLBACK(select_font), label);
+    g_signal_connect(G_OBJECT(font), "activate", G_CALLBACK(select_font), label);
 	//cuando le damos al boton font, accedemos a una ventna para cmabiar el formato
 
-	g_signal_connect(binfo, "clicked",G_CALLBACK(show_about), (gpointer) window);
+	g_signal_connect(G_OBJECT(binfo),  "activate",G_CALLBACK(show_about), (gpointer) window);
 	//cuando le damos al boton binfo, accedemos a una ventna que nos muestra información sobre el sistema.
 
     g_signal_connect(entry1, "activate",G_CALLBACK(mostrar_formula),entry1);
@@ -148,6 +162,8 @@ int main(int argc, char** argv) {
 
  	g_signal_connect(window, "destroy",G_CALLBACK (gtk_main_quit), NULL);
 	//cuando le damos a x se cierra el programa.
+	
+	g_signal_connect(G_OBJECT(quit), "activate",G_CALLBACK(gtk_main_quit), NULL);
 
     gtk_main();//la aplicación entra en un main loop
 
