@@ -52,6 +52,24 @@ public:
         add_unit_name(uid,bunit.get_name());
         return uid;
     }
+    void remove_unit(unit_id id) {
+        src.remove_unit(id);
+        names.remove_unit_names(id); //removes all names of that unit in glossary
+    }
+    void remove_magnitude(magnitude_id mid) {
+        src.remove_magnitude(mid);
+        names.remove_magnitude_names(mid);//removes names of magnitude in glossary
+    }
+    //removes magnitude name from glossary
+    void remove_magnitude_name(string name) {
+        names.remove_magnitude_name(name);
+    }
+    //removes unit name from glossary
+    void remove_unit_name(const string &name) {
+        names.remove_unit_name(name);
+    }
+
+
     void add_operator(const string &name,operation_id opid,bool bina) {
         op op2(name,opid,bina);
         operations.insert(op2);

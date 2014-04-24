@@ -97,7 +97,7 @@ public:
         standard_unit=0;
     }
     //ACCESS
-    bool is_null() const {
+    bool empty() const {
         return src.empty();
     }
     string get_name()const {
@@ -248,9 +248,20 @@ private:
         for(it=v.begin(); it!=v.end(); it++) result.insert(*it);
     }
     //search the next "free" id
+    /* complex_unit_id next_id() const {
+         complex_unit_id id;
+         id=size()+1;
+         return id;
+     }*/
     complex_unit_id next_id() const {
-        complex_unit_id id;
-        id=size()+1;
+        complex_unit_id id=1;
+        map<complex_unit_id,unit>::const_iterator it;
+        for(it=src.begin(); it!=src.end(); it++) { //returns the first unused id
+            if((*it).first!=id) {
+                return id;
+            }
+            else id++;
+        }
         return id;
     }
     /*   bool set_standard_unit(basic_unit_source basic_src) {

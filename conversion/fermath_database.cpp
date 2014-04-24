@@ -58,18 +58,24 @@ int main() {
     cout<<"Fermath Database Creator "<<version<<endl;
     cout<<"Working with database.fermath"<<endl;
     cin.get();
-    unsigned int cmd=0; //command selected
-    string nam;
-    magnitude_id current_mag;
     vector<string> opt; //options of menu
     opt.push_back("Add Operation");
     opt.push_back("Add Magnitude");
     opt.push_back("Add Basic Unit");
     opt.push_back("Add Unit");
+    opt.push_back("Remove operation");
+    opt.push_back("Remove unit");
+    opt.push_back("Remove magnitude");
     opt.push_back("Show Database");
     opt.push_back("Save and Exit");
     cls();
-    while(cmd!=6) {
+    unsigned int cmd=0; //command selected
+    while(cmd!=9) {
+        string nam;
+        magnitude_id current_mag;
+        op oper;
+        unit_id uid;
+        magnitude_id mid;
         cout<<"Fermath Database Creator "<<version<<endl;
         cmd=menu(opt);
         switch(cmd) {
@@ -91,10 +97,28 @@ int main() {
             current_mag=database.get_magnitude_id(nam);
             if(current_mag!=0) add_unit(current_mag,database);
             break;
-        case 5: //show database
+        case 5: //remove operator
+            cout<<"Enter operator:";
+            cin>>nam;
+            oper=database.get_operator(nam);
+            remove_operation(oper,database);
+            break;
+        case 6: //remove unit
+            cout<<"Enter name of unit:";
+            cin>>nam;
+            uid=database.get_unit_id(nam);
+            if(uid!=null_id) remove_unit(uid,database);
+            break;
+        case 7: //remove magnitude
+            cout<<"Enter name of magnitude:";
+            cin>>nam;
+            mid=database.get_magnitude_id(nam);
+            if(mid!=0) remove_magnitude(mid,database);
+            break;
+        case 8: //show database
             show_database(database);
             break;
-        case 6: //exit
+        case 9: //exit
             break;
         }
         cls();
@@ -108,7 +132,7 @@ int main() {
 
 unsigned int menu(vector<string> opt) {
     unsigned int cmd;
-    for(int i=0; i<opt.size(); i++) {
+    for(unsigned int i=0; i<opt.size(); i++) {
         cout<<i+1<<"-"<<opt[i]<<endl;
     }
     cin>>cmd;
@@ -154,7 +178,7 @@ unit_id add_basic_unit(magnitude_id mid,data_src &database) {
     cout<<"Number of operations for conversion:";
     cin>>n_op;
     basic_unit bunit(name);
-    for(int i=0; i<n_op; i++) {
+    for(unsigned int i=0; i<n_op; i++) {
         op oper;
         string name_op;
         cout<<"Operation:";
@@ -189,7 +213,7 @@ unit_id add_unit(magnitude_id mid,data_src &database) {
     }
     cout<<"Number of units (a/b) (two numbers):";
     cin>>a>>b;
-    for(int i=0; i<a; i++) {
+    for(unsigned int i=0; i<a; i++) {
         string name2;
         unit unit2;
         cout<<i<<"-";
@@ -197,7 +221,7 @@ unit_id add_unit(magnitude_id mid,data_src &database) {
         unit2=database.get_unit(name2);
         result.add_unit(unit2);
     }
-    for(int i=0; i<b; i++) {
+    for(unsigned int i=0; i<b; i++) {
         string name2;
         unit unit2;
         cout<<i<<"-";
@@ -237,5 +261,15 @@ void add_operation(data_src &database) {
     }
 }
 
+
+void remove_unit(unit_id uid,data_src &database) {
+    database.remove_unit(uid);
+}
+void remove_magnitude(magnitude_id mid,data_src &database) {
+    database.remove_magnitude(mid);
+}
+void remove_operation(const op &oper,data_src &database) {
+    database.remove_operator(oper);
+}
 
 

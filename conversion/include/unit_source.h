@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Unit Source Class
-Version:0.9.3
+Version:0.9.4
 */
 #include "magnitude.h"
 
@@ -78,7 +78,21 @@ public:
         unit_id u=make_pair(magid,uid);
         return u;
     }
-
+    void remove_unit(unit_id id) {
+        map<magnitude_id,magnitude>::iterator it;
+        it=src.find(id.first);
+        ((*it).second).remove_unit(id.second);
+    }
+    //remove manitude if is empty
+    void remove_magnitude(magnitude_id mid) {
+        map<magnitude_id,magnitude>::iterator it;
+        it=src.find(mid);
+        if(it!=src.end()) {
+            (*it).second.clear();
+            if(((*it).second).empty()==true)  src.erase(it);
+        }
+        else error_report(user_error,"not possible to remove magnitude",1,1);
+    }
     void clear() {
         basic_src.clear();
         src.clear();
@@ -96,8 +110,14 @@ public:
         return src.size();
     }
     magnitude_id next_id() const {
-        magnitude_id id;
-        id=size()+1;
+        magnitude_id id=1;
+        map<magnitude_id,magnitude>::const_iterator it;
+        for(it=src.begin(); it!=src.end(); it++) { //returns the first unused id
+            if((*it).first!=id) {
+                return id;
+            }
+            else id++;
+        }
         return id;
     }
     vector<magnitude_id> get_magnitude_ids() const {
@@ -214,6 +234,7 @@ public:
             ((*it).second).check(basic_src);
         }
     }
+
     //returns the unused basic units
     set<basic_unit_id> unused_basic_units() const {
         set<basic_unit_id> used;

@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Glossary Class
-Version:0.9.2
+Version:0.9.4
 */
 
 #include "unit_source.h"
@@ -89,6 +89,28 @@ public:
         }
         return v;
     }
+    void remove_unit_name(const string &s) {
+        map<string,unit_id>::iterator it;
+        it=unit_dic.find(s);
+        if(it!=unit_dic.end()) unit_dic.erase(s);
+    }
+    void remove_magnitude_name(const string &s) {
+        map<string,magnitude_id>::iterator it;
+        it=magnitude_dic.find(s);
+        if(it!=magnitude_dic.end()) magnitude_dic.erase(s);
+    }
+    void remove_magnitude_names(magnitude_id id) {
+        vector<string> v;
+        v=get_magnitude_names(id);
+        for(unsigned int i=0; i<v.size(); i++)
+            remove_magnitude_name(v[i]);
+    }
+    void remove_unit_names(unit_id id) {
+        vector<string> v;
+        v=get_unit_names(id);
+        for(unsigned int i=0; i<v.size(); i++)
+            remove_unit_name(v[i]);
+    }
 
     //I/O
     void write(ofstream &out) const {
@@ -150,50 +172,11 @@ public:
             out<<endl;
         }
     }
+
     void  check() {
         //TODO
     }
 
 private:
 
-    /*   string remove_magnitude_name(magnitude_id uid) {
-           pair<string,magnitude_id> p;
-           map<string,magnitude_id>::iterator it;
-           it=magnitude_dic.find(uid);
-           if(it!=magnitude_dic.end()) {
-               p=*it;
-               magnitude_dic.remove(it);
-               return p.first;
-           }
-           else return "";
-       }
-
-       string remove_unit_name(unit_id uid) {
-           pair<string,unit_id> p;
-           map<string,unit_id>::iterator it;
-           it=unit_dic.find(uid);
-           if(it!=unit_dic.end()) {
-               p=*it;
-               unit_dic.remove(it);
-               return p.first;
-           }
-           else return "";
-       }*/
-    /*    pair<string,unit_id> remove_unit_name(map<string,unit_id>::iterator it) {
-            pair<string,unit_id> p;
-            p=*it;
-            unit_dic.remove(it);
-            return p;
-        }*/
-
-    void remove_unit_name(const string &s) {
-        map<string,unit_id>::iterator it;
-        it=unit_dic.find(s);
-        if(it!=unit_dic.end()) unit_dic.erase(s);
-    }
-    void remove_magnitude_name(const string &s) {
-        map<string,magnitude_id>::iterator it;
-        it=magnitude_dic.find(s);
-        if(it!=magnitude_dic.end()) magnitude_dic.erase(s);
-    }
 };
