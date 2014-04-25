@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
 	entry1 = gtk_entry_new();//creamos una entiqueta para introducir texto
 	gtk_fixed_put(GTK_FIXED(frame), entry1, 250,50);//situamos la etiqueta en la ventana
 
-    gtk_window_set_icon(GTK_WINDOW(window), create_pixbuf("logo.jpg"));//pone de icono de la ventana la foto "logo.jpg"
+    gtk_window_set_icon(GTK_WINDOW(window), create_pixbuf("logo.ico"));//pone de icono de la ventana la foto "logo.ico"
     gtk_widget_show_all(window);//mostrmaos la ventana
 
 
