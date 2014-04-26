@@ -67,7 +67,7 @@ GdkPixbuf *create_pixbuf(const gchar * filename)
 //genera una nueva ventana donde apaecera la información de la aplicación
 void show_about(GtkWidget *widget, gpointer data)
 {
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file("logo.png", NULL);
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file("logo.jpg", NULL);
     GtkWidget *dialog = gtk_about_dialog_new();
     gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog),"Fermath");
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog),"0.1");
