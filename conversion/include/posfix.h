@@ -240,9 +240,9 @@ expression pasarpostfijo(const vector<string> &infijo,const data_src &datasrc) {
 }
 expression convertirpostfijo(string a, const data_src &datasrc) {
     vector< string > infijo;
-	cout<<a<<endl;
-	check_parenthesis(a);
-	cout<<a<<endl;
+    cout<<a<<endl;
+    check_parenthesis(a);
+    cout<<a<<endl;
     infijo=convertir(a,datasrc); //convierte string a vector<string> (añade #delante de operadores)
     expression expr;
     expr=pasarpostfijo(infijo,datasrc);

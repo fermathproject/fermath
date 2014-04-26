@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Templates
-Version:0.9.2
+Version:0.9.5
 */
 //Some templates for write/reading with vectors, neccesary for the classes of Fermeth
 
@@ -243,44 +243,42 @@ string format_string(string s) {
 }
 
 
-//compruba que el numero de parenteis abiertos y cerrados sea el mismo, 
+//compruba que el numero de parenteis abiertos y cerrados sea el mismo,
 //en caso contrario salta un warning y añade al final lo parantesis necesarios.
-void check_parenthesis(string & s)
-{
-	int c=0;//contador
-	for(int i=0;i<s.size();i++)
-	{
-		//cambiar corchetes o llaves por parentesis 
-		if(s[i]=='[' or s[i]=='{') s[i]='(';
-		else{
-			if(s[i]==']' or s[i]=='}') s[i]=')';
-		}		
-		if (s[i]=='('){
-			c++;
-		}
-		else{
-			if(s[i]==')'){
-				c--;
-			}
-		} 
-	}
-	if (c!=0){
-		//genera warning
-		error_report(warning_check,"Parenthesis dont match",1,1);
-		//le añadimos paresntesis.
-		while(c>0){
-			 s.push_back(')');
-			c--;
-		}	
-		while(c<0){
-			 s.insert(s.begin(),'(');
-			c++;
-		}	
-	}
-//comprobmaos que tiene parentesis al inicio y final
-		if(s[0]!='(' or s[s.size()-1]!=')'){//insertamos parentesis la princio y final
-			s.insert(s.begin(),'(');		
-			s.push_back(')');
-		}	
+void check_parenthesis(string &s) {
+    int c=0;//contador
+    for(int i=0; i<s.size(); i++) {
+        //cambiar corchetes o llaves por parentesis
+        if(s[i]=='[' or s[i]=='{') s[i]='(';
+        else {
+            if(s[i]==']' or s[i]=='}') s[i]=')';
+        }
+        if(s[i]=='(') {
+            c++;
+        }
+        else {
+            if(s[i]==')') {
+                c--;
+            }
+        }
+    }
+    if(c!=0) {
+        //genera warning
+        error_report(warning_check,"Parenthesis dont match",1,1);
+        //le añadimos paresntesis.
+        while(c>0) {
+            s.push_back(')');
+            c--;
+        }
+        while(c<0) {
+            s.insert(s.begin(),'(');
+            c++;
+        }
+    }
+    //comprobmaos que tiene parentesis al inicio y final
+    if(s[0]!='(' or s[s.size()-1]!=')') { //insertamos parentesis la princio y final
+        s.insert(s.begin(),'(');
+        s.push_back(')');
+    }
 }
 
