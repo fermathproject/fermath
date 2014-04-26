@@ -216,7 +216,7 @@ public:
     }
     //devuelve el operador, a partir del nombre
     op get_operator(const string &txt) const {
-       // cout<<"--"<<txt<<endl;
+        // cout<<"--"<<txt<<endl;
         set<op>::iterator it=operations.find(txt);
         op result;
         if(it!=operations.end())  result=*it;

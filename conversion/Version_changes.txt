@@ -1,3 +1,9 @@
+Fermath Conversions V0.9.5
+*posfix.h works with expressions
+*posfix.h read float numbers (separated with , . ' `)
+**posfix.h bugs fixed
+**added Ñ to string format (convert Ñ to ñ)
+
 Fermath Conversions V0.9.4
 *added posfix.h and posfix_test.cpp
 *changes in expression.h

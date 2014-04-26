@@ -80,7 +80,7 @@ public:
         numeric_value=true;
         check();
     }
-    void set_name(const string &s){
+    void set_name(const string &s) {
         name=s;
     }
     //set value as from a string (the number written will be in the base)
@@ -231,7 +231,7 @@ public:
         return val;
     }
 
-    void show(const basic_unit_source &src,ostream &out=cout) const{
+    void show(const basic_unit_source &src,ostream &out=cout) const {
         if(have_name()) out<<name<<":";
         if(have_value()) out<<value;
         if(have_unit()) {

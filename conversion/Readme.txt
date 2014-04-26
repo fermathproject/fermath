@@ -1,5 +1,5 @@
 Fermath Project:Conversion
-Version: 0.9.4
+Version: 0.9.5
 /* (C) by:
    Antonio Jimenez Martínez
    Andrés Ortiz Corrales
@@ -16,5 +16,7 @@ unit_source.h
 glossary.h
 data_source.h
 variable.h
+posfix.h
+expression.h
 
-All files can be tested with varaible.cpp program, this test need the file database.fermath, wich can be created with database_fermath.cpp (the file database.dev is needed)
+All files can be tested with .cpp programs, this test need the file database.fermath, which can be modified with fermath_database.cpp program

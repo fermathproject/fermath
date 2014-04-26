@@ -107,52 +107,73 @@ bool fprioridad(const string &pila,const string &infijo,const data_src &datasrc)
                 }
             }
         }
+    }
     return p;
 }
+bool comma_char(char c) {
+    if(c==39 || c==44 || c==46 || c==96) return true;
+    else return false;
 }
 //transformar un string a variable
 variable convert_string(string s,const data_src &datasrc) {
-    //cout<<"convert string:"<<s<<endl;
+    // cout<<"convert string:"<<s<<endl;
+    string name; //name si es incognita
+    unit u; //unidad
     variable var;
-    char c;
-    c=s[0];
-    if(c>='0' && c<='9') { //numero + [unidad]
-        data_type dat=c-'0';
-        unsigned int i=1;
-        for(i=1; i<s.size(); i++) {
-            c=s[i];
-            if(c>='0' && c<='9') {
-                dat*=10;
-                dat+=c-'0';
+    unsigned int i=0;
+    if(s.size()>=1) {
+        if((s[i]>='0' && s[i]<='9') || comma_char(s[i]==true)) { //if has a number
+            char c;
+            bool is_float=false;
+            data_type dat=0; //numero
+            unsigned int num_dec=1; //por cuanto dividir el caracter decimal siguiente
+            for(i=0; i<s.size(); i++) {
+                c=s[i];
+                if(comma_char(s[i])==true) { //si el primer elemento es una coma, supone que es un numero 0.(x)
+                    if(is_float==true) error_report(warning_check,"multiple, in same variable",1,1);
+                    is_float=true;
+                }
+                else if(c>='0' && c<='9') {
+                    if(is_float==false) { //añadir caracter entero
+                        dat*=10;
+                        dat+=c-'0';
+                    }
+                    if(is_float==true) { //añadir caracter decimal
+                        data_type dat2;
+                        dat2=c-'0';
+                        dat2=dat2/(num_dec*10);
+                        num_dec++;
+                        dat+=dat2;
+                    }
+                }
+                else {
+                    break;
+                }
             }
-            else {
-                var.set_value(dat);
-                //i--;
-                break;
+            var.set_value(dat);
+            if(i<=s.size()-1) { //num+unit
+                s=s.substr(i,s.size()-i);
+                unit u;
+                u=datasrc.get_unit(s);
+                if(u.is_null()) error_report(user_error,"Unit not found",1,1);
+                else var.set_unit(u);
             }
         }
-        if(i<=s.size()-1){
-        s=s.substr(i,s.size()-i);
-        unit u;
-        u=datasrc.get_unit(s);
-        if(u.is_null()) error_report(user_error,"Unit not found",1,1);
-        else var.set_unit(u);
+        else { //variable incógnita o solo unidad
+            unit u;
+            u=datasrc.get_unit(s);
+            if(u.is_null()) var.set_name(s); //incognita
+            else {
+                var.set_value(1);
+                var.set_unit(u);
+            }
+        }
     }
-    }
-    else { //variable incógnita o solo unidad
-         unit u;
-        u=datasrc.get_unit(s);
-        if(u.is_null()) var.set_name(s); //incognita
-        else{
-        var.set_value(1);
-         var.set_unit(u);
-     }
-    }
-  /*  const basic_unit_source *bsrc;
-    bsrc=datasrc.get_basic_source2();
-    cout<<"convert string return:";
-    var.show(*bsrc);
-    cout<<endl;*/
+    /*    const basic_unit_source *bsrc;
+         bsrc=datasrc.get_basic_source2();
+         cout<<"convert string return:";
+         var.show(*bsrc);
+         cout<<endl;*/
     return var;
 }
 //pasa de formato infijo a formato postfijo
@@ -166,13 +187,12 @@ variable convert_string(string s,const data_src &datasrc) {
 //-un vector de string en infijo
 //-El conjunto de operadores.
 expression pasarpostfijo(const vector<string> &infijo,const data_src &datasrc) {
-  expression expr;
-    int ci,tope;
-    ci=tope=0;
-
+    expression expr;
+    int tope;
+    tope=0;
     vector< string > Pila;//vector auxiliar, donde ser cargaran los operadores
     Pila.resize(infijo.size());
-    for(unsigned ci=0; ci<infijo.size(); ci++) {//recorre el vector de infijo
+    for(unsigned int ci=0; ci<infijo.size(); ci++) {//recorre el vector de infijo
         if("("==infijo[ci]) {//si es un parentesis abierto lo metemos en la pila.
             tope++;
             Pila[tope]=infijo[ci];
@@ -195,7 +215,6 @@ expression pasarpostfijo(const vector<string> &infijo,const data_src &datasrc) {
                     if(Pila[tope]!="(") {//si en la en el tope de la pila no hay un parentesis abierto comprobamos la propiedad
                         // prioridad=1;//si prioridad=1 introduce en el Postfijo el valor actual de infijo. Si prioridad=0 introduce el valor que habia en la Pila.
                         //comprueba la prioridad
-
                         if(!fprioridad(Pila[tope],infijo[ci],datasrc)) {
                             while(tope>0 && Pila[tope]!="(") {//cargamos los operadores
                                 expr.add_operation(datasrc.get_operator(Pila[tope]));//en la pila de operadores
@@ -213,14 +232,12 @@ expression pasarpostfijo(const vector<string> &infijo,const data_src &datasrc) {
         expr.add_operation(datasrc.get_operator(Pila[tope]));//la pila de operadores
         tope--;
     }
-
     return expr;//devolvemos el vector de postfijo
     //devolvemos en los argumentos por referencia:
     //-una pila de string con las variables
     //-una pila de operator con los operadores
     //-una pila de int para determinar si va 0=variable y 1=operador
 }
-
 expression convertirpostfijo(const string &a, const data_src &datasrc) {
     vector< string > infijo;
     infijo=convertir(a,datasrc); //convierte string a vector<string> (añade #delante de operadores)

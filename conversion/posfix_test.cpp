@@ -32,12 +32,11 @@ int main() {
     input.close();
     expression expr;
     //database.show();
-    string infijo("((5m/s+3km/h)*5m)");
+    string infijo("((5.3m/s+2km/h)*5meter)");
     expr=convertirpostfijo(infijo,database);
     //expr.show(database);
     variable var=expr.evaluate(database);
     var.show(*bsrc);
     cout<<endl;
-    
     return 0;
 }

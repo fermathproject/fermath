@@ -136,24 +136,23 @@ public:
         return res.top();
     }
 
-    void show(const data_src &database,ostream &out=cout) const{
+    void show(const data_src &database,ostream &out=cout) const {
         const basic_unit_source *bsrc;
-         bsrc=database.get_basic_source2();
+        bsrc=database.get_basic_source2();
         if(have_name()) out<<name<<": ";
         unsigned int j1=0,j2=0;
-        for(unsigned int i=0;i<selection.size();i++){
-            if(selection[i]==selec_data){
+        for(unsigned int i=0; i<selection.size(); i++) {
+            if(selection[i]==selec_data) {
                 data_v[j1].show(*bsrc,out);
                 out<<" ";
                 j1++;
             }
-            else{
+            else {
                 operation_v[j2].show();
                 out<<" ";
                 j2++;
             }
         }
-
     }
     // operator=
     expression &operator=(const expression &expr2) {
