@@ -122,7 +122,7 @@ public:
                     res.pop();
                     b=res.top();
                     res.pop();
-                    res.push(calculate(a,b,oper.get_id(),src));
+                    res.push(calculate(b,a,oper.get_id(),src));
                 }
                 else { //unary operation
                     variable a;
@@ -135,14 +135,26 @@ public:
         }
         return res.top();
     }
-    /* variable get_result(const data_src &src) const {
-         variable result;
-         expression expr2=(*this).evaluate(src);
-         if(expr2.is_variable()==true) result=expr2;
-         else error_report(user_error,"no result in expresion",0,1);
-         return result;
-     }*/
-    //TODO:show expression
+
+    void show(const data_src &database,ostream &out=cout) const{
+        const basic_unit_source *bsrc;
+         bsrc=database.get_basic_source2();
+        if(have_name()) out<<name<<": ";
+        unsigned int j1=0,j2=0;
+        for(unsigned int i=0;i<selection.size();i++){
+            if(selection[i]==selec_data){
+                data_v[j1].show(*bsrc,out);
+                out<<" ";
+                j1++;
+            }
+            else{
+                operation_v[j2].show();
+                out<<" ";
+                j2++;
+            }
+        }
+
+    }
     // operator=
     expression &operator=(const expression &expr2) {
         if(this!=&expr2) {

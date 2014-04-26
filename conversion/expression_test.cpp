@@ -31,9 +31,11 @@ int main() {
     database.read(input);
     input.close();
     expression expr;
+    string s="kg";
     variable var;
     //5*(6+4)=50 --> 5 6 4 + *
     var.set_value(5);
+    var.set_unit(database.get_unit(s));
     expr.add_variable(var);
     var.set_value(6);
     expr.add_variable(var);

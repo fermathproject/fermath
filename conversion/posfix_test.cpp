@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Posfix Test
-Version:0.9.4
+Version:0.9.5
 
 This program test units,magnitudes,operators and glossary
 */
@@ -25,14 +25,19 @@ using namespace std;
 int main() {
     cout<<"Fermath posfijo Test "<<endl;
     data_src database;
-    //   const basic_unit_source *bsrc;
-    //  bsrc=database.get_basic_source2();
+    const basic_unit_source *bsrc;
+    bsrc=database.get_basic_source2();
     ifstream input("database.fermath");
     database.read(input);
     input.close();
-    vector< string > Postfijo;
-    string infijo("(1kg*(5)-(1T*5m))");
-    Postfijo=convertirpostfijo(infijo,database);
+    expression expr;
+    //database.show();
+    string infijo("((5m/s+3km/h)*5m)");
+    expr=convertirpostfijo(infijo,database);
+    //expr.show(database);
+    variable var=expr.evaluate(database);
+    var.show(*bsrc);
     cout<<endl;
+    
     return 0;
 }

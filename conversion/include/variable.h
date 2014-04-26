@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Variable Class
-Version:0.9.4
+Version:0.9.5
 */
 #include "data_source.h"
 //this class stores and operate with a variable, it can have an unit or not, also operates with undefined variables (variables without a value)
@@ -31,7 +31,7 @@ public:
         check();
     }
     variable(string name2,data_type val2,const unit &uni,base vb=DEC_BASE) {//a variable with name, value and unit
-        name=name2;
+        set_name(name2);
         dim_unit=false;
         set_unit(uni);
         set_base(vb);
@@ -46,7 +46,7 @@ public:
     }
     variable(string name2,data_type val2,base vb=DEC_BASE) { //a variable with name and value
         dim_unit=false;
-        name=name2;
+        set_name(name2);
         set_base(vb);
         set_value(val2);
         check();
@@ -62,7 +62,7 @@ public:
     variable(string name2,base vb=DEC_BASE) { //a variable with only a name
         dim_unit=false;
         numeric_value=false;
-        name=name2;
+        set_name(name2);
         set_base(vb);
         check();
     }
@@ -79,6 +79,9 @@ public:
         value=x;
         numeric_value=true;
         check();
+    }
+    void set_name(const string &s){
+        name=s;
     }
     //set value as from a string (the number written will be in the base)
     /*void set_value(string s) {
@@ -228,7 +231,7 @@ public:
         return val;
     }
 
-    void show(const basic_unit_source &src,ostream &out=cout) {
+    void show(const basic_unit_source &src,ostream &out=cout) const{
         if(have_name()) out<<name<<":";
         if(have_value()) out<<value;
         if(have_unit()) {

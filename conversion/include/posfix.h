@@ -5,7 +5,7 @@
 */
 /*
 Fermath Project:Posfix
-Version:0.9.4
+Version:0.9.5
 */
 
 #include "expression.h"
@@ -88,12 +88,12 @@ vector<string> convertir(const string &infijo,const data_src &datasrc) {   //con
 //calcula la priodioriadad. compara el valor del tope de la pila y el valor del string del infijo actual.
 //devuelve 0 si pila tiene mas prioridad que infijo y devuevle 1 si al pila tiene menos prioridad que infijo
 //la prioridad va de unary */ -+
-int fprioridad(const string &pila,const string &infijo,const data_src &datasrc) {     //tener en cuenta ^
+bool fprioridad(const string &pila,const string &infijo,const data_src &datasrc) {     //tener en cuenta ^
     op oppila=datasrc.get_operator(pila);
     op opinfijo=datasrc.get_operator(infijo);
-    int p=1;
+    bool p=true;
     if(oppila.is_unary()) { //si en al pila encontramos un operador unario este tiene siempre preferencia.
-        p=0;
+        p=false;
     }
     else {
         if(oppila.is_binary() && opinfijo.is_binary()) { //si ambos operadores son binarios
@@ -101,16 +101,60 @@ int fprioridad(const string &pila,const string &infijo,const data_src &datasrc) 
             int idinfijoci=opinfijo.get_id();//calculamso el identificador del operador deinfijo[ci]
             if(idPilatope==5 && idinfijoci<=5) 	p=0;//id=5 -> ^
             else {
-                if((idPilatope==4 || idPilatope==3) && (idinfijoci<=4 || idinfijoci<=3)) p=0; //id=4 -> /. id=3 -> *
+                if((idPilatope==4 || idPilatope==3) && (idinfijoci<=4 || idinfijoci<=3)) p=false; //id=4 -> /. id=3 -> *
                 else {
-                    if((idPilatope==1 || idPilatope==2) && (idinfijoci==1 || idinfijoci==2)) p=0;//id=1 -> +. id=2 -> -
+                    if((idPilatope==1 || idPilatope==2) && (idinfijoci==1 || idinfijoci==2)) p=false;//id=1 -> +. id=2 -> -
                 }
             }
         }
-    }
     return p;
 }
-
+}
+//transformar un string a variable
+variable convert_string(string s,const data_src &datasrc) {
+    //cout<<"convert string:"<<s<<endl;
+    variable var;
+    char c;
+    c=s[0];
+    if(c>='0' && c<='9') { //numero + [unidad]
+        data_type dat=c-'0';
+        unsigned int i=1;
+        for(i=1; i<s.size(); i++) {
+            c=s[i];
+            if(c>='0' && c<='9') {
+                dat*=10;
+                dat+=c-'0';
+            }
+            else {
+                var.set_value(dat);
+                //i--;
+                break;
+            }
+        }
+        if(i<=s.size()-1){
+        s=s.substr(i,s.size()-i);
+        unit u;
+        u=datasrc.get_unit(s);
+        if(u.is_null()) error_report(user_error,"Unit not found",1,1);
+        else var.set_unit(u);
+    }
+    }
+    else { //variable incógnita o solo unidad
+         unit u;
+        u=datasrc.get_unit(s);
+        if(u.is_null()) var.set_name(s); //incognita
+        else{
+        var.set_value(1);
+         var.set_unit(u);
+     }
+    }
+  /*  const basic_unit_source *bsrc;
+    bsrc=datasrc.get_basic_source2();
+    cout<<"convert string return:";
+    var.show(*bsrc);
+    cout<<endl;*/
+    return var;
+}
 //pasa de formato infijo a formato postfijo
 //salida:
 //-un vector de string en formato postfijo
@@ -121,16 +165,13 @@ int fprioridad(const string &pila,const string &infijo,const data_src &datasrc) 
 //-Las diferentes pilas
 //-un vector de string en infijo
 //-El conjunto de operadores.
-vector<string> pasarpostfijo(const vector<string> &infijo,const data_src &datasrc,stack<int> &posiciones01,stack<string> &variables,stack<op> &operadores) {
-    int ci,tope,cp;
-    cp=ci=tope=0;
-    //cp contadorpostfijo
-    //ci contadorinfijo
-    vector< string > Postfijo;//vectro donde se cargará el formato postfijo
-    Postfijo.resize(infijo.size()," ");
+expression pasarpostfijo(const vector<string> &infijo,const data_src &datasrc) {
+  expression expr;
+    int ci,tope;
+    ci=tope=0;
+
     vector< string > Pila;//vector auxiliar, donde ser cargaran los operadores
     Pila.resize(infijo.size());
-    cout<<"Pasar de infijo a postfijo"<<endl;
     for(unsigned ci=0; ci<infijo.size(); ci++) {//recorre el vector de infijo
         if("("==infijo[ci]) {//si es un parentesis abierto lo metemos en la pila.
             tope++;
@@ -139,10 +180,7 @@ vector<string> pasarpostfijo(const vector<string> &infijo,const data_src &datasr
         else {
             if(")"==infijo[ci]) {//si es un parentesis cerrado.
                 while(Pila[tope]!="(") {//mientras no aparezca un parentesis abierto metemos los operadores en la pila de operadores y en el vector de postfijo
-                    operadores.push(datasrc.get_operator(Pila[tope]));//cargamos en la pila de operadores
-                    posiciones01.push(1);//metemos un 1 para determinar que es operador
-                    Postfijo[cp]=Pila[tope];//saca de la pila los operadores necesarios; y los mete en posfijo.
-                    cp++;
+                    expr.add_operation(datasrc.get_operator(Pila[tope]));//cargamos en la pila de operadores
                     tope--;
                 }
                 Pila[tope]="\0";//sobreescribe en el parentesis abierto.
@@ -150,22 +188,17 @@ vector<string> pasarpostfijo(const vector<string> &infijo,const data_src &datasr
             }
             else {//si no es ni un parentesis abierto ni cerrado.
                 if(infijo[ci]!="#") {// si no es un "#", sabemos que es un operando (variable)
-                    variables.push(infijo[ci]);//cargamos la variable en la pila de variables
-                    posiciones01.push(0);//metemos un 0 para determinar que es una variable
-                    Postfijo[cp]=infijo[ci];//escribimos la variable en el Postfijo
-                    cp++;
+                    expr.add_variable(convert_string(infijo[ci],datasrc));
                 }
                 else {//es un operador
                     ci++;
                     if(Pila[tope]!="(") {//si en la en el tope de la pila no hay un parentesis abierto comprobamos la propiedad
                         // prioridad=1;//si prioridad=1 introduce en el Postfijo el valor actual de infijo. Si prioridad=0 introduce el valor que habia en la Pila.
                         //comprueba la prioridad
+
                         if(!fprioridad(Pila[tope],infijo[ci],datasrc)) {
                             while(tope>0 && Pila[tope]!="(") {//cargamos los operadores
-                                operadores.push(datasrc.get_operator(Pila[tope]));//en la pila de operadores
-                                posiciones01.push(1);//metemos un 1 para determinar que es operador
-                                Postfijo[cp]=Pila[tope];//escribimos en el Postfijo el operador de la Pila
-                                cp++;
+                                expr.add_operation(datasrc.get_operator(Pila[tope]));//en la pila de operadores
                                 tope--;
                             }
                         }
@@ -177,27 +210,21 @@ vector<string> pasarpostfijo(const vector<string> &infijo,const data_src &datasr
         }
     }
     while(tope>0) {//si quedan operadores en la pila, los metemos en:
-        operadores.push(datasrc.get_operator(Pila[tope]));//la pila de operadores
-        posiciones01.push(1);//metemos un 1 para determinar que es operador
-        Postfijo[cp]=Pila[tope];//el vector de postfijo
-        cp++;
+        expr.add_operation(datasrc.get_operator(Pila[tope]));//la pila de operadores
         tope--;
     }
-    return Postfijo;//devolvemos el vector de postfijo
+
+    return expr;//devolvemos el vector de postfijo
     //devolvemos en los argumentos por referencia:
     //-una pila de string con las variables
     //-una pila de operator con los operadores
     //-una pila de int para determinar si va 0=variable y 1=operador
 }
 
-vector <string> convertirpostfijo(const string &a, const data_src &datasrc) {
-    vector< string > infijo,Postfijo;
-    infijo=convertir(a,datasrc);
-    stack<int> posiciones01;
-    stack<string> variables;
-    stack<op> operadores;
-    Postfijo=pasarpostfijo(infijo,datasrc,posiciones01,variables,operadores);
-    cout<<"mostramos el vector de string en postfijo"<<endl;
-    mostrar(Postfijo);
-    return Postfijo;
+expression convertirpostfijo(const string &a, const data_src &datasrc) {
+    vector< string > infijo;
+    infijo=convertir(a,datasrc); //convierte string a vector<string> (añade #delante de operadores)
+    expression expr;
+    expr=pasarpostfijo(infijo,datasrc);
+    return expr;
 }
