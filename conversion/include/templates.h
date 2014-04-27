@@ -247,7 +247,7 @@ string format_string(string s) {
 //en caso contrario salta un warning y añade al final lo parantesis necesarios.
 void check_parenthesis(string &s) {
     int c=0;//contador
-    for(int i=0; i<s.size(); i++) {
+    for(unsigned int i=0; i<s.size(); i++) {
         //cambiar corchetes o llaves por parentesis
         if(s[i]=='[' or s[i]=='{') s[i]='(';
         else {

@@ -201,8 +201,8 @@ private:
     }
     //cheque las operaciones. Tiene en cuenta el el ide y el numero maximo del ide de dicho tipo.
     void check() {
-        if(type==unary_operator && id>unary_max) error_report("Error in operator while checking",1,1);
-        if(type==binary_operator && id>binary_max) error_report("Error in operator while checking",1,1);
+        if(type==unary_operator && id>unary_max) error_report(error_check,"Error in operator while checking",1,1);
+        if(type==binary_operator && id>binary_max) error_report(error_check,"Error in operator while checking",1,1);
     }
 };
 

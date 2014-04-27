@@ -35,14 +35,6 @@ bool parentesis(const char &a) {
     return  a==')' || a=='(' ;
 }
 
-//muestra un vector de string.
-void mostrar(const vector<string> &a) {
-    for(unsigned int i=0; i<a.size(); ++i) {
-        cout<<a[i]<<"  ";
-    }
-    cout<<endl;
-}
-
 //Tiene de entrada el conjunto de operandos y un string con la operacion completa. Devuelve un vector de string.
 //Donde cada string sera una variable, un operador o un string aux(#)
 vector<string> convertir(const string &infijo,const data_src &datasrc) {   //convierte en un vector de string
@@ -89,9 +81,10 @@ vector<string> convertir(const string &infijo,const data_src &datasrc) {   //con
 //devuelve 0 si pila tiene mas prioridad que infijo y devuevle 1 si al pila tiene menos prioridad que infijo
 //la prioridad va de unary */ -+
 bool fprioridad(const string &pila,const string &infijo,const data_src &datasrc) {     //tener en cuenta ^
+    bool p=true;
+    if(pila.empty()==false || infijo.empty()==false) return true; //FIXME
     op oppila=datasrc.get_operator(pila);
     op opinfijo=datasrc.get_operator(infijo);
-    bool p=true;
     if(oppila.is_unary()) { //si en al pila encontramos un operador unario este tiene siempre preferencia.
         p=false;
     }
@@ -240,9 +233,7 @@ expression pasarpostfijo(const vector<string> &infijo,const data_src &datasrc) {
 }
 expression convertirpostfijo(string a, const data_src &datasrc) {
     vector< string > infijo;
-    cout<<a<<endl;
     check_parenthesis(a);
-    cout<<a<<endl;
     infijo=convertir(a,datasrc); //convierte string a vector<string> (añade #delante de operadores)
     expression expr;
     expr=pasarpostfijo(infijo,datasrc);

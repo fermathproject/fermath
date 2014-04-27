@@ -67,27 +67,6 @@ public:
         operation_v.clear();
         selection.clear();
     }
-    /*  //add unary operation
-      void add_operation(operation_id oper) {
-          if(oper>unary_max || oper==0) error_report(fatal_error,"operation_id not valid",1,1);
-          else {
-              op oper2(oper,unary_operator);
-              operation_v.push_back(oper2);
-          }
-          clean_operators();
-          check();
-      }
-      //add binary operation
-      void add_operation(const variable &var,operation_id oper) {
-          if(oper>binary_max || oper==0) error_report(fatal_error,"operation_id not valid",1,1);
-          else {
-              data_v.push_back(var);
-              op oper2(oper,binary_operator);
-              operation_v.push_back(oper2);
-          }
-          clean_operators();
-          check();
-      }*/
 
 
     //ACCESS
@@ -97,11 +76,6 @@ public:
     bool have_name() const {
         return !name.empty();
     }
-    //true if only has a variable and no operations
-    /*bool is_variable() const {
-        if(data_v.size()==1 && operation_v.empty()==true) return true;
-        else return false;
-    }*/
 
     //JOBS
     variable evaluate(const data_src &src) const { //TODO:solve if dont have solution
@@ -120,8 +94,10 @@ public:
                     variable a,b;
                     a=res.top();
                     res.pop();
-                    b=res.top();
-                    res.pop();
+                    if(res.empty()==false) {
+                        b=res.top();
+                        res.pop();
+                    }
                     res.push(calculate(b,a,oper.get_id(),src));
                 }
                 else { //unary operation

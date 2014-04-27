@@ -74,7 +74,7 @@ void error_report(error_id id,string error,bool write,bool show,bool assert=fals
     }
 }*/
 
-void error_report(string error,bool write,bool show,bool assert=false) {
+/*void error_report(string error,bool write,bool show,bool assert=false) {
     if((write==true && hide_write==false) || force_write==true) {
         ofstream out;
         out.open(error_file, ios::app);
@@ -88,4 +88,4 @@ void error_report(string error,bool write,bool show,bool assert=false) {
     if((assert==true && hide_assert==false) || force_assert==true) {
         exit(1);
     }
-}
+}*/

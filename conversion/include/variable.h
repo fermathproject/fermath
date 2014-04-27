@@ -202,6 +202,13 @@ public:
     bool have_value() const {
         return numeric_value;
     }
+    bool is_null() const {
+        bool b=true;
+        if(have_name()) b=false;
+        else if(have_value()) b=false;
+        else if(have_unit()) b=false;
+        return b;
+    }
 
     //return true if has the same value (only checks value!!!)
     bool same_value(const variable &other) const {
@@ -241,7 +248,7 @@ public:
     }
 
     void set_value_from_standard(data_type x,const basic_unit_source &bsrc) { //set the value of x to the variable according to the unit
-        if(standard_base()==false) error_report("Warning, non standard base, value may change",0,1);
+        if(standard_base()==false) error_report(warning_check,"Warning, non standard base, value may change",0,1);
         if(!dim_unit) {
             set_value(x);
         }
@@ -329,12 +336,12 @@ public:
                 }
                 else { //adding non dimensional units
                     data_type x=result.value;
-                    x=x+other.value;
+                    x=x-other.value;
                     result.set_value(x);
                 }
             }
         }
-        else error_report(class_error,"operating with variables with no value (+)",1,1);
+        else error_report(class_error,"operating with variables with no value (-)",1,1);
         result.erase_name();
         result.check();
         return result;
@@ -454,7 +461,7 @@ private:
         string digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         string result;
         if(b<BIN_BASE || b>MAX_BASE) {
-            error_report("ERROR, variable base not allowed",1,1);
+            error_report(error_check,"variable base not allowed",1,1);
             b=DEC_BASE;
         }
         if(v<0) {
@@ -472,7 +479,7 @@ private:
 
     long int to_dec(string s,base b) const {
         if(b<BIN_BASE || b>MAX_BASE) {
-            error_report("ERROR, variable base not allowed",1,1);
+            error_report(error_check,"variable base not allowed",1,1);
             b=DEC_BASE;
         }
         return strtol(s.c_str(),NULL,b);

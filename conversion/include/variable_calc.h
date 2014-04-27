@@ -71,6 +71,12 @@ variable calc_square_root(const variable &var1) {
 variable calculate(const variable &var1,const variable &var2,operation_id oper,const data_src &src) {
     variable var;
     if(oper==0 || oper>binary_max) error_report(user_error,"operation id not valid",1,1);
+    else if(var1.is_null()) { //What happens if the first variable is null in a binary operation (i.e -6,+6...)
+        if(oper==2) { //if the binary operation is - and var1 is null, makes the unary - operation
+            var=-var2;
+        }
+        else error_report(fatal_error,"only one variable in binary operation",1,1);
+    }
     else {
         switch(oper) {
         case 1:

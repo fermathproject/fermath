@@ -295,7 +295,7 @@ private:
         }
         if(b==false) error_report(fatal_error,"repeated units in same magnitude",1,1);
         if(b2==false) error_report(class_error,"units with same name in magnitude",1,1);
-        if(is_unit(0)==true) error_report("Fatal Error, unit in magnitude with id=0 (null)",1,1);
+        if(is_unit(0)==true) error_report(fatal_error,"unit in magnitude with id=0 (null)",1,1);
     }
 };
 
