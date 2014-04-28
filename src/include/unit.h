@@ -222,7 +222,7 @@ public:
             }
         }
     }
-        void show(const basic_unit_source *src,ostream &out=cout) const {
+    void show(const basic_unit_source *src,ostream &out=cout) const {
         if(have_default_name()) out<<name<<"   ";
         else if(is_null()==false) {
             multiset<basic_unit_id>::iterator it;

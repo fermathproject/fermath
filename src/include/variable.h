@@ -246,7 +246,7 @@ public:
             variable_unit.show(src,out);
         }
     }
-    void show(const data_src &database,ostream &out=cout) const{
+    void show(const data_src &database,ostream &out=cout) const {
         if(have_name()) out<<name<<":";
         if(have_value()) out<<value;
         if(have_unit()) {
@@ -254,10 +254,8 @@ public:
             const basic_unit_source *bsrc;
             bsrc=database.get_basic_source2();
             variable_unit.show(bsrc,out);
-
-
+        }
     }
-}
 
     void set_value_from_standard(data_type x,const basic_unit_source &bsrc) { //set the value of x to the variable according to the unit
         if(standard_base()==false) error_report(warning_check,"Warning, non standard base, value may change",0,1);
