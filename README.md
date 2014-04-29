@@ -1,5 +1,8 @@
 FerMath alpha
 =============
+El código fuente incorporado se encuentra en la carpeta src, junto con los archivos necesarios para compilar y trabajar
+
+
 
 Proyecto de Software Libre para la realización de una calculadora con Base de datos de fórmulas incorporadas con propósito múltiple, actualmente en desarrollo lo siguiente:
 
