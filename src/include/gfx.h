@@ -8,8 +8,8 @@ Version:1.0
 */
 
 //Functions using gtk+ 2.0
-#define icon "images/logo.ico"
-#define logobw "images/logobw.jpg"
+#define icon "logo.ico"
+#define logobw "logobw.jpg"
 
 
 
