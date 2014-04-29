@@ -226,13 +226,13 @@ public:
         if(have_default_name()) out<<name<<"   ";
         else if(is_null()==false) {
             multiset<basic_unit_id>::iterator it;
-            if(avect.size()==0) out<<"1";
+            if(avect.size()==0) out<<"1 ";
             else {
-                for(it=avect.begin(); it!=avect.end(); it++) out<<src->get_name(*it);
+                for(it=avect.begin(); it!=avect.end(); it++) out<<src->get_name(*it)<<" ";
             }
             if(bvect.size()!=0) {
                 out<<"/";
-                for(it=bvect.begin(); it!=bvect.end(); it++) out<<src->get_name(*it);
+                for(it=bvect.begin(); it!=bvect.end(); it++) out<<src->get_name(*it)<<" ";
             }
         }
     }

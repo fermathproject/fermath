@@ -27,8 +27,12 @@ using namespace std;
 const data_src *src;
 //muestra cadena en el label
 void fermath_calculate(GtkWidget *widget, GtkEntry *entry) {
-    string strin(gtk_entry_get_text(entry));
+    string strin2(gtk_entry_get_text(entry));
+    string strin;
     string strout;
+    for(unsigned int i=0; i<strin2.size(); i++) {
+        if(strin2[i]!=32)	strin.push_back(strin2[i]);
+    }
     if(strin.empty()==false) {
         strout=calculate_expression(strin,*src);
         gtk_label_set_text(GTK_LABEL(label), strout.c_str());//escribe en label el valor de buf
