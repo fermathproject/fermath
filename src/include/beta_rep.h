@@ -8,7 +8,7 @@ Version:1.0
 */
 
 typedef unsigned short error_id;
-const bool hide_assert=false;
+const bool hide_assert=true;
 const bool hide_write=true;
 const bool hide_show=false; //true to hide errors
 

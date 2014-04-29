@@ -5,7 +5,7 @@
 */
 /*
 Fermath Project:Posfix
-Version:0.9.5
+Version:1.0
 */
 
 #include "expression.h"
@@ -82,7 +82,9 @@ vector<string> convertir(const string &infijo,const data_src &datasrc) {   //con
 //la prioridad va de unary */ -+
 bool fprioridad(const string &pila,const string &infijo,const data_src &datasrc) {     //tener en cuenta ^
     bool p=true;
-    if(pila.empty()==false || infijo.empty()==false) return true; //FIXME
+    if(pila.empty()==true && infijo.empty()==true) {
+        error_report(fatal_error,"Error, fprioridad with empty elements",1,1,1);
+    }
     op oppila=datasrc.get_operator(pila);
     op opinfijo=datasrc.get_operator(infijo);
     if(oppila.is_unary()) { //si en al pila encontramos un operador unario este tiene siempre preferencia.
@@ -109,7 +111,6 @@ bool comma_char(char c) {
 }
 //transformar un string a variable
 variable convert_string(string s,const data_src &datasrc) {
-    // cout<<"convert string:"<<s<<endl;
     string name; //name si es incognita
     unit u; //unidad
     variable var;
@@ -162,11 +163,6 @@ variable convert_string(string s,const data_src &datasrc) {
             }
         }
     }
-    /*    const basic_unit_source *bsrc;
-         bsrc=datasrc.get_basic_source2();
-         cout<<"convert string return:";
-         var.show(*bsrc);
-         cout<<endl;*/
     return var;
 }
 //pasa de formato infijo a formato postfijo
