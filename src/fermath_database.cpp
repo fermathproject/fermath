@@ -3,8 +3,8 @@
    Andrés Ortiz Corrales
    Mariano Palomo Villafranca  */
 /*
-Fermath Project:Data Source Test
-Version:0.9.3
+Fermath Project:Database
+Version:1.0
 
 Interface for creating and modifiying the database (operators,unts and magnitudes)
 */
@@ -28,17 +28,19 @@ unit_id add_unit(magnitude_id mid,data_src &database);
 magnitude_id add_magnitude(data_src &database);
 void add_operation(data_src &database);
 
-bool add_name(const string &name,magnitude_id mid,data_src &database); //adds a name for a magnitude
-bool add_name(const string &name,unit_id uid,data_src &database); //add a name for a unit
+
+void add_names_to_unit(string s,data_src &database);
+void add_names_to_magnitude(string s,data_src &database);
 
 void remove_unit(unit_id uid,data_src &database);
-//void remove_basic_unit(unit_id uid ,data_src &database);
 void remove_magnitude(magnitude_id mid,data_src &database);
 void remove_operation(const op &oper,data_src &database);
 
 
 void remove_name(const string &name,magnitude_id mid,data_src &database);
 void remove_name(const string &name,unit_id id,data_src &database);
+
+void merge_database(data_src &database);
 
 void cls() { //clear_screen
     cout<<endl<<"-------------------------------"<<endl;
@@ -47,6 +49,10 @@ void cls() { //clear_screen
 void show_database(data_src dtbs) {
     cout<<endl<<"DATABASE:"<<endl;
     dtbs.show2();
+}
+void show_glossary(data_src database) {
+    cout<<endl<<"GLOSSARY:"<<endl;
+    database.show_glossary();
 }
 unsigned int menu(vector<string> opt); //shows menu and returns selection
 
@@ -63,14 +69,17 @@ int main() {
     opt.push_back("Add Magnitude");
     opt.push_back("Add Basic Unit");
     opt.push_back("Add Unit");
+    opt.push_back("Add Name");
     opt.push_back("Remove operation");
     opt.push_back("Remove unit");
     opt.push_back("Remove magnitude");
+    opt.push_back("Merge database");
     opt.push_back("Show Database");
+    opt.push_back("Show Glossary");
     opt.push_back("Save and Exit");
     cls();
     unsigned int cmd=0; //command selected
-    while(cmd!=9) {
+    while(cmd!=12) {
         string nam;
         magnitude_id current_mag;
         op oper;
@@ -97,28 +106,50 @@ int main() {
             current_mag=database.get_magnitude_id(nam);
             if(current_mag!=0) add_unit(current_mag,database);
             break;
-        case 5: //remove operator
+        case 5: //add name
+            int tip_name;
+            cout<<"1-New name for magnitude\n";
+            cout<<"2-New name for unit\n";
+            cin>>tip_name;
+            if(tip_name==1) {
+                cout<<"Enter name of magnitude:";
+                cin>>nam;
+                add_names_to_magnitude(nam,database);
+            }
+            else if(tip_name==2) {
+                cout<<"Enter name of units:";
+                cin>>nam;
+                add_names_to_unit(nam,database);
+            }
+            break;
+        case 6: //remove operator
             cout<<"Enter operator:";
             cin>>nam;
             oper=database.get_operator(nam);
             remove_operation(oper,database);
             break;
-        case 6: //remove unit
+        case 7: //remove unit
             cout<<"Enter name of unit:";
             cin>>nam;
             uid=database.get_unit_id(nam);
             if(uid!=null_id) remove_unit(uid,database);
             break;
-        case 7: //remove magnitude
+        case 8: //remove magnitude
             cout<<"Enter name of magnitude:";
             cin>>nam;
             mid=database.get_magnitude_id(nam);
             if(mid!=0) remove_magnitude(mid,database);
             break;
-        case 8: //show database
+        case 9: //merge database
+            merge_database(database);
+            break;
+        case 10: //show database
             show_database(database);
             break;
-        case 9: //exit
+        case 11: //show glossary
+            show_glossary(database);
+            break;
+        case 12: //save and exit
             break;
         }
         cls();
@@ -273,3 +304,30 @@ void remove_operation(const op &oper,data_src &database) {
 }
 
 
+void merge_database(data_src &database) {
+    string s;
+    cout<<"Warning, maerge option is a beta version\n";
+    cout<<"Name of database file:";
+    cin>>s;
+    data_src database2;
+    ifstream input(s.c_str()); //reads database (if exists)
+    if(input) database2.read(input);
+    input.close();
+    database.merge(database2);
+}
+void add_names_to_unit(string s,data_src &database) {
+    unit_id uid=database.get_unit_id(s);
+    if(uid==null_id) error_report(error_check,"Unit not found",1,1);
+    else {
+        vector<string> v=get_names();
+        database.add_names(uid,v);
+    }
+}
+void add_names_to_magnitude(string s,data_src &database) {
+    magnitude_id magid=database.get_magnitude_id(s);
+    if(magid==0) error_report(error_check,"Magnitude not found",1,1);
+    else {
+        vector<string> v=get_names();
+        database.add_names(magid,v);
+    }
+}

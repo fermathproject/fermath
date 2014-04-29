@@ -1,0 +1,6 @@
+Fermath V1.0
+*small changes in gtk interface
+*main.cpp provides graphical interface to expression calc
+*added options of remove and merge in database_fermath to modify the units/magnitudes database
+*added options to modify names in database_fermath
+**some small bugs from previous versions fixed

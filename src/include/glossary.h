@@ -155,16 +155,15 @@ public:
         out<<"Unit   "<<unit_dic.size()<<endl;
     }
     void show(ostream &out=cout) const {
-        out<<"Glossary"<<endl;
+        out<<"-Glossary-"<<endl;
         map<string,magnitude_id>::const_iterator it1;
         map<string,unit_id>::const_iterator it2;
-        out<<"magnitude"<<endl;
+        out<<"Magnitude"<<endl;
         for(it1=magnitude_dic.begin(); it1!=magnitude_dic.end(); it1++) {
             out<<(*it1).first<<" - "<<(*it1).second;;
             out<<endl;
         }
-        out<<endl;
-        out<<"unit"<<endl;
+        out<<"Unit"<<endl;
         unit_id uid;
         for(it2=unit_dic.begin(); it2!=unit_dic.end(); it2++) {
             uid=(*it2).second;

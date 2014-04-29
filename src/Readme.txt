@@ -11,4 +11,8 @@ build essential
 libgtk2.0-0
 libgtk2.0-dev
 
-g++ -o interfaz interfaz.cpp `pkg-config --libs --cflags gtk+-2.0`
+g++ -o fermath main.cpp `pkg-config --libs --cflags gtk+-2.0`
+
+Fermath has two main programs:
+main.cpp (fermath) graphical interface for using fermath
+fermath_database.cpp modify fermath database 

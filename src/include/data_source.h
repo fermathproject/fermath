@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Data Source Class
-Version:0.9.4
+Version:1.0
 */
 
 #include "glossary.h"
@@ -305,11 +305,6 @@ public:
         src.read(input);
         read_operations(input);
     }
-    void show2(ostream &out=cout) const {
-        src.show2(out);
-        out<<endl<<"operations   "<<operations.size()<<endl;
-        names.show2(out);
-    }
     void show(ostream &out=cout) const {
         src.show(out);
         out<<endl<<"operations"<<endl;
@@ -319,6 +314,14 @@ public:
             out<<endl;
         }
         out<<endl;
+        names.show(out);
+    }
+    void show2(ostream &out=cout) const {
+        src.show2(out);
+        out<<endl<<"operations   "<<operations.size()<<endl;
+        names.show2(out);
+    }
+    void show_glossary(ostream &out=cout) const {
         names.show(out);
     }
 private:
