@@ -1,7 +1,32 @@
-Programa para la resolución de sistemas de ecuaciones de hasta 5 ecuaciones y 5
-incógnitas para FerMath.
+La clase EquationsSystem es un clase preparada para resolver sistemas de
+ecuaciones para cualquier dimension, simpre que quepa en el heap. Para ello
+utiliza el método de gauss. 
 
-Para ello se debe usar la libreria eigen e incluirla en el directorio.
+La forma de inicializarla es la siguiente:
+	Si tenemos el siguiente sistema de ecuaciones:
+		x + 3y = 4
+		2x + 7y = 9
 
-Programado por: 
-	Mariano Palomo Villafranca con la ayuda de Alberto Piñero Lardín.
+	Inicializaremos un vector con los coeficientes de la primera fila tal que asi:
+		vector < double > vector1;
+		vector1.pushback(1); vector1.pushback(3); vector1.pushback(4);
+
+		vector < double > vector2;
+		vector2.pushback(2); vector2.pushback(7); vector2.pushback(9);
+
+		vector < vector < double > > matriz;
+		matriz.pushback(vector1); matriz.pushback(vector2);
+
+		EquationsSystem sistema(matriz);
+
+
+	Esta clase tiene 3 metodos:
+
+	devuelve_soluciones(); //Devuelve en un vector las soluciones de las ecuaciones en orden.
+
+	print_solutions(); //Imprime en la salida estandar informacion sobre el sistema de ecuaciones.
+
+	devuelve_tipo(); //Devuleve el tipo de sistema que es. A saber:
+						// compatible_determinado
+						//compatible_indeterminado
+						//incompatible
