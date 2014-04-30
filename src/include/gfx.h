@@ -4,12 +4,12 @@
    Mariano Palomo Villafranca*/
 /*
 Fermath Project: Graphic Functions
-Version:1.0
+Version:1.1
 */
 
 //Functions using gtk+ 2.0
-#define icon "logo.ico"
-#define logobw "logobw.jpg"
+#define icon "images/fermath.ico"
+#define logobw "images/logobw.jpg"
 
 
 

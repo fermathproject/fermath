@@ -4,22 +4,22 @@
    Mariano Palomo Villafranca  */
 /*
 Fermath Project:Beta Version Reports
-Version:1.0
+Version:1.1
 */
 
 typedef unsigned short error_id;
-const bool hide_assert=true;
-const bool hide_write=true;
+const bool hide_assert=false;
+const bool hide_write=false;
 const bool hide_show=false; //true to hide errors
 
 const bool force_assert=false;
-const bool force_write=false;
-const bool force_show=true; //true to force errors(indepent of hide value)
+const bool force_write=true;
+const bool force_show=false; //true to force errors(indepent of hide value)
 
 
 
-bool show_contact_message=false;
-const string version="V1.0";
+bool show_contact_message=true;
+const string version="V1.1";
 const error_id correct_check=0,warning_check=1,error_check=2,user_error=3,class_error=4,fatal_error=5;
 #define error_file "fermath.error"
 
