@@ -1,0 +1,14 @@
+[Desktop Entry]
+#this is only an example!!
+#change name to fermath.desktop
+#chmod g+x,o+x,u+x fermath.desktop (add exe permission)
+#sudo cp fermath.desktop /usr/share/applications
+Type=Application
+Version=1.0
+Name=Fermath
+Comment=Calculator with units
+Path=/home/andrew/Desktop/Fermath/
+Exec=/home/andrew/Desktop/Fermath/fermath
+Icon=/home/andrew/Desktop/Fermath/logo.ico
+Terminal=false
+Categories=Education;
