@@ -40,7 +40,3 @@ g++ -o fermath main.cpp `pkg-config --libs --cflags gtk+-2.0`
 Fermath has two main programs:
 main.cpp (fermath) graphical interface for using fermath
 fermath_database.cpp modify fermath database 
-
-To compile in 32 bits, add option -m32, the next libraries will be necessary:
-g++-multilib
-sudo apt-get install libgtk2.0-0:i386
