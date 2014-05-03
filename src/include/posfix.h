@@ -8,10 +8,8 @@ Fermath Project:Posfix
 Version:1.0
 */
 
-#include "expression.h"
+//#include "expression.h"
 
-
-using namespace std;
 
 //devuelve true si el operador, dado a partir del string, esta en el conjunto
 bool operador(const string &a,const data_src &datasrc) {

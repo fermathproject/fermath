@@ -4,7 +4,7 @@
    Mariano Palomo Villafranca*/
 /*
 Fermath Project:Expression
-Version:0.9.4
+Version:1.1
 */
 
 #include "variable_calc.h"
@@ -39,7 +39,6 @@ public:
     }
     expression(const variable &var1) {
         add_variable(var1);
-        clean_operators();
         check();
     }
     expression(const expression &expr2) {

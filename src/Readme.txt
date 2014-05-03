@@ -1,4 +1,4 @@
-          11                                           
+﻿          11                                           
          11 0             1                             
         01   0      1111111111111                       
        01     01  101     11    101        111          
@@ -27,16 +27,22 @@
    Andrés Ortiz Corrales
    Mariano Palomo Villafranca  
 
-Fermath Project: main
-V 1.0
+Fermath Project V 1.1:
+
+fermath.cpp: terminal-based fermath
+fermath_gfx.cpp: graphic version of fermath (gtk+)
+fermath_database.cpp: terminal-based database modificator (in future versions will be incorpored in fermath main program)
+
+
 
 To compile the graphic version, you will need the following libraries installed:
 build essential
 libgtk2.0-0
 libgtk2.0-dev
 
-g++ -o fermath main.cpp `pkg-config --libs --cflags gtk+-2.0`
+run g++ with the next options:
+g++ fermath_gfx.cpp `pkg-config --libs --cflags gtk+-2.0` -o fermath
 
-Fermath has two main programs:
-main.cpp (fermath) graphical interface for using fermath
-fermath_database.cpp modify fermath database 
+
+Fermath can be found in https://github.com/fermathproject/fermath
+For contact, please mail to fermathproject@gmail.com

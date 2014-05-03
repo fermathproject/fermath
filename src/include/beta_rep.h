@@ -14,7 +14,7 @@ const bool hide_show=false; //true to hide errors
 
 const bool force_assert=false;
 const bool force_write=true;
-const bool force_show=false; //true to force errors(indepent of hide value)
+const bool force_show=true; //true to force errors(indepent of hide value)
 
 
 

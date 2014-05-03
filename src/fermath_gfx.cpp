@@ -1,11 +1,10 @@
-//compilar g++ -o fermath main.cpp `pkg-config --libs --cflags gtk+-2.0`
 /* (C) Programmed by:
    Antonio Jimenez Martínez
    Andrés Ortiz Corrales
    Mariano Palomo Villafranca
 */
 /*
-Fermath Project: main
+Fermath Project: graphic interface fermath
 Version:1.1
 */
 #include <gtk/gtk.h>
@@ -21,6 +20,7 @@ Version:1.1
 #include <map>
 #include <sstream>
 using namespace std;
+#include "include/expression.h"
 #include "include/conversion.h"
 #include "include/gfx.h"
 

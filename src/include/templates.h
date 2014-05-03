@@ -237,7 +237,7 @@ string format_string(string s) {
     unsigned int siz=s.size();
     for(unsigned int i=0; i<siz; i++) {
         if(s[i]>'A' && s[i]<'Z') s[i]=s[i]+32; //A..Z -> a..z
-        else if(s[i]==165) s[i]=164; //Ñ -> ñ
+        else if(s[i]==165) s[i]=164; //Ñ -> ñ //TODO:solve warning
     }
     return s;
 }

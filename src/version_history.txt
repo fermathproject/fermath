@@ -1,3 +1,10 @@
+Fermath V1.1
+*New terminal-based version
+*New windows version (non graphic) with setup
+*32 and 64 graphic versions for linux
+*Added installation scripts for linux versions, with desktop entries
+*New class formula.h (not included in main yet)
+
 Fermath V1.0
 *erased space from user entry
 *small changes in gtk interface

@@ -120,18 +120,18 @@ public:
         value=(int) value;
     }
     //round decimals
-    void round_off(unsigned short prec=0) {
-        if(is_int()==false && standard_base()==true) {
-            unsigned int prec2=pow(10,prec);
-            value=floor(value*prec2+0.5)/prec2;
-        }
-        else if(standard_base()==false) {
-            error_report(warning_check,"not possible to round a not dec variable",1,0);
-        }
-        if(numeric_value==false) {
-            error_report(error_check,"rouding off a non numerical value",1,1);
-        }
-    }
+    /*  void round_off(unsigned short prec=0) {
+          if(is_int()==false && standard_base()==true) {
+              unsigned int prec2=pow(10,prec);
+              value=floor(value*prec2+0.5)/prec2;
+          }
+          else if(standard_base()==false) {
+              error_report(warning_check,"not possible to round a not dec variable",1,0);
+          }
+          if(numeric_value==false) {
+              error_report(error_check,"rouding off a non numerical value",1,1);
+          }
+      }*/
     void clear_unit() {
         dim_unit=false;
         variable_unit.clear();
@@ -180,7 +180,7 @@ public:
     }
     //return true if the value is an int number
     bool is_int() const {
-        int val2=value;
+        int val2=(int) value;
         if(val2==value) return true;
         else return false;
     }

@@ -1,5 +1,5 @@
 [Desktop Entry]
-#this is only an example pf the future desktp entry for version 1.1
+#this is only an example pf the future desktop entry for version 1.1
 #change name to fermath.desktop
 #chmod a+x fermath.desktop (add exe permission)
 #sudo cp fermath.desktop /usr/share/applications
