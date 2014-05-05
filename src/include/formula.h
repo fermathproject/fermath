@@ -23,7 +23,7 @@ public:
         name=nam;
     }
     formula(const formula &form) {
-        (*this)=Formularm;
+        (*this)=from;
     }
     //MODIFICATION
     void add_magnitude(const magnitude_id &mid) {
